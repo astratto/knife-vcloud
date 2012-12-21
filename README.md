@@ -45,8 +45,8 @@ USAGE
     knife vc org show [ORG_ID] (options)
     knife vc vapp create [VDC_ID] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP_ID] (options)
-    knife vc vapp shutdown [VAPP_ID] (options)
-    knife vc vapp startup [VAPP_ID] (options)
+    knife vc vapp start [VAPP_ID] (options)
+    knife vc vapp stop [VAPP_ID] (options)
     knife vc vdc show [VDC_ID] (options)
 
 ###Configuration
@@ -148,7 +148,7 @@ This command starts up a given vApp.
 
 _Example:_
 
-    $ knife vc vapp startup 4338a436-19fc-47b9-aaba-024841acfd66
+    $ knife vc vapp start 4338a436-19fc-47b9-aaba-024841acfd66
     vApp startup...Done!
     Summary: Status: success - started at 2012-12-19T16:50:31.030+01:00 and ended at 2012-12-19T16:50:38.487+01:00
 
@@ -157,7 +157,7 @@ This command halts a given vApp.
 
 _Example:_
 
-    $ knife vc vapp $ knife vc vapp shutdown 09551b42-dca9-474d-aa50-201b223522db
+    $ knife vc vapp $ knife vc vapp stop 09551b42-dca9-474d-aa50-201b223522db
     vApp shutdown...Done!
     Summary: Status: success - started at 2012-12-19T16:56:31.100+01:00 and ended at 2012-12-19T16:56:38.667+01:00
 
