@@ -19,7 +19,7 @@
 require 'chef/knife'
 
 module KnifeVCloud
-  class VcVappShutdown < Chef::Knife
+  class VcVappStart < Chef::Knife
     include KnifeVCloud::Common
 
     deps do
@@ -27,7 +27,7 @@ module KnifeVCloud
       require 'chef/api_client'
     end
 
-    banner "knife vc vapp shutdown [VAPP_ID] (options)"
+    banner "knife vc vapp start [VAPP_ID] (options)"
 
     option :vcloud_url,
            :short => "-H URL",
@@ -66,9 +66,9 @@ module KnifeVCloud
 
       connection.login
 
-      task_id = connection.poweroff_vapp vapp_id
+      task_id = connection.poweron_vapp vapp_id
 
-      print "vApp shutdown..."
+      print "vApp startup..."
       wait_task(connection, task_id)
 
       connection.logout
