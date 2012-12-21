@@ -4,7 +4,7 @@ PATH
     knife-vcloud (0.1.0)
       chef (>= 0.10.0)
       knife-windows
-      vcloud-rest
+      vcloud-rest (~> 0.2.0)
 
 GEM
   remote: http://rubygems.org/
@@ -100,7 +100,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     uuidtools (2.1.3)
-    vcloud-rest (0.1.2)
+    vcloud-rest (0.2.0)
       nokogiri (~> 1.5.5)
       rest-client (~> 1.6.7)
     wasabi (1.0.0)
@@ -125,4 +125,5 @@ DEPENDENCIES
   knife-vcloud!
   minitest
   rake
+  vcloud-rest (~> 0.2.0)
   webmock
