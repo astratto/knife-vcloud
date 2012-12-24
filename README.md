@@ -25,7 +25,11 @@ FEATURES
 - show VDCs
 - show Catalogs
 - show Catalog Items
-- create/start/stop/delete vApps
+- create/start/stop/delete/show vApps
+- show VMs
+- basic vApp network configuration
+- basic VM network configuration
+- basic VM Guest Customization configuration
 
 PREREQUISITES
 --
@@ -38,16 +42,21 @@ USAGE
 
 ###Available commands
 
-    knife vc catalog item show [ITEM_ID] (options)
+    knife vc catalog item show [CATALOG_ID] (options)
     knife vc catalog show [CATALOG_ID] (options)
     knife vc login (options)
     knife vc org list (options)
     knife vc org show [ORG_ID] (options)
+    knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)
     knife vc vapp create [VDC_ID] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP_ID] (options)
+    knife vc vapp show [VAPP_ID] (options)
     knife vc vapp start [VAPP_ID] (options)
     knife vc vapp stop [VAPP_ID] (options)
     knife vc vdc show [VDC_ID] (options)
+    knife vc vm config guest [VAPP_ID] [COMPUTER_NAME] (options)
+    knife vc vm config network [VAPP_ID] [NETWORK_NAME] (options)
+    knife vc vm show [VM_ID] (options)
 
 ###Configuration
 All commands accept the following options:
@@ -192,6 +201,30 @@ _Example:_
     IP: 10.102.46.237
     Name                  Status         IPs             ID
     CENTOS63              running        10.102.46.237   8b943bf9-a8ca-4d41-b97f-316c3aa891ea
+
+###vApp's network configuration
+This command allows for basic vApp network configuration.
+
+_Example:_
+*TBD*
+
+###Show VM's details
+This command shows details about a given VM.
+
+_Example:_
+*TBD*
+
+###VM's network configuration
+This command allows for basic VM network configuration.
+
+_Example:_
+*TBD*
+
+###VM's Guest Customization configuration
+This command allows for basic VM Guest Customization configuration.
+
+_Example:_
+*TBD*
 
 LICENSE
 --
