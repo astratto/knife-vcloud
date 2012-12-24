@@ -63,7 +63,7 @@ module KnifeVCloud
       $stdout.sync = true
 
       connection.login
-      msg("Authenticated successfully, code", connection.auth_key)
+      out_msg("Authenticated successfully, code", connection.auth_key)
 
       connection.logout
     end

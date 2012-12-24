@@ -75,10 +75,10 @@ module KnifeVCloud
       name, description, status, ip, vms_hash = connection.show_vapp vapp_id
       connection.logout
 
-      msg("Name", name)
-      msg("Description", description)
-      msg("Status", status)
-      msg("IP", ip)
+      out_msg("Name", name)
+      out_msg("Description", description)
+      out_msg("Status", status)
+      out_msg("IP", ip)
 
       vms_hash.each do |k, v|
         list << (k || '')

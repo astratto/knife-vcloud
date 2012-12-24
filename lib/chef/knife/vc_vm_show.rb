@@ -74,7 +74,7 @@ module KnifeVCloud
       os_desc, networks, guest_customizations = connection.show_vm vm_id
       connection.logout
 
-      msg("OS Name", os_desc)
+      out_msg("OS Name", os_desc)
 
       networks.each do |network, values|
         list << ui.color('Network', :bold)

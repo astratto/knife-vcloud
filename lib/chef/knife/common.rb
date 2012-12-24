@@ -32,7 +32,7 @@ module KnifeVCloud
       @connection
     end
 
-    def msg(label, value)
+    def out_msg(label, value)
       if value && !value.empty?
         puts "#{ui.color(label, :cyan)}: #{value}"
       end
@@ -46,7 +46,7 @@ module KnifeVCloud
     def wait_task(connection, task_id)
       status, errormsg, start_time, end_time = connection.wait_task_completion task_id
       puts "Done!"
-      msg("Summary", "Status: #{ui.color(status, :cyan)} - started at #{start_time} and ended at #{end_time}")
+      out_msg("Summary", "Status: #{ui.color(status, :cyan)} - started at #{start_time} and ended at #{end_time}")
 
       if errormsg
         puts ui.color("ATTENTION: #{errormsg}", :red)
