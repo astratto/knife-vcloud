@@ -1,5 +1,4 @@
-knife-vcloud [![Dependency
-Status](https://gemnasium.com/astratto/knife-vcloud.png)](https://gemnasium.com/astratto/knife-vcloud)
+knife-vcloud [![Dependency Status](https://gemnasium.com/astratto/knife-vcloud.png)](https://gemnasium.com/astratto/knife-vcloud)
 ===========
 
 DESCRIPTION
