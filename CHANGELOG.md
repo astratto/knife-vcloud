@@ -1,5 +1,17 @@
 Changes
 ==
+2012-12-24 (0.2.0)
+--
+
+FEATURES:
+* Add command for basic VM Guest Customization configuration
+* Add command for basic VM Network configuration
+* Add command for basic vApp Network configuration
+
+FIXES:
+* Renamed _Common#msg_ to _Common#out\_msg_
+
+==
 2012-12-21 (0.1.0)
 --
 

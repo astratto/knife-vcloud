@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = %q{knife-vcloud}
-  s.version = "0.1.0"
-  s.date = %q{2012-12-21}
+  s.version = "0.2.0"
+  s.date = %q{2012-12-24}
   s.authors = ["Stefano Tortarolo"]
   s.email = ['stefano.tortarolo@gmail.com']
   s.summary = %q{A knife plugin for the VMWare vCloud API}

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    knife-vcloud (0.1.0)
+    knife-vcloud (0.2.0)
       chef (>= 0.10.0)
       knife-windows
       vcloud-rest (~> 0.2.0)
