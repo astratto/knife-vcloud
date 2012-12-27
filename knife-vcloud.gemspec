@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{knife-vcloud}
-  s.version = "0.2.1"
+  s.version = "0.2.2"
   s.date = %q{2012-12-27}
   s.authors = ["Stefano Tortarolo"]
   s.email = ['stefano.tortarolo@gmail.com']
