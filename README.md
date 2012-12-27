@@ -185,7 +185,7 @@ This command creates a vApp starting from a template (see catalog item).
 
 _Example:_
 
-    $ knife vc vapp create 440d5134-d2dd-4be7-8692-79a28c86f55b TestVM "Test vm description" 14b63ef2-fe93-4d0b-91f0-ccbd3847c665
+    $ knife vc vapp create 440d5134-d2dd-4be7-8692-79a28c86f55b TestvApp "Test vApp description" 14b63ef2-fe93-4d0b-91f0-ccbd3847c665
     vApp creation...Done!
     Summary: Status: success - started at 2012-12-19T17:02:32.797+01:00 and ended at 2012-12-19T17:02:53.943+01:00
     vApp created with ID: 9cdd92ad-ab65-467f-abe1-075e35c050ec
