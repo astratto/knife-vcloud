@@ -38,12 +38,15 @@ class Chef
              :description => "IP of the current network interface"
 
       option :vm_net_is_connected,
-             :long => "--net-is-connected true|false",
-             :description => "Toggle IsConnected flag of the current network interface"
+             :long => "--net-[no-]connected",
+             :description => "Toggle IsConnected flag of the current network interface (default true)",
+             :boolean => true,
+             :default => true
 
       option :vm_ip_allocation_mode,
              :long => "--ip-allocation-mode ALLOCATION_MODE",
-             :description => "Set IP allocation mode of the current network interface (e.g., POOL)"
+             :description => "Set IP allocation mode of the current network interface (default POOL)",
+             :default => 'POOL'
 
       def run
         $stdout.sync = true
@@ -53,7 +56,15 @@ class Chef
 
         connection.login
 
-        task_id, response = connection.set_vm_network_config vm_id, network_name, {:ip_allocation_mode => 'POOL'}
+        config = {
+          :primary_index => locate_config_value(:vm_net_primary_index),
+          :network_index => locate_config_value(:vm_net_index),
+          :ip => locate_config_value(:vm_net_ip),
+          :is_connected => locate_config_value(:vm_net_is_connected),
+          :ip_allocation_mode => locate_config_value(:vm_ip_allocation_mode),
+        }
+
+        task_id, response = connection.set_vm_network_config vm_id, network_name, config
 
         print "VM network configuration..."
         wait_task(connection, task_id)
