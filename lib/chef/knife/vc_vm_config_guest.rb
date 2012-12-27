@@ -26,13 +26,16 @@ class Chef
       banner "knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)"
 
       option :guest_enabled,
-             :short => "-E ENABLED",
-             :long => "--enable-guest true|false",
-             :description => "Toggle Guest Customization"
+             :long => "--[no-]guest",
+             :description => "Toggle Guest Customization (default true)",
+             :boolean => true,
+             :default => true
 
       option :admin_passwd_enabled,
-             :long => "--admin-passwd-enabled true|false",
-             :description => "Toggle Admin Password"
+             :long => "--use-[no-]admin-passwd",
+             :description => "Toggle Admin Password (default true)",
+             :boolean => true,
+             :default => true
 
       option :admin_passwd,
              :long => "--admin-passwd ADMIN_PASSWD",

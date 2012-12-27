@@ -32,10 +32,11 @@ class Chef
              :proc => Proc.new { |key| Chef::Config[:knife][:fence_mode] = key }
 
       option :retain_network,
-             :short => "-R RETAIN_NETWORK",
-             :long => "--retain-network RETAIN_NETWORK",
-             :description => "Toggle Retain Network across deployments (e.g., true, false)",
-             :proc => Proc.new { |key| Chef::Config[:knife][:retain_network] = key }
+             :long => "--[no-]retain-network",
+             :description => "Toggle Retain Network across deployments (default true)",
+             :proc => Proc.new { |key| Chef::Config[:knife][:retain_network] = key },
+             :boolean => true,
+             :default => true
 
       def run
         $stdout.sync = true
