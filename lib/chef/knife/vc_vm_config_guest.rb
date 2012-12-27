@@ -16,82 +16,49 @@
 # limitations under the License.
 #
 
-require 'chef/knife'
+require 'chef/knife/vc_common'
 
-module KnifeVCloud
-  class VcVmConfigGuest < Chef::Knife
-    include KnifeVCloud::Common
+class Chef
+  class Knife
+    class VcVmConfigGuest < Chef::Knife
+      include Knife::VcCommon
 
-    deps do
-      require 'vcloud-rest/connection'
-      require 'chef/api_client'
-    end
+      banner "knife vc vm config guest [VAPP_ID] [COMPUTER_NAME] (options)"
 
-    banner "knife vc vm config guest [VAPP_ID] [COMPUTER_NAME] (options)"
+      option :guest_enabled,
+             :short => "-E ENABLED",
+             :long => "--enable-guest true|false",
+             :description => "Toggle Guest Customization"
 
-    option :vcloud_url,
-           :short => "-H URL",
-           :long => "--vcloud-url URL",
-           :description => "The vCloud endpoint URL",
-           :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+      option :admin_passwd_enabled,
+             :long => "--admin-passwd-enabled true|false",
+             :description => "Toggle Admin Password"
 
-    option :vcloud_user,
-           :short => "-U USER",
-           :long => "--vcloud-user USER",
-           :description => "Your vCloud User",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
+      option :admin_passwd,
+             :long => "--admin-passwd ADMIN_PASSWD",
+             :description => "Set Admin Password"
 
-    option :vcloud_password,
-           :short => "-P SECRET",
-           :long => "--vcloud-password SECRET",
-           :description => "Your vCloud secret key",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
+      def run
+        $stdout.sync = true
 
-    option :vcloud_org,
-           :short => "-O ORGANIZATION",
-           :long => "--vcloud-organization ORGANIZATION",
-           :description => "Your vCloud Organization",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
+        vm_id = @name_args.shift
+        computer_name = @name_args.shift
 
-    option :vcloud_api_version,
-           :short => "-A API_VERSION",
-           :long => "--vcloud-api-version API_VERSION",
-           :description => "vCloud API version (1.5 and 5.1 supported)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
+        connection.login
 
-    option :guest_enabled,
-           :short => "-E ENABLED",
-           :long => "--enable-guest true|false",
-           :description => "Toggle Guest Customization"
+        config = {
+          :enabled => locate_config_value(:guest_enabled),
+          :admin_passwd_enabled => locate_config_value(:admin_passwd_enabled),
+          :admin_passwd => locate_config_value(:admin_passwd)
+        }
 
-    option :admin_passwd_enabled,
-           :long => "--admin-passwd-enabled true|false",
-           :description => "Toggle Admin Password"
+        task_id, response = connection.set_vm_guest_customization vm_id, computer_name, config
 
-    option :admin_passwd,
-           :long => "--admin-passwd ADMIN_PASSWD",
-           :description => "Set Admin Password"
+        print "VM network configuration..."
+        wait_task(connection, task_id)
 
-    def run
-      $stdout.sync = true
-
-      vm_id = @name_args.shift
-      computer_name = @name_args.shift
-
-      connection.login
-
-      config = {
-        :enabled => locate_config_value(:guest_enabled),
-        :admin_passwd_enabled => locate_config_value(:admin_passwd_enabled),
-        :admin_passwd => locate_config_value(:admin_passwd)
-      }
-
-      task_id, response = connection.set_vm_guest_customization vm_id, computer_name, config
-
-      print "VM network configuration..."
-      wait_task(connection, task_id)
-
-      connection.logout
+        connection.logout
+      end
     end
   end
 end

@@ -16,97 +16,64 @@
 # limitations under the License.
 #
 
-require 'chef/knife'
+require 'chef/knife/vc_common'
 
-module KnifeVCloud
-  class VcOrgShow < Chef::Knife
-    include KnifeVCloud::Common
+class Chef
+  class Knife
+    class VcOrgShow < Chef::Knife
+      include Knife::VcCommon
 
-    deps do
-      require 'vcloud-rest/connection'
-      require 'chef/api_client'
-    end
+      banner "knife vc org show [ORG_ID] (options)"
 
-    banner "knife vc org show [ORG_ID] (options)"
+      def run
+        $stdout.sync = true
 
-    option :vcloud_url,
-           :short => "-H URL",
-           :long => "--vcloud-url URL",
-           :description => "The vCloud endpoint URL",
-           :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+        org_id = @name_args.first
 
-    option :vcloud_user,
-           :short => "-U USER",
-           :long => "--vcloud-user USER",
-           :description => "Your vCloud User",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
+        connection.login
 
-    option :vcloud_password,
-           :short => "-P SECRET",
-           :long => "--vcloud-password SECRET",
-           :description => "Your vCloud secret key",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
+        header = [
+            ui.color('Name', :bold),
+            ui.color('ID', :bold)
+        ]
 
-    option :vcloud_org,
-           :short => "-O ORGANIZATION",
-           :long => "--vcloud-organization ORGANIZATION",
-           :description => "Your vCloud Organization",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
+        catalogs, vdcs, networks, tasklists = connection.show_organization org_id
+        connection.logout
 
-    option :vcloud_api_version,
-           :short => "-A API_VERSION",
-           :long => "--vcloud-api-version API_VERSION",
-           :description => "vCloud API version (1.5 and 5.1 supported)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
+        list = ["#{ui.color('CATALOGS', :cyan)}", '']
+        list << header
+        list.flatten!
+        catalogs.each do |k, v|
+          list << (k || '')
+          list << (v || '')
+        end
 
-    def run
-      $stdout.sync = true
+        list << ['', '', "#{ui.color('VDCs', :cyan)}", '']
+        list << header
+        list.flatten!
+        vdcs.each do |k, v|
+          list << (k || '')
+          list << (v || '')
+        end
 
-      org_id = @name_args.first
+        list << ['', '', "#{ui.color('NETWORKS', :cyan)}", '']
+        list << header
+        list.flatten!
+        networks.each do |k, v|
+          list << (k || '')
+          list << (v || '')
+        end
 
-      connection.login
+        list << ['', '', "#{ui.color('TASKLISTS', :cyan)}", '']
+        list << header
+        list.flatten!
+        tasklists.each do |k, v|
+          list << (k || '<unnamed list>')
+          list << (v || '')
+        end
 
-      header = [
-          ui.color('Name', :bold),
-          ui.color('ID', :bold)
-      ]
-
-      catalogs, vdcs, networks, tasklists = connection.show_organization org_id
-      connection.logout
-
-      list = ["#{ui.color('CATALOGS', :cyan)}", '']
-      list << header
-      list.flatten!
-      catalogs.each do |k, v|
-        list << (k || '')
-        list << (v || '')
+        puts ui.list(list, :columns_across, 2)
       end
-
-      list << ['', '', "#{ui.color('VDCs', :cyan)}", '']
-      list << header
-      list.flatten!
-      vdcs.each do |k, v|
-        list << (k || '')
-        list << (v || '')
-      end
-
-      list << ['', '', "#{ui.color('NETWORKS', :cyan)}", '']
-      list << header
-      list.flatten!
-      networks.each do |k, v|
-        list << (k || '')
-        list << (v || '')
-      end
-
-      list << ['', '', "#{ui.color('TASKLISTS', :cyan)}", '']
-      list << header
-      list.flatten!
-      tasklists.each do |k, v|
-        list << (k || '<unnamed list>')
-        list << (v || '')
-      end
-
-      puts ui.list(list, :columns_across, 2)
     end
   end
 end

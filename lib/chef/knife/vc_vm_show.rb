@@ -16,82 +16,49 @@
 # limitations under the License.
 #
 
-require 'chef/knife'
+require 'chef/knife/vc_common'
 
-module KnifeVCloud
-  class VcVmShow < Chef::Knife
-    include KnifeVCloud::Common
+class Chef
+  class Knife
+    class VcVmShow < Chef::Knife
+      include Knife::VcCommon
 
-    deps do
-      require 'vcloud-rest/connection'
-      require 'chef/api_client'
-    end
+      banner "knife vc vm show [VM_ID] (options)"
 
-    banner "knife vc vm show [VM_ID] (options)"
+      def pretty_symbol(key)
+        key.to_s.gsub('_', ' ').capitalize
+      end
 
-    option :vcloud_url,
-           :short => "-H URL",
-           :long => "--vcloud-url URL",
-           :description => "The vCloud endpoint URL",
-           :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+      def run
+        $stdout.sync = true
 
-    option :vcloud_user,
-           :short => "-U USER",
-           :long => "--vcloud-user USER",
-           :description => "Your vCloud User",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
+        vm_id = @name_args.first
 
-    option :vcloud_password,
-           :short => "-P SECRET",
-           :long => "--vcloud-password SECRET",
-           :description => "Your vCloud secret key",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
+        list = []
 
-    option :vcloud_org,
-           :short => "-O ORGANIZATION",
-           :long => "--vcloud-organization ORGANIZATION",
-           :description => "Your vCloud Organization",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
+        connection.login
+        os_desc, networks, guest_customizations = connection.show_vm vm_id
+        connection.logout
 
-    option :vcloud_api_version,
-           :short => "-A API_VERSION",
-           :long => "--vcloud-api-version API_VERSION",
-           :description => "vCloud API version (1.5 and 5.1 supported)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
+        out_msg("OS Name", os_desc)
 
-    def pretty_symbol(key)
-      key.to_s.gsub('_', ' ').capitalize
-    end
+        networks.each do |network, values|
+          list << ui.color('Network', :bold)
+          list << (network || '')
+          values.each do |k, v|
+            list << (pretty_symbol(k) || '')
+            list << (v || '')
+          end
+        end
 
-    def run
-      $stdout.sync = true
-
-      vm_id = @name_args.first
-
-      list = []
-
-      connection.login
-      os_desc, networks, guest_customizations = connection.show_vm vm_id
-      connection.logout
-
-      out_msg("OS Name", os_desc)
-
-      networks.each do |network, values|
-        list << ui.color('Network', :bold)
-        list << (network || '')
-        values.each do |k, v|
+        list << ['', '', ui.color('Guest Customizations', :bold), '']
+        list.flatten!
+        guest_customizations.each do |k, v|
           list << (pretty_symbol(k) || '')
           list << (v || '')
         end
+        puts ui.list(list, :columns_across, 2)
       end
-
-      list << ['', '', ui.color('Guest Customizations', :bold), '']
-      list.flatten!
-      guest_customizations.each do |k, v|
-        list << (pretty_symbol(k) || '')
-        list << (v || '')
-      end
-      puts ui.list(list, :columns_across, 2)
     end
   end
 end

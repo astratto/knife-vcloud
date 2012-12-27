@@ -16,80 +16,47 @@
 # limitations under the License.
 #
 
-require 'chef/knife'
+require 'chef/knife/vc_common'
 
-module KnifeVCloud
-  class VcVappConfigNetwork < Chef::Knife
-    include KnifeVCloud::Common
+class Chef
+  class Knife
+    class VcVappConfigNetwork < Chef::Knife
+      include Knife::VcCommon
 
-    deps do
-      require 'vcloud-rest/connection'
-      require 'chef/api_client'
-    end
+      banner "knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)"
 
-    banner "knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)"
+      option :fence_mode,
+             :short => "-F FENCE_MODE",
+             :long => "--fence-mode FENCE_MODE",
+             :description => "Set Fence Mode (e.g., Isolated, Bridged)",
+             :proc => Proc.new { |key| Chef::Config[:knife][:fence_mode] = key }
 
-    option :vcloud_url,
-           :short => "-H URL",
-           :long => "--vcloud-url URL",
-           :description => "The vCloud endpoint URL",
-           :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+      option :retain_network,
+             :short => "-R RETAIN_NETWORK",
+             :long => "--retain-network RETAIN_NETWORK",
+             :description => "Toggle Retain Network across deployments (e.g., true, false)",
+             :proc => Proc.new { |key| Chef::Config[:knife][:retain_network] = key }
 
-    option :vcloud_user,
-           :short => "-U USER",
-           :long => "--vcloud-user USER",
-           :description => "Your vCloud User",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
+      def run
+        $stdout.sync = true
 
-    option :vcloud_password,
-           :short => "-P SECRET",
-           :long => "--vcloud-password SECRET",
-           :description => "Your vCloud secret key",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
+        vapp_id = @name_args.shift
+        network_name = @name_args.shift
 
-    option :vcloud_org,
-           :short => "-O ORGANIZATION",
-           :long => "--vcloud-organization ORGANIZATION",
-           :description => "Your vCloud Organization",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
+        connection.login
 
-    option :vcloud_api_version,
-           :short => "-A API_VERSION",
-           :long => "--vcloud-api-version API_VERSION",
-           :description => "vCloud API version (1.5 and 5.1 supported)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
+        config = {
+          :fence_mode => locate_config_value(:fence_mode),
+          :retain_net => locate_config_value(:retain_net)
+        }
 
-    option :fence_mode,
-           :short => "-F FENCE_MODE",
-           :long => "--fence-mode FENCE_MODE",
-           :description => "Set Fence Mode (e.g., Isolated, Bridged)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:fence_mode] = key }
+        task_id, response = connection.set_vapp_network_config vapp_id, network_name, config
 
-    option :retain_network,
-           :short => "-R RETAIN_NETWORK",
-           :long => "--retain-network RETAIN_NETWORK",
-           :description => "Toggle Retain Network across deployments (e.g., true, false)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:retain_network] = key }
+        print "vApp network configuration..."
+        wait_task(connection, task_id)
 
-    def run
-      $stdout.sync = true
-
-      vapp_id = @name_args.shift
-      network_name = @name_args.shift
-
-      connection.login
-
-      config = {
-        :fence_mode => locate_config_value(:fence_mode),
-        :retain_net => locate_config_value(:retain_net)
-      }
-
-      task_id, response = connection.set_vapp_network_config vapp_id, network_name, config
-
-      print "vApp network configuration..."
-      wait_task(connection, task_id)
-
-      connection.logout
+        connection.logout
+      end
     end
   end
 end

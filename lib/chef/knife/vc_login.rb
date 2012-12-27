@@ -16,56 +16,23 @@
 # limitations under the License.
 #
 
-require 'chef/knife'
+require 'chef/knife/vc_common'
 
-module KnifeVCloud
-  class VcLogin < Chef::Knife
-    include KnifeVCloud::Common
+class Chef
+  class Knife
+    class VcLogin < Chef::Knife
+      include Knife::VcCommon
 
-    deps do
-      require 'vcloud-rest/connection'
-      require 'chef/api_client'
-    end
+      banner "knife vc login (options)"
 
-    banner "knife vc login (options)"
+      def run
+        $stdout.sync = true
 
-    option :vcloud_url,
-           :short => "-H URL",
-           :long => "--vcloud-url URL",
-           :description => "The vCloud endpoint URL",
-           :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+        connection.login
+        out_msg("Authenticated successfully, code", connection.auth_key)
 
-    option :vcloud_user,
-           :short => "-U USER",
-           :long => "--vcloud-user USER",
-           :description => "Your vCloud User",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
-
-    option :vcloud_password,
-           :short => "-P SECRET",
-           :long => "--vcloud-password SECRET",
-           :description => "Your vCloud secret key",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
-
-    option :vcloud_org,
-           :short => "-O ORGANIZATION",
-           :long => "--vcloud-organization ORGANIZATION",
-           :description => "Your vCloud Organization",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
-
-    option :vcloud_api_version,
-           :short => "-A API_VERSION",
-           :long => "--vcloud-api-version API_VERSION",
-           :description => "vCloud API version (1.5 and 5.1 supported)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
-
-    def run
-      $stdout.sync = true
-
-      connection.login
-      out_msg("Authenticated successfully, code", connection.auth_key)
-
-      connection.logout
+        connection.logout
+      end
     end
   end
 end

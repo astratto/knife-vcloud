@@ -16,73 +16,40 @@
 # limitations under the License.
 #
 
-require 'chef/knife'
+require 'chef/knife/vc_common'
 
-module KnifeVCloud
-  class VcCatalogItemShow < Chef::Knife
-    include KnifeVCloud::Common
+class Chef
+  class Knife
+    class VcCatalogItemShow < Chef::Knife
+      include Knife::VcCommon
 
-    deps do
-      require 'vcloud-rest/connection'
-      require 'chef/api_client'
-    end
+      banner "knife vc catalog item show [CATALOG_ID] (options)"
 
-    banner "knife vc catalog item show [CATALOG_ID] (options)"
+      def run
+        $stdout.sync = true
 
-    option :vcloud_url,
-           :short => "-H URL",
-           :long => "--vcloud-url URL",
-           :description => "The vCloud endpoint URL",
-           :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+        item_id = @name_args.first
 
-    option :vcloud_user,
-           :short => "-U USER",
-           :long => "--vcloud-user USER",
-           :description => "Your vCloud User",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
+        connection.login
 
-    option :vcloud_password,
-           :short => "-P SECRET",
-           :long => "--vcloud-password SECRET",
-           :description => "Your vCloud secret key",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
+        header = [
+            ui.color('Name', :bold),
+            ui.color('Template ID', :bold)
+        ]
 
-    option :vcloud_org,
-           :short => "-O ORGANIZATION",
-           :long => "--vcloud-organization ORGANIZATION",
-           :description => "Your vCloud Organization",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
+        description, items = connection.show_catalog_item item_id
+        connection.logout
 
-    option :vcloud_api_version,
-           :short => "-A API_VERSION",
-           :long => "--vcloud-api-version API_VERSION",
-           :description => "vCloud API version (1.5 and 5.1 supported)",
-           :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
+        puts "#{ui.color('Description:', :cyan)} #{description}"
+        list = header
+        list.flatten!
+        items.each do |k, v|
+          list << (k || '')
+          list << (v || '')
+        end
 
-    def run
-      $stdout.sync = true
-
-      item_id = @name_args.first
-
-      connection.login
-
-      header = [
-          ui.color('Name', :bold),
-          ui.color('Template ID', :bold)
-      ]
-
-      description, items = connection.show_catalog_item item_id
-      connection.logout
-
-      puts "#{ui.color('Description:', :cyan)} #{description}"
-      list = header
-      list.flatten!
-      items.each do |k, v|
-        list << (k || '')
-        list << (v || '')
+        puts ui.list(list, :columns_across, 2)
       end
-
-      puts ui.list(list, :columns_across, 2)
     end
   end
 end
