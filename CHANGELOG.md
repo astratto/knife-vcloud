@@ -1,5 +1,12 @@
 Changes
 ==
+2012-12-27 (0.2.1)
+--
+
+FIXES:
+* Change namespace to fix import error under 1.9.x (system-wide)
+
+==
 2012-12-24 (0.2.0)
 --
 
