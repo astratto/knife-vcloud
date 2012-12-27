@@ -54,8 +54,8 @@ USAGE
     knife vc vapp start [VAPP_ID] (options)
     knife vc vapp stop [VAPP_ID] (options)
     knife vc vdc show [VDC_ID] (options)
-    knife vc vm config guest [VAPP_ID] [COMPUTER_NAME] (options)
-    knife vc vm config network [VAPP_ID] [NETWORK_NAME] (options)
+    knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)
+    knife vc vm config network [VM_ID] [NETWORK_NAME] (options)
     knife vc vm show [VM_ID] (options)
 
 ###Configuration

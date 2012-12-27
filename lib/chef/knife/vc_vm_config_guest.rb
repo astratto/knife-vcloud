@@ -23,7 +23,7 @@ class Chef
     class VcVmConfigGuest < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vm config guest [VAPP_ID] [COMPUTER_NAME] (options)"
+      banner "knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)"
 
       option :guest_enabled,
              :short => "-E ENABLED",

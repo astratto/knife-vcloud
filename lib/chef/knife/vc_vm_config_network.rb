@@ -23,7 +23,7 @@ class Chef
     class VcVmConfigNetwork < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vm config network [VAPP_ID] [NETWORK_NAME] (options)"
+      banner "knife vc vm config network [VM_ID] [NETWORK_NAME] (options)"
 
       option :vm_net_primary_index,
              :long => "--net-primary NETWORK_PRIMARY_IDX",
