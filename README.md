@@ -166,7 +166,7 @@ This command halts a given vApp.
 
 _Example:_
 
-    $ knife vc vapp $ knife vc vapp stop 09551b42-dca9-474d-aa50-201b223522db
+    $ knife vc vapp stop 09551b42-dca9-474d-aa50-201b223522db
     vApp shutdown...Done!
     Summary: Status: success - started at 2012-12-19T16:56:31.100+01:00 and ended at 2012-12-19T16:56:38.667+01:00
 
