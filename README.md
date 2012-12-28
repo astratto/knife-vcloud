@@ -204,27 +204,56 @@ _Example:_
 
 ###vApp's network configuration
 This command allows for basic vApp network configuration.
+E.g., retain IP address across deployments (defaults to POOL), set fence mode to _Isolated_ or _Bridge_
+
+Please note that you must use the human readable name of the network (i.e., _TestNet\_1_).
 
 _Example:_
-*TBD*
+
+    $ knife vc vapp config network 31a56cf6-088b-4a43-b726-d6370b4e7d0a TestNet_1
 
 ###Show VM's details
 This command shows details about a given VM.
 
 _Example:_
-*TBD*
+
+    $ knife vc vm show 31a56cf6-088b-4a43-b726-d6370b4e7d0a
+    OS Name: Red Hat Enterprise Linux 6 (64-bit)
+    Network                TestNet_1
+    Index                  0
+    Ip                     10.102.47.70
+    Is connected           true
+    Mac address            00:50:56:01:01:80
+    Ip allocation mode     POOL
+
+    Guest Customizations
+    Enabled                true
+    Admin passwd enabled   true
+    Admin passwd auto      true
+    Admin passwd           xxxxxxxxxx
+    Reset passwd required  false
+    Computer name          RHEL63-Plus
 
 ###VM's network configuration
 This command allows for basic VM network configuration.
+E.g., set IP allocation mode (defaults to POOL)
+
+Please note that you must use the human readable name of the network (i.e., _TestNet\_1_).
 
 _Example:_
-*TBD*
+
+    $ knife vc vm config network 31a56cf6-088b-4a43-b726-d6370b4e7d0a TestNet_1
+    VM network configuration...Done!
+    Summary: Status: success - started at 2012-12-28T11:42:32.910+01:00 and ended at 2012-12-28T11:42:37.313+01:00
 
 ###VM's Guest Customization configuration
 This command allows for basic VM Guest Customization configuration.
 
 _Example:_
-*TBD*
+
+    $ knife vc vm config guest c5f11906-561b-4ffd-850a-60a48c6a21e9 CENTOS63 --guest --admin-passwd "testpassword"
+    VM guest configuration...Done!
+    Summary: Status: success - started at 2012-12-28T11:42:32.910+01:00 and ended at 2012-12-28T11:42:37.313+01:00
 
 LICENSE
 --
