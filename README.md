@@ -35,7 +35,7 @@ PREREQUISITES
 --
 - chef >= 0.10.0
 - knife-windows
-- vcloud-rest"
+- vcloud-rest
 
 USAGE
 --
