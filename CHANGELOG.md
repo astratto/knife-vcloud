@@ -1,5 +1,15 @@
 Changes
 ==
+2012-12-28 (0.2.3)
+--
+
+VARIOUS:
+* Update dependency vcloud-rest v. 0.2.1
+* Update documentation
+
+FIXES:
+* Minor fixes
+
 2012-12-27 (0.2.2)
 --
 
