@@ -3,9 +3,9 @@ knife-vcloud [![Dependency Status](https://gemnasium.com/astratto/knife-vcloud.p
 
 DESCRIPTION
 --
-A knife plugin for the VMWare® vCloud API.
+A knife plugin for the VMware® vCloud API.
 
-It uses [vcloud-rest](https://github.com/astratto/vcloud-rest) to communicate with a VMWare vCloud Server.
+It uses [vcloud-rest](https://github.com/astratto/vcloud-rest) to communicate with a VMware vCloud Director instance.
 
 This code is BETA QUALITY.
 
@@ -78,7 +78,7 @@ In addition, those options can be specified inside your _.chef/knife.rb_ file.
     (OPTIONAL) knife[:vcloud_api_version] = '1.5'
 
 ###Login
-This command can be used to verify that the vCloud Server can be reached and credentials are correct.
+This command can be used to verify that vCloud Director can be reached and credentials are correct.
 
 _Example:_
 
