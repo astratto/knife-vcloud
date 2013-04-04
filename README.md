@@ -249,6 +249,8 @@ _Example:_
 ###VM's Guest Customization configuration
 This command allows for basic VM Guest Customization configuration.
 
+Please note that the vapp must be turned on.
+
 _Example:_
 
     $ knife vc vm config guest c5f11906-561b-4ffd-850a-60a48c6a21e9 CENTOS63 --guest --admin-passwd "testpassword"
