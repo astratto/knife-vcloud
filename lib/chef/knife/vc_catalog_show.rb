@@ -37,13 +37,13 @@ class Chef
             ui.color('ID', :bold)
         ]
 
-        description, items = connection.show_catalog catalog_id
+        catalog = connection.get_catalog catalog_id
         connection.logout
 
-        puts "#{ui.color('Description:', :cyan)} #{description}"
+        puts "#{ui.color('Description:', :cyan)} #{catalog[:description]}"
         list = header
         list.flatten!
-        items.each do |k, v|
+        catalog[:items].each do |k, v|
           list << (k || '')
           list << (v || '')
         end

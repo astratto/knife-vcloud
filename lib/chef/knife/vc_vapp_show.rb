@@ -38,15 +38,15 @@ class Chef
         ]
 
         connection.login
-        name, description, status, ip, vms_hash = connection.show_vapp vapp_id
+        vapp = connection.get_vapp vapp_id
         connection.logout
 
-        out_msg("Name", name)
-        out_msg("Description", description)
-        out_msg("Status", status)
-        out_msg("IP", ip)
+        out_msg("Name", vapp[:name])
+        out_msg("Description", vapp[:description])
+        out_msg("Status", vapp[:status])
+        out_msg("IP", vapp[:ip])
 
-        vms_hash.each do |k, v|
+        vapp[:vms_hash].each do |k, v|
           list << (k || '')
           list << (v[:status] || '')
           list << (v[:addresses].join(', ') || '<no ip>')

@@ -39,18 +39,18 @@ class Chef
             ui.color('IP', :bold),
         ]
 
-        description, vapps, networks = connection.show_vdc vdc_id
+        vdc = connection.get_vdc vdc_id
 
-        puts "#{ui.color('Description:', :cyan)} #{description}"
+        puts "#{ui.color('Description:', :cyan)} #{vdc[:description]}"
         list = ["#{ui.color('vAPPS', :cyan)}", '', '', '']
         list << header
         list.flatten!
-        vapps.each do |k, v|
-          name, description, status, ip, vms_hash = connection.show_vapp v
+        vdc[:vapps].each do |k, v|
+          vapp = connection.get_vapp v
           list << ("#{k} (#{vms_hash.count} VMs)" || '')
           list << (v || '')
-          list << (status || '')
-          list << (ip || '')
+          list << (vapp[:status] || '')
+          list << (vapp[:ip] || '')
         end
 
         puts ui.list(list, :columns_across, 4)

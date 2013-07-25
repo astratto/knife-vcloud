@@ -34,7 +34,7 @@ class Chef
         ]
 
         connection.login
-        org_list = connection.list_organizations
+        org_list = connection.get_organizations
         connection.logout
 
         org_list.each do |k, v|

@@ -37,12 +37,12 @@ class Chef
         list = []
 
         connection.login
-        os_desc, networks, guest_customizations = connection.show_vm vm_id
+        vm = connection.get_vm vm_id
         connection.logout
 
-        out_msg("OS Name", os_desc)
+        out_msg("OS Name", vm[:os_desc])
 
-        networks.each do |network, values|
+        vm[:networks].each do |network, values|
           list << ui.color('Network', :bold)
           list << (network || '')
           values.each do |k, v|
@@ -53,7 +53,7 @@ class Chef
 
         list << ['', '', ui.color('Guest Customizations', :bold), '']
         list.flatten!
-        guest_customizations.each do |k, v|
+        vm[:guest_customizations].each do |k, v|
           list << (pretty_symbol(k) || '')
           list << (v || '')
         end

@@ -37,13 +37,13 @@ class Chef
             ui.color('ID', :bold)
         ]
 
-        catalogs, vdcs, networks, tasklists = connection.show_organization org_id
+        organizations = connection.get_organization org_id
         connection.logout
 
         list = ["#{ui.color('CATALOGS', :cyan)}", '']
         list << header
         list.flatten!
-        catalogs.each do |k, v|
+        organizations[:catalogs].each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -51,7 +51,7 @@ class Chef
         list << ['', '', "#{ui.color('VDCs', :cyan)}", '']
         list << header
         list.flatten!
-        vdcs.each do |k, v|
+        organizations[:vdcs].each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -59,7 +59,7 @@ class Chef
         list << ['', '', "#{ui.color('NETWORKS', :cyan)}", '']
         list << header
         list.flatten!
-        networks.each do |k, v|
+        organizations[:networks].each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -67,7 +67,7 @@ class Chef
         list << ['', '', "#{ui.color('TASKLISTS', :cyan)}", '']
         list << header
         list.flatten!
-        tasklists.each do |k, v|
+        organizations[:tasklists].each do |k, v|
           list << (k || '<unnamed list>')
           list << (v || '')
         end
