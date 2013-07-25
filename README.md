@@ -198,6 +198,15 @@ _Example:_
     vApp suspend...Done!
     Summary: Status: success - started at 2013-07-19T16:50:31.030+01:00 and ended at 2013-07-19T16:50:38.487+01:00
 
+###Reset vApp
+This command resets a given vApp.
+
+_Example:_
+
+    $ knife vc vapp reset 4338a436-19fc-47b9-aaba-024841acfd66
+    vApp reset...Done!
+    Summary: Status: success - started at 2013-07-19T16:50:31.030+01:00 and ended at 2013-07-19T16:50:38.487+01:00
+
 ###Create vApp from template
 This command creates a vApp starting from a template (see catalog item).
 
