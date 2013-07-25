@@ -226,8 +226,8 @@ _Example:_
     Name: TEST_CENTOS
     Status: running
     IP: 10.102.46.237
-    Name                  Status         IPs             ID
-    CENTOS63              running        10.102.46.237   8b943bf9-a8ca-4d41-b97f-316c3aa891ea
+    Name                  Status         IPs             ID                                     Scoped ID
+    CENTOS63              running        10.102.46.237   8b943bf9-a8ca-4d41-b97f-316c3aa891ea   3963994b-5a0a-48fe-b9ae-7f9a2d8e8e5b
 
 ###vApp's network configuration
 This command allows for basic vApp network configuration.

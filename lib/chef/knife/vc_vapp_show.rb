@@ -34,7 +34,8 @@ class Chef
             ui.color('Name', :bold),
             ui.color('Status', :bold),
             ui.color('IPs', :bold),
-            ui.color('ID', :bold)
+            ui.color('ID', :bold),
+            ui.color('Scoped ID', :bold)
         ]
 
         connection.login
@@ -51,6 +52,7 @@ class Chef
           list << (v[:status] || '')
           list << (v[:addresses].join(', ') || '<no ip>')
           list << (v[:id] || '')
+          list << (v[:vapp_scoped_local_id] || '')
         end
         puts ui.list(list, :columns_across, 4)
       end
