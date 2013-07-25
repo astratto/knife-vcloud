@@ -25,7 +25,7 @@ FEATURES
 - show VDCs
 - show Catalogs
 - show Catalog Items
-- create/start/stop/delete/show vApps
+- create/start/stop/delete/show/reset/suspend/reboot vApps
 - show VMs
 - basic vApp network configuration
 - basic VM network configuration
@@ -50,9 +50,12 @@ USAGE
     knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)
     knife vc vapp create [VDC_ID] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP_ID] (options)
+    knife vc vapp reboot [VAPP_ID] (options)
+    knife vc vapp reset [VAPP_ID] (options)
     knife vc vapp show [VAPP_ID] (options)
     knife vc vapp start [VAPP_ID] (options)
     knife vc vapp stop [VAPP_ID] (options)
+    knife vc vapp suspend [VAPP_ID] (options)
     knife vc vdc show [VDC_ID] (options)
     knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)
     knife vc vm config network [VM_ID] [NETWORK_NAME] (options)
