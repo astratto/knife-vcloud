@@ -180,6 +180,15 @@ _Example:_
     vApp deletion...Done!
     Summary: Status: success - started at 2012-12-19T17:00:20.503+01:00 and ended at 2012-12-19T17:00:21.133+01:00
 
+###Reboot vApp
+This command reboots a given vApp.
+
+_Example:_
+
+    $ knife vc vapp reboot 4338a436-19fc-47b9-aaba-024841acfd66
+    vApp reboot...Done!
+    Summary: Status: success - started at 2013-07-19T16:50:31.030+01:00 and ended at 2013-07-19T16:50:38.487+01:00
+
 ###Create vApp from template
 This command creates a vApp starting from a template (see catalog item).
 
