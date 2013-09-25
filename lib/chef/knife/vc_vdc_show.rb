@@ -47,7 +47,7 @@ class Chef
         list.flatten!
         vdc[:vapps].each do |k, v|
           vapp = connection.get_vapp v
-          list << ("#{k} (#{vms_hash.count} VMs)" || '')
+          list << ("#{k} (#{vapp[:vms_hash].count} VMs)" || '')
           list << (v || '')
           list << (vapp[:status] || '')
           list << (vapp[:ip] || '')

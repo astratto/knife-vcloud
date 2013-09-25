@@ -64,7 +64,7 @@ class Chef
           :ip_allocation_mode => locate_config_value(:vm_ip_allocation_mode),
         }
 
-        task_id, response = connection.set_vm_network_config vm_id, network_name, config
+        task_id = connection.set_vm_network_config vm_id, network_name, config
 
         print "VM network configuration..."
         wait_task(connection, task_id)
