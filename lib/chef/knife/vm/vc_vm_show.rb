@@ -38,9 +38,20 @@ class Chef
 
         connection.login
         vm = connection.get_vm vm_id
+        vm_info = connection.get_vm_info vm_id
         connection.logout
 
         out_msg("OS Name", vm[:os_desc])
+
+        vm_info.each do |section, values|
+          list << ui.color(section.capitalize, :bold)
+          list << ''
+
+          list << (values[:name] || '')
+          list << (values[:description] || '')
+
+          list << ['', '']
+        end
 
         vm[:networks].each do |network, values|
           list << ui.color('Network', :bold)
