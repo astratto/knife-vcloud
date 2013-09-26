@@ -19,3 +19,4 @@
 require 'chef/knife/vm/vc_vm_config_guest'
 require 'chef/knife/vm/vc_vm_config_network'
 require 'chef/knife/vm/vc_vm_show'
+require 'chef/knife/vm/vc_vm_set_info'
