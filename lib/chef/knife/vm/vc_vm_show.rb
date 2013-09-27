@@ -39,6 +39,7 @@ class Chef
         connection.login
         vm = connection.get_vm vm_id
         vm_info = connection.get_vm_info vm_id
+        vm_disks = connection.get_vm_disk_info vm_id
         connection.logout
 
         out_msg("OS Name", vm[:os_desc])
@@ -53,8 +54,14 @@ class Chef
           list << ['', '']
         end
 
+        list << [ui.color('Disks', :bold), '']
+        vm_disks.each do |values|
+          list << (values[:name] || '')
+          list << (values[:capacity] || '')
+        end
+
+        list << ['', '', ui.color('Networks', :bold), '']
         vm[:networks].each do |network, values|
-          list << ui.color('Network', :bold)
           list << (network || '')
           values.each do |k, v|
             list << (pretty_symbol(k) || '')
