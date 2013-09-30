@@ -23,12 +23,17 @@ class Chef
     class VcCatalogShow < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc catalog show [CATALOG_ID] (options)"
+      banner "knife vc catalog show CATALOG (options)"
+      option :org_name,
+             :long => "--org ORG_NAME",
+             :description => "Organization to whom VDC belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
 
       def run
         $stdout.sync = true
 
-        catalog_id = @name_args.first
+        catalog_arg = @name_args.shift
+        org_name = locate_config_value(:org_name)
 
         connection.login
 
@@ -37,7 +42,12 @@ class Chef
             ui.color('ID', :bold)
         ]
 
-        catalog = connection.get_catalog catalog_id
+        unless org_name
+          catalog = connection.get_catalog catalog_arg
+        else
+          org = connection.get_organization_by_name org_name
+          catalog = connection.get_catalog_by_name org, catalog_arg
+        end
         connection.logout
 
         puts "#{ui.color('Description:', :cyan)} #{catalog[:description]}"
