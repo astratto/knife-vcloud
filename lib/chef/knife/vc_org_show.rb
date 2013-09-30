@@ -23,12 +23,19 @@ class Chef
     class VcOrgShow < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc org show [ORG_ID] (options)"
+      banner "knife vc org show [ORG] (options)"
+
+      option :org_use_ids,
+             :long => "--[no-]use-ids",
+             :description => "Specify whether [ORG] is an ID or a name (default)",
+             :boolean => true,
+             :default => false
 
       def run
         $stdout.sync = true
 
-        org_id = @name_args.first
+        org = @name_args.first
+        use_ids = locate_config_value(:org_use_ids)
 
         connection.login
 
@@ -37,7 +44,12 @@ class Chef
             ui.color('ID', :bold)
         ]
 
-        organizations = connection.get_organization org_id
+        if use_ids
+          organizations = connection.get_organization org
+        else
+          organizations = connection.get_organization_by_name org
+        end
+
         connection.logout
 
         list = ["#{ui.color('CATALOGS', :cyan)}", '']
