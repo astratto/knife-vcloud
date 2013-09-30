@@ -43,23 +43,26 @@ USAGE
 ###Available commands
 
     knife vc catalog item show [CATALOG_ID] (options)
-    knife vc catalog show [CATALOG_ID] (options)
+    knife vc catalog show CATALOG (options)
     knife vc login (options)
     knife vc org list (options)
-    knife vc org show [ORG_ID] (options)
+    knife vc org show [ORG] (options)
+    knife vc vapp clone [VDC_ID] [SOURCE_VAPP_ID] [DEST_NAME] (options)
     knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)
     knife vc vapp create [VDC_ID] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP_ID] (options)
     knife vc vapp reboot [VAPP_ID] (options)
     knife vc vapp reset [VAPP_ID] (options)
-    knife vc vapp show [VAPP_ID] (options)
+    knife vc vapp show VAPP (options)
     knife vc vapp start [VAPP_ID] (options)
     knife vc vapp stop [VAPP_ID] (options)
     knife vc vapp suspend [VAPP_ID] (options)
-    knife vc vdc show [VDC_ID] (options)
+    knife vc vdc show VDC (options)
     knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)
     knife vc vm config network [VM_ID] [NETWORK_NAME] (options)
-    knife vc vm show [VM_ID] (options)
+    knife vc vm set disks [VM_ID] [SIZE (in MB)] (options)
+    knife vc vm set info [VM_ID] (options)
+    knife vc vm show VM (options)
 
 ###Configuration
 All commands accept the following options:
@@ -102,7 +105,7 @@ This command shows details about a given organization.
 
 _Example:_
 
-    $ knife vc org show 9f3ac2a8-92dd-4921-b48b-85b42f4d247c
+    $ knife vc org show TEST-ORG
     CATALOGS
     Name                    ID
     Catalog_1               7414bc46-44fc-44ed-9844-0aa6ea9f5cf9
@@ -126,7 +129,7 @@ This command shows details about a given catalog.
 
 _Example:_
 
-    $ knife vc catalog show 7414bc46-44fc-44ed-9844-0aa6ea9f5cf9
+    $ knife vc catalog show Catalog_1 --org TEST-ORG
     Description: Test Catalog description
     Name                    ID
     CentOS 6.3              40e5e071-8231-46c1-92b7-fbe8f633e259
@@ -148,7 +151,7 @@ This command shows details about a given vDC.
 
 _Example:_
 
-    $ knife vc vdc show 440d5134-d2dd-4be7-8692-79a28c86f55b
+    $ knife vc vdc show Test_vDC_1 --org TEST-ORG
     Description:
     vAPPS
     Name                    ID                                    Status    IP
@@ -225,7 +228,7 @@ This command shows details about a given vApp.
 
 _Example:_
 
-    $ knife vc vapp show 4338a436-19fc-47b9-aaba-024841acfd66
+    $ knife vc vapp show TEST_CENTOS --org TEST-ORG --vdc Test_vDC_1
     Name: TEST_CENTOS
     Status: running
     IP: 10.102.46.237
@@ -247,22 +250,24 @@ This command shows details about a given VM.
 
 _Example:_
 
-    $ knife vc vm show 31a56cf6-088b-4a43-b726-d6370b4e7d0a
-    OS Name: Red Hat Enterprise Linux 6 (64-bit)
-    Network                TestNet_1
-    Index                  0
-    Ip                     10.102.47.70
-    Is connected           true
-    Mac address            00:50:56:01:01:80
-    Ip allocation mode     POOL
+    $ knife vc vm show TestVM --vapp TEST_CENTOS --org TEST-ORG --vdc Test_vDC_1
+    Cpu
+    Number of Virtual CPUs  2 virtual CPU(s)
+
+    Memory
+    Memory Size             1024 MB of memory
+
+    Disks
+    Hard disk 1             16384 MB
+
+    Networks
 
     Guest Customizations
-    Enabled                true
-    Admin passwd enabled   true
-    Admin passwd auto      true
-    Admin passwd           xxxxxxxxxx
-    Reset passwd required  false
-    Computer name          RHEL63-Plus
+    Enabled                 true
+    Admin passwd enabled    false
+    Admin passwd auto       false
+    Admin passwd            xxxxxxxx
+    Reset passwd required   false
 
 ###VM's network configuration
 This command allows for basic VM network configuration.
