@@ -42,14 +42,16 @@ class Chef
         vm_disks = connection.get_vm_disk_info vm_id
         connection.logout
 
+        out_msg("VM Name", vm[:vm_name])
         out_msg("OS Name", vm[:os_desc])
 
+        list << ['', '']
         vm_info.each do |section, values|
           list << ui.color(section.capitalize, :bold)
           list << ''
 
-          list << (values[:name] || '')
           list << (values[:description] || '')
+          list << (values[:name] || '')
 
           list << ['', '']
         end
