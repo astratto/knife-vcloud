@@ -44,6 +44,7 @@ class Chef
 
         out_msg("VM Name", vm[:vm_name])
         out_msg("OS Name", vm[:os_desc])
+        out_msg("Status", vm[:status])
 
         list << ['', '']
         vm_info.each do |section, values|
