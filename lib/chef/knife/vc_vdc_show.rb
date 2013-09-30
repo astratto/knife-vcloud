@@ -23,12 +23,18 @@ class Chef
     class VcVdcShow < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vdc show [VDC_ID] (options)"
+      banner "knife vc vdc show VDC (options)"
+
+      option :org_name,
+             :long => "--org ORG_NAME",
+             :description => "Organization to whom VDC belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
 
       def run
         $stdout.sync = true
 
-        vdc_id = @name_args.first
+        vdc_arg = @name_args.shift
+        org_name = locate_config_value(:org_name)
 
         connection.login
 
@@ -39,7 +45,12 @@ class Chef
             ui.color('IP', :bold),
         ]
 
-        vdc = connection.get_vdc vdc_id
+        unless org_name
+          vdc = connection.get_vdc vdc_arg
+        else
+          org = connection.get_organization_by_name org_name
+          vdc = connection.get_vdc_by_name org, vdc_arg
+        end
 
         puts "#{ui.color('Description:', :cyan)} #{vdc[:description]}"
         list = ["#{ui.color('vAPPS', :cyan)}", '', '', '']
