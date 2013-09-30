@@ -23,7 +23,7 @@ class Chef
     class VcVappClone < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vapp clone [VDC_ID] [SOURCE_VAPP_ID] [DEST_NAME] (options)"
+      banner "knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)"
 
       option :vm_deploy_clone,
              :long => "--[no-]deploy-clone",
@@ -46,19 +46,45 @@ class Chef
              :boolean => true,
              :default => false
 
+      option :org_name,
+             :long => "--org ORG_NAME",
+             :description => "Organization to whom vApp's VDC belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
+
+      option :vdc_name,
+             :long => "--vdc VDC_NAME",
+             :description => "VDC to whom vApp belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_vdc_name] = key }
+
       def run
         $stdout.sync = true
 
-        vdc_id = @name_args.shift
-        vapp_id = @name_args.shift
+        vdc_arg = @name_args.shift
+        vapp_arg = @name_args.shift
         dest_vapp_name = @name_args.shift
+
+        org_name = locate_config_value(:org_name)
         deploy_clone = locate_config_value(:vm_deploy_clone).to_s
         poweron_clone = locate_config_value(:vm_poweron_clone).to_s
         delete_source = locate_config_value(:vm_delete_source).to_s
 
         connection.login
 
-        result = connection.clone_vapp vdc_id, vapp_id, dest_vapp_name, deploy_clone, poweron_clone, delete_source
+        unless org_name
+          vdc = connection.get_vdc vdc_arg
+        else
+          org = connection.get_organization_by_name org_name
+          vdc = connection.get_vdc_by_name org, vdc_arg
+        end
+
+        unless org_name
+          vapp = connection.get_vapp vapp_arg
+        else
+          org = connection.get_organization_by_name org_name unless org
+          vapp = connection.get_vapp_by_name org, vdc[:name], vapp_arg
+        end
+
+        result = connection.clone_vapp vdc[:id], vapp[:id], dest_vapp_name, deploy_clone, poweron_clone, delete_source
 
         print "Cloning vApp..."
         wait_task(connection, result[:task_id])
