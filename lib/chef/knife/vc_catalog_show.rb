@@ -23,7 +23,7 @@ class Chef
     class VcCatalogShow < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc catalog show CATALOG (options)"
+      banner "knife vc catalog show [CATALOG] (options)"
       option :org_name,
              :long => "--org ORG_NAME",
              :description => "Organization to whom VDC belongs",
