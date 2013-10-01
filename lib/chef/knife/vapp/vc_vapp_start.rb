@@ -23,16 +23,35 @@ class Chef
     class VcVappStart < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vapp start [VAPP_ID] (options)"
+      banner "knife vc vapp start [VAPP] (options)"
+
+      option :org_name,
+             :long => "--org ORG_NAME",
+             :description => "Organization to whom vApp's VDC belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
+
+      option :vdc_name,
+             :long => "--vdc VDC_NAME",
+             :description => "VDC to whom vApp belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_vdc_name] = key }
 
       def run
         $stdout.sync = true
 
-        vapp_id = @name_args.first
+        vapp_arg = @name_args.shift
+        org_name = locate_config_value(:org_name)
+        vdc_name = locate_config_value(:vdc_name)
 
         connection.login
+        unless org_name && vdc_name
+          notice_msg("--org and --vdc not specified, assuming VAPP is an ID")
+          vapp = connection.get_vapp vapp_arg
+        else
+          org = connection.get_organization_by_name org_name
+          vapp = connection.get_vapp_by_name org, vdc_name, vapp_arg
+        end
 
-        task_id = connection.poweron_vapp vapp_id
+        task_id = connection.poweron_vapp vapp[:id]
 
         print "vApp startup..."
         wait_task(connection, task_id)
