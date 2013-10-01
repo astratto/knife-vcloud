@@ -23,17 +23,32 @@ class Chef
     class VcVappCreate < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vapp create [VDC_ID] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)"
+      banner "knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)"
+
+      option :org_name,
+             :long => "--org ORG_NAME",
+             :description => "Organization to whom vApp's VDC belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
 
       def run
         $stdout.sync = true
 
-        vdc_id = @name_args.shift
+        vdc_arg = @name_args.shift
         name = @name_args.shift
         description = @name_args.shift
         templateId = @name_args.shift
+        org_name = locate_config_value(:org_name)
 
         connection.login
+
+        unless org_name
+          notice_msg("--org not specified, assuming VDC is an ID")
+          vdc_id = vdc_arg
+        else
+          org = connection.get_organization_by_name org_name
+          vdc = connection.get_vdc_by_name org, vdc_arg
+          vdc_id = vdc[:id]
+        end
 
         result = connection.create_vapp_from_template vdc_id, name, description, templateId
 
