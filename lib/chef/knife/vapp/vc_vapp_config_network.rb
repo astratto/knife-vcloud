@@ -23,7 +23,7 @@ class Chef
     class VcVappConfigNetwork < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)"
+      banner "knife vc vapp config network [VAPP] [NETWORK_NAME] (options)"
 
       option :fence_mode,
              :short => "-F FENCE_MODE",
@@ -38,20 +38,38 @@ class Chef
              :boolean => true,
              :default => true
 
+      option :org_name,
+             :long => "--org ORG_NAME",
+             :description => "Organization to whom vApp's VDC belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
+
+      option :vdc_name,
+             :long => "--vdc VDC_NAME",
+             :description => "VDC to whom vApp belongs",
+             :proc => Proc.new { |key| Chef::Config[:knife][:default_vdc_name] = key }
+
       def run
         $stdout.sync = true
 
-        vapp_id = @name_args.shift
+        vapp_arg = @name_args.shift
         network_name = @name_args.shift
-
-        connection.login
-
+        org_name = locate_config_value(:org_name)
+        vdc_name = locate_config_value(:vdc_name)
         config = {
           :fence_mode => locate_config_value(:fence_mode),
           :retain_net => locate_config_value(:retain_net)
         }
 
-        task_id, response = connection.set_vapp_network_config vapp_id, network_name, config
+        connection.login
+        unless org_name && vdc_name
+          notice_msg("--org and --vdc not specified, assuming VAPP is an ID")
+          vapp = connection.get_vapp vapp_arg
+        else
+          org = connection.get_organization_by_name org_name
+          vapp = connection.get_vapp_by_name org, vdc_name, vapp_arg
+        end
+
+        task_id, response = connection.set_vapp_network_config vapp[:id], network_name, config
 
         print "vApp network configuration..."
         wait_task(connection, task_id)
