@@ -43,6 +43,7 @@ class Chef
         ]
 
         unless org_name
+          notice_msg("--org not specified, assuming CATALOG is an ID")
           catalog = connection.get_catalog catalog_arg
         else
           org = connection.get_organization_by_name org_name

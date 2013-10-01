@@ -84,6 +84,12 @@ class Chef
         end
       end
 
+      def notice_msg(value)
+        if value && !value.empty?
+          puts "#{ui.color('Note:', :bold)} #{value}"
+        end
+      end
+
       def locate_config_value(key)
         key = key.to_sym
         Chef::Config[:knife][key] || config[key]

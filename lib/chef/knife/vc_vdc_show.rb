@@ -46,6 +46,7 @@ class Chef
         ]
 
         unless org_name
+          notice_msg("--org not specified, assuming VDC is an ID")
           vdc = connection.get_vdc vdc_arg
         else
           org = connection.get_organization_by_name org_name

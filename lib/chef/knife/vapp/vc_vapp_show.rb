@@ -52,6 +52,7 @@ class Chef
 
         connection.login
         unless org_name && vdc_name
+          notice_msg("--org and --vdc not specified, assuming VAPP is an ID")
           vapp = connection.get_vapp vapp_arg
         else
           org = connection.get_organization_by_name org_name

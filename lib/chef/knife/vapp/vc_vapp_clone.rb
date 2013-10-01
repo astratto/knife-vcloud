@@ -71,6 +71,7 @@ class Chef
         connection.login
 
         unless org_name
+          notice_msg("--org not specified, assuming VDC is an ID")
           vdc = connection.get_vdc vdc_arg
         else
           org = connection.get_organization_by_name org_name
@@ -78,6 +79,7 @@ class Chef
         end
 
         unless org_name
+          notice_msg("--org not specified, assuming SOURCE_VAPP is an ID")
           vapp = connection.get_vapp vapp_arg
         else
           org = connection.get_organization_by_name org_name unless org
