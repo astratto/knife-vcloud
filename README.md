@@ -43,14 +43,14 @@ USAGE
 ###Available commands
 
     knife vc catalog item show [CATALOG_ID] (options)
-    knife vc catalog show CATALOG (options)
+    knife vc catalog show [CATALOG] (options)
     knife vc login (options)
     knife vc org list (options)
     knife vc org show [ORG] (options)
-    knife vc vapp clone [VDC_ID] [SOURCE_VAPP_ID] [DEST_NAME] (options)
+    knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
     knife vc vapp config network [VAPP_ID] [NETWORK_NAME] (options)
-    knife vc vapp create [VDC_ID] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
-    knife vc vapp delete [VAPP_ID] (options)
+    knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
+    knife vc vapp delete [VAPP] (options)
     knife vc vapp reboot [VAPP_ID] (options)
     knife vc vapp reset [VAPP_ID] (options)
     knife vc vapp show VAPP (options)
@@ -63,6 +63,20 @@ USAGE
     knife vc vm set disks [VM_ID] [SIZE (in MB)] (options)
     knife vc vm set info [VM_ID] (options)
     knife vc vm show VM (options)
+
+####Note about IDs and names
+Most commands now accept both names and IDs.
+For searches based on names, in general, _--org_ and _--vdc_ must be specified.
+
+The examples in this document try to use names whenever is possible.
+Keep in mind that ID-based search is still in place.
+
+_Example:_
+
+    $ knife vc vapp delete a3f81395-4eda-43b0-8677-b2d597014979
+    Note: --org and --vdc not specified, assuming VAPP is an ID
+    Do you really want to DELETE vApp TestAppN (ID: a3f81395-4eda-43b0-8677-b2d597014979)? (Y/N) Y
+    ...
 
 ###Configuration
 All commands accept the following options:
@@ -181,10 +195,10 @@ This command deletes a given vApp.
 
 _Example:_
 
-    $ knife vc vapp delete c1bad644-6c4d-40fc-a46b-7624ff6d5e75
-    Do you really want to DELETE vApp c1bad644-6c4d-40fc-a46b-7624ff6d5e75?? (Y/N) Y
+    $ knife vc vapp delete clone2 --vdc vDC_Test --org Test  -VV
+    Do you really want to DELETE vApp clone2 (ID: ddd059c3-8988-4fd6-b125-4eac049ca77c)?? (Y/N) Y
     vApp deletion...Done!
-    Summary: Status: success - started at 2012-12-19T17:00:20.503+01:00 and ended at 2012-12-19T17:00:21.133+01:00
+    Summary: Status: success - started at 2013-10-01T11:37:45.690+02:00 and ended at 2013-10-01T11:37:45.973+02:00
 
 ###Reboot vApp
 This command reboots a given vApp.
@@ -244,6 +258,16 @@ Please note that you must use the human readable name of the network (i.e., _Tes
 _Example:_
 
     $ knife vc vapp config network 31a56cf6-088b-4a43-b726-d6370b4e7d0a TestNet_1
+
+###Clone a vApp
+This command clones an existing vApp.
+
+_Example:_
+
+    $ knife vc vapp clone vDC_Test clone_vAPP clone3 --org Test -VV
+    Cloning vApp...Done!
+    Summary: Status: success - started at 2013-09-30T18:14:36.740+02:00 and ended at 2013-09-30T18:14:42.857+02:00
+    vApp cloned with ID: 587210aa-cf92-48e8-8f37-07e058c0116f
 
 ###Show VM's details
 This command shows details about a given VM.
