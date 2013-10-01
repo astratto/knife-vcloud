@@ -177,26 +177,26 @@ This command starts up a given vApp.
 
 _Example:_
 
-    $ knife vc vapp start 4338a436-19fc-47b9-aaba-024841acfd66
+    $ knife vc vapp start clone3 --vdc vDC_Test --org Test -VV
     vApp startup...Done!
-    Summary: Status: success - started at 2012-12-19T16:50:31.030+01:00 and ended at 2012-12-19T16:50:38.487+01:00
+    Summary: Status: success - started at 2013-10-01T12:30:12.953+02:00 and ended at 2013-10-01T12:30:16.010+02:00
 
 ###Shutdown vApp
 This command halts a given vApp.
 
 _Example:_
 
-    $ knife vc vapp stop 09551b42-dca9-474d-aa50-201b223522db
+    $ knife vc vapp stop clone3 --vdc vDC_Test --org Test
     vApp shutdown...Done!
-    Summary: Status: success - started at 2012-12-19T16:56:31.100+01:00 and ended at 2012-12-19T16:56:38.667+01:00
+    Summary: Status: success - started at 2013-10-01T12:34:22.953+02:00 and ended at 2013-10-01T12:34:26.010+02:00
 
 ###Delete vApp
 This command deletes a given vApp.
 
 _Example:_
 
-    $ knife vc vapp delete clone2 --vdc vDC_Test --org Test  -VV
-    Do you really want to DELETE vApp clone2 (ID: ddd059c3-8988-4fd6-b125-4eac049ca77c)?? (Y/N) Y
+    $ knife vc vapp delete clone2 --vdc vDC_Test --org Test
+    Do you really want to DELETE vApp clone2 (ID: ddd059c3-8988-4fd6-b125-4eac049ca77c)? (Y/N) Y
     vApp deletion...Done!
     Summary: Status: success - started at 2013-10-01T11:37:45.690+02:00 and ended at 2013-10-01T11:37:45.973+02:00
 
@@ -205,36 +205,36 @@ This command reboots a given vApp.
 
 _Example:_
 
-    $ knife vc vapp reboot 4338a436-19fc-47b9-aaba-024841acfd66
+    $ knife vc vapp reboot clone3 --vdc vDC_Test --org Test
     vApp reboot...Done!
-    Summary: Status: success - started at 2013-07-19T16:50:31.030+01:00 and ended at 2013-07-19T16:50:38.487+01:00
+    Summary: Status: success - started at 2013-10-01T12:36:49.853+02:00 and ended at 2013-10-01T12:36:50.120+02:00
 
 ###Suspend vApp
 This command suspends a given vApp.
 
 _Example:_
 
-    $ knife vc vapp suspend 4338a436-19fc-47b9-aaba-024841acfd66
+    $ knife vc vapp suspend clone3 --vdc vDC_Test --org Test
     vApp suspend...Done!
-    Summary: Status: success - started at 2013-07-19T16:50:31.030+01:00 and ended at 2013-07-19T16:50:38.487+01:00
+    Summary: Status: success - started at 2013-10-01T12:37:43.540+02:00 and ended at 2013-10-01T12:37:50.130+02:00
 
 ###Reset vApp
 This command resets a given vApp.
 
 _Example:_
 
-    $ knife vc vapp reset 4338a436-19fc-47b9-aaba-024841acfd66
+    $ knife vc vapp reset clone3 --vdc vDC_Test --org Test
     vApp reset...Done!
-    Summary: Status: success - started at 2013-07-19T16:50:31.030+01:00 and ended at 2013-07-19T16:50:38.487+01:00
+    Summary: Status: success - started at 2013-10-01T12:38:42.920+02:00 and ended at 2013-10-01T12:38:44.323+02:00
 
 ###Create vApp from template
 This command creates a vApp starting from a template (see catalog item).
 
 _Example:_
 
-    $ knife vc vapp create 440d5134-d2dd-4be7-8692-79a28c86f55b TestvApp "Test vApp description" 14b63ef2-fe93-4d0b-91f0-ccbd3847c665
+    $ knife vc vapp create vDC_Test clone4 "Create example" 89e33fd7-04a7-4b5f-830b-2423c41089e3 --org Test
     vApp creation...Done!
-    Summary: Status: success - started at 2012-12-19T17:02:32.797+01:00 and ended at 2012-12-19T17:02:53.943+01:00
+    Summary: Status: success - started at 2013-10-01T12:18:32.220+02:00 and ended at 2013-10-01T12:18:38.323+02:00
     vApp created with ID: 9cdd92ad-ab65-467f-abe1-075e35c050ec
 
 ###Show vApp's details
