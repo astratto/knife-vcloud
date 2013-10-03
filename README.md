@@ -293,6 +293,38 @@ _Example:_
     Admin passwd            xxxxxxxx
     Reset passwd required   false
 
+###Set VM's CPUs / Memory
+This command sets CPUs and RAM info for a given VM.
+
+_Example:_
+    $ knife vc vm set info --ram 512 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    VM setting RAM info...
+    Summary: Status: success - started at 2013-10-03T10:09:10.797+02:00 and ended at 2013-10-03T10:09:17.240+02:00
+
+    $ knife vc vm set info --cpu 2 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    VM setting CPUs info...
+    Summary: Status: success - started at 2013-10-03T10:07:57.517+02:00 and ended at 2013-10-03T10:08:02.617+02:00
+
+###Set VM's disks
+This command manages disks for a given VM.
+
+_Example:_
+    # Create a new disk
+    $ knife vc vm set disks --add --disk-size 3000 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    VM setting Disks info...
+    Summary: Status: success - started at 2013-10-03T10:12:28.967+02:00 and ended at 2013-10-03T10:12:34.987+02:00
+
+    # Resize an existing disk (note that disk size can only be increased)
+    $ knife vc vm set disks --disk-name "Hard disk 2" --disk-size 3500 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    VM setting Disks info...
+    Summary: Status: success - started at 2013-10-03T10:13:50.933+02:00 and ended at 2013-10-03T10:13:57.367+02:00
+
+    # Delete an existing disk
+    $ knife vc vm set disks --disk-name "Hard disk 2" --delete --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    Do you really want to DELETE disk Hard disk 2? (Y/N) Y
+    VM setting Disks info...
+    Summary: Status: success - started at 2013-10-03T10:15:14.220+02:00 and ended at 2013-10-03T10:15:21.060+02:00
+
 ###VM's network configuration
 This command allows for basic VM network configuration.
 E.g., set IP allocation mode (defaults to POOL)
