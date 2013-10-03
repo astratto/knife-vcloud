@@ -20,6 +20,7 @@ class Chef
   class Knife
     class VcVappStop < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcVappCommon
 
       banner "knife vc vapp stop [VAPP] (options)"
 
@@ -37,17 +38,9 @@ class Chef
         $stdout.sync = true
 
         vapp_arg = @name_args.shift
-        org_name = locate_config_value(:org_name)
-        vdc_name = locate_config_value(:vdc_name)
 
         connection.login
-        unless org_name && vdc_name
-          notice_msg("--org and --vdc not specified, assuming VAPP is an ID")
-          vapp = connection.get_vapp vapp_arg
-        else
-          org = connection.get_organization_by_name org_name
-          vapp = connection.get_vapp_by_name org, vdc_name, vapp_arg
-        end
+        vapp = get_vapp(vapp_arg)
 
         task_id = connection.poweroff_vapp vapp[:id]
 
