@@ -16,39 +16,46 @@
 # limitations under the License.
 #
 
-require 'chef/knife/vc_common'
+require 'chef/knife/common/vc_common'
 
 class Chef
   class Knife
-    class VcCatalogItemShow < Chef::Knife
+    class VcVdcShow < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcVDCCommon
 
-      banner "knife vc catalog item show [CATALOG_ID] (options)"
+      banner "knife vc vdc show VDC (options)"
 
       def run
         $stdout.sync = true
 
-        item_id = @name_args.first
+        vdc_arg = @name_args.shift
 
         connection.login
 
+        vdc = get_vdc(vdc_arg)
+
         header = [
             ui.color('Name', :bold),
-            ui.color('Template ID', :bold)
+            ui.color('ID', :bold),
+            ui.color('Status', :bold),
+            ui.color('IP', :bold),
         ]
 
-        catalog_item = connection.get_catalog_item item_id
-        connection.logout
-
-        ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
-        list = header
+        ui.msg "#{ui.color('Description:', :cyan)} #{vdc[:description]}"
+        list = ["#{ui.color('vAPPS', :cyan)}", '', '', '']
+        list << header
         list.flatten!
-        catalog_item[:items].each do |k, v|
-          list << (k || '')
+        vdc[:vapps].each do |k, v|
+          vapp = connection.get_vapp v
+          list << ("#{k} (#{vapp[:vms_hash].count} VMs)" || '')
           list << (v || '')
+          list << (vapp[:status] || '')
+          list << (vapp[:ip] || '')
         end
 
-        ui.msg ui.list(list, :columns_across, 2)
+        ui.msg ui.list(list, :columns_across, 4)
+        connection.logout
       end
     end
   end

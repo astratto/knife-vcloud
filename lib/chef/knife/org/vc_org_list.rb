@@ -16,9 +16,31 @@
 # limitations under the License.
 #
 
-require 'chef/knife/vm/vc_vm_common'
-require 'chef/knife/vm/vc_vm_config_guest'
-require 'chef/knife/vm/vc_vm_config_network'
-require 'chef/knife/vm/vc_vm_show'
-require 'chef/knife/vm/vc_vm_set_info'
-require 'chef/knife/vm/vc_vm_set_disks'
+class Chef
+  class Knife
+    class VcOrgList < Chef::Knife
+      include Knife::VcCommon
+
+      banner "knife vc org list (options)"
+
+      def run
+        $stdout.sync = true
+
+        list = [
+            ui.color('Name', :bold),
+            ui.color('ID', :bold)
+        ]
+
+        connection.login
+        org_list = connection.get_organizations
+        connection.logout
+
+        org_list.each do |k, v|
+          list << (k || '')
+          list << (v || '')
+        end
+        ui.msg ui.list(list, :columns_across, 2)
+      end
+    end
+  end
+end

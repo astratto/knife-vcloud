@@ -18,31 +18,34 @@
 
 class Chef
   class Knife
-    class VcVappCreate < Chef::Knife
+    class VcCatalogShow < Chef::Knife
       include Knife::VcCommon
-      include Knife::VcVDCCommon
+      include Knife::VcCatalogCommon
 
-      banner "knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)"
+      banner "knife vc catalog show [CATALOG] (options)"
 
       def run
         $stdout.sync = true
 
-        vdc_arg = @name_args.shift
-        name = @name_args.shift
-        description = @name_args.shift
-        templateId = @name_args.shift
-
+        catalog_arg = @name_args.shift
         connection.login
-
-        vdc = get_vdc(vdc_arg)
-
-        result = connection.create_vapp_from_template vdc[:id], name, description, templateId
-
-        ui.msg "vApp creation..."
-        wait_task(connection, result[:task_id])
-        ui.msg "vApp created with ID: #{ui.color(result[:vapp_id], :cyan)}"
-
+        catalog = get_catalog(catalog_arg)
         connection.logout
+
+        header = [
+            ui.color('Name', :bold),
+            ui.color('ID', :bold)
+        ]
+
+        ui.msg "#{ui.color('Description:', :cyan)} #{catalog[:description]}"
+        list = header
+        list.flatten!
+        catalog[:items].each do |k, v|
+          list << (k || '')
+          list << (v || '')
+        end
+
+        ui.msg ui.list(list, :columns_across, 2)
       end
     end
   end

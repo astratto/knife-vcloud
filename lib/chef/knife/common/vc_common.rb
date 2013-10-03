@@ -20,11 +20,7 @@ require 'chef/knife'
 
 class Chef
   class Knife
-    # Module for operations common among commands
     module VcCommon
-      # :nodoc:
-      # Would prefer to do this in a rational way, but can't be done b/c of
-      # Mixlib::CLI's design :(
       def self.included(includer)
         includer.class_eval do
 

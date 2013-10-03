@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-require 'chef/knife/vc_common'
+require 'chef/knife/common/vc_common'
 
 class Chef
   class Knife

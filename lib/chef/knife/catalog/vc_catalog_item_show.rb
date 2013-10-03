@@ -16,45 +16,32 @@
 # limitations under the License.
 #
 
-require 'chef/knife/vc_common'
-
 class Chef
   class Knife
-    class VcCatalogShow < Chef::Knife
+    class VcCatalogItemShow < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc catalog show [CATALOG] (options)"
-      option :org_name,
-             :long => "--org ORG_NAME",
-             :description => "Organization to whom VDC belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
+      banner "knife vc catalog item show [CATALOG_ID] (options)"
 
       def run
         $stdout.sync = true
 
-        catalog_arg = @name_args.shift
-        org_name = locate_config_value(:org_name)
+        item_id = @name_args.first
 
         connection.login
 
         header = [
             ui.color('Name', :bold),
-            ui.color('ID', :bold)
+            ui.color('Template ID', :bold)
         ]
 
-        unless org_name
-          notice_msg("--org not specified, assuming CATALOG is an ID")
-          catalog = connection.get_catalog catalog_arg
-        else
-          org = connection.get_organization_by_name org_name
-          catalog = connection.get_catalog_by_name org, catalog_arg
-        end
+        catalog_item = connection.get_catalog_item item_id
         connection.logout
 
-        ui.msg "#{ui.color('Description:', :cyan)} #{catalog[:description]}"
+        ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
         list = header
         list.flatten!
-        catalog[:items].each do |k, v|
+        catalog_item[:items].each do |k, v|
           list << (k || '')
           list << (v || '')
         end

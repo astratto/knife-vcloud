@@ -1,6 +1,6 @@
 #
 # Author:: Stefano Tortarolo (<stefano.tortarolo@gmail.com>)
-# Copyright:: Copyright (c) 2012-2013
+# Copyright:: Copyright (c) 2013
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,32 +16,28 @@
 # limitations under the License.
 #
 
-require 'chef/knife/vc_common'
-
 class Chef
   class Knife
-    class VcOrgList < Chef::Knife
-      include Knife::VcCommon
-
-      banner "knife vc org list (options)"
-
-      def run
-        $stdout.sync = true
-
-        list = [
-            ui.color('Name', :bold),
-            ui.color('ID', :bold)
-        ]
-
-        connection.login
-        org_list = connection.get_organizations
-        connection.logout
-
-        org_list.each do |k, v|
-          list << (k || '')
-          list << (v || '')
+    module VcVDCCommon
+      def self.included(includer)
+        includer.class_eval do
+          option :org_name,
+                 :long => "--org ORG_NAME",
+                 :description => "Organization to whom VDC belongs",
+                 :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
         end
-        ui.msg ui.list(list, :columns_across, 2)
+      end
+
+      def get_vdc(vdc_arg)
+        org_name = locate_config_value(:org_name)
+
+        unless org_name
+          notice_msg("--org not specified, assuming VDC is an ID")
+          vdc = connection.get_vdc vdc_arg
+        else
+          org = connection.get_organization_by_name org_name
+          vdc = connection.get_vdc_by_name org, vdc_arg
+        end
       end
     end
   end

@@ -16,6 +16,23 @@
 # limitations under the License.
 #
 
+require 'chef/knife/common/vc_common'
+
+# ORG
+require 'chef/knife/org/vc_org_list'
+require 'chef/knife/org/vc_org_show'
+
+# VDC
+require 'chef/knife/common/vc_vdc_common'
+require 'chef/knife/vdc/vc_vdc_show'
+
+# Catalog
+require 'chef/knife/common/vc_catalog_common'
+require 'chef/knife/catalog/vc_catalog_show'
+require 'chef/knife/catalog/vc_catalog_item_show'
+
+# VAPP
+require 'chef/knife/common/vc_vapp_common'
 require 'chef/knife/vapp/vc_vapp_config_network'
 require 'chef/knife/vapp/vc_vapp_create'
 require 'chef/knife/vapp/vc_vapp_delete'
@@ -26,3 +43,11 @@ require 'chef/knife/vapp/vc_vapp_start'
 require 'chef/knife/vapp/vc_vapp_stop'
 require 'chef/knife/vapp/vc_vapp_suspend'
 require 'chef/knife/vapp/vc_vapp_clone'
+
+# VM
+require 'chef/knife/common/vc_vm_common'
+require 'chef/knife/vm/vc_vm_config_guest'
+require 'chef/knife/vm/vc_vm_config_network'
+require 'chef/knife/vm/vc_vm_show'
+require 'chef/knife/vm/vc_vm_set_info'
+require 'chef/knife/vm/vc_vm_set_disks'
