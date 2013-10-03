@@ -16,8 +16,6 @@
 # limitations under the License.
 #
 
-require 'chef/knife/common/vc_common'
-
 class Chef
   class Knife
     class VcVdcShow < Chef::Knife
