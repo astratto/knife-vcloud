@@ -53,7 +53,7 @@ class Chef
 
         task_id = connection.suspend_vapp vapp[:id]
 
-        print "vApp suspend..."
+        ui.msg "vApp suspend..."
         wait_task(connection, task_id)
 
         connection.logout

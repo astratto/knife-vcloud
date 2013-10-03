@@ -53,7 +53,7 @@ class Chef
 
         task_id = connection.poweroff_vapp vapp[:id]
 
-        print "vApp shutdown..."
+        ui.msg "vApp shutdown..."
         wait_task(connection, task_id)
 
         connection.logout
