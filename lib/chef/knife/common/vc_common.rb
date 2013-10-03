@@ -17,6 +17,7 @@
 #
 
 require 'chef/knife'
+require 'date'
 
 class Chef
   class Knife
@@ -94,13 +95,29 @@ class Chef
       def wait_task(connection, task_id)
         result = connection.wait_task_completion task_id
 
+        elapsed = humanize_elapsed_time(result[:start_time], result[:end_time])
+
         out_msg("Summary",
-          "Status: #{ui.color(result[:status], :cyan)} - started at #{result[:start_time]} and ended at #{result[:end_time]}")
+          "Status: #{ui.color(result[:status], :cyan)} - time elapsed: #{elapsed}")
 
         if result[:errormsg]
           ui.warn(ui.color("ATTENTION: #{result[:errormsg]}", :red))
         end
       end
+
+      private
+        def humanize_elapsed_time(start_time, end_time)
+          start_time = Time.parse(start_time || Time.now)
+          end_time = Time.parse(end_time || Time.now)
+          secs = (end_time - start_time)
+
+          [[60, :seconds],
+            [60, :minutes],
+            [24, :hours]].map do |count, name|
+            secs, n = secs.divmod(count)
+            "#{n} #{name}" unless n <= 0
+          end.compact.reverse.join(' ')
+        end
     end
   end
 end
