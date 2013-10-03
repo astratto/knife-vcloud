@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 
+require 'chef/knife/vm/vc_vm_common'
 require 'chef/knife/vm/vc_vm_config_guest'
 require 'chef/knife/vm/vc_vm_config_network'
 require 'chef/knife/vm/vc_vm_show'

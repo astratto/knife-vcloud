@@ -22,8 +22,9 @@ class Chef
   class Knife
     class VcVmSetDisks < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcVmCommon
 
-      banner "knife vc vm set disks [VM_ID] [SIZE (in MB)] (options)"
+      banner "knife vc vm set disks [VM] [SIZE (in MB)] (options)"
 
       option :vm_disk_name,
              :long => "--disk-name DISK_NAME",
@@ -48,7 +49,7 @@ class Chef
       def run
         $stdout.sync = true
 
-        vm_id = @name_args.shift
+        vm_arg = @name_args.shift
 
         new_disk = locate_config_value(:vm_add_disk)
         delete_disk = locate_config_value(:vm_delete_disk)
@@ -59,9 +60,11 @@ class Chef
         raise ArgumentError, "Disk size is mandatory if using --add" if new_disk && disk_size.nil?
         raise ArgumentError, "Disk name is mandatory if using --delete" if delete_disk && disk_name.nil?
 
+        connection.login
+        vm = get_vm(vm_arg)
+
         if !delete_disk || ui.confirm("Do you really want to #{ui.color('DELETE', :red)} disk #{disk_name}")
-          connection.login
-          task_id = connection.set_vm_disk_info vm_id, {
+          task_id = connection.set_vm_disk_info vm[:id], {
                                                         :add => new_disk,
                                                         :delete => delete_disk,
                                                         :disk_size => disk_size,
@@ -69,9 +72,8 @@ class Chef
                                                       }
           ui.msg "VM setting Disks info..."
           wait_task(connection, task_id)
-
-          connection.logout
         end
+        connection.logout
       end
     end
   end

@@ -22,43 +22,18 @@ class Chef
   class Knife
     class VcVmShow < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcVmCommon
 
       banner "knife vc vm show VM (options)"
-
-      option :org_name,
-             :long => "--org ORG_NAME",
-             :description => "Organization to whom vApp's VDC belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
-
-      option :vdc_name,
-             :long => "--vdc VDC_NAME",
-             :description => "VDC to whom vApp belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_vdc_name] = key }
-
-      option :vapp_name,
-             :long => "--vapp VAPP_NAME",
-             :description => "vApp to whom VM belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_vapp_name] = key }
 
       def run
         $stdout.sync = true
 
         vm_arg = @name_args.first
-        vapp_name = locate_config_value(:vapp_name)
-        org_name = locate_config_value(:org_name)
-        vdc_name = locate_config_value(:vdc_name)
-
-        list = []
 
         connection.login
 
-        unless org_name && vdc_name && vapp_name
-          notice_msg("--vapp, --org and --vdc not specified, assuming VM is an ID")
-          vm = connection.get_vm vm_arg
-        else
-          org = connection.get_organization_by_name org_name
-          vm = connection.get_vm_by_name org, vdc_name, vapp_name, vm_arg
-        end
+        vm = get_vm(vm_arg)
 
         vm_info = connection.get_vm_info vm[:id]
         vm_disks = connection.get_vm_disk_info vm[:id]
@@ -68,6 +43,7 @@ class Chef
         out_msg("OS Name", vm[:os_desc])
         out_msg("Status", vm[:status])
 
+        list = []
         list << ['', '']
         vm_info.each do |section, values|
           list << ui.color(section.capitalize, :bold)

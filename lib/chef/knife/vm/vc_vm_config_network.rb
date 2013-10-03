@@ -22,8 +22,9 @@ class Chef
   class Knife
     class VcVmConfigNetwork < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcVmCommon
 
-      banner "knife vc vm config network [VM_ID] [NETWORK_NAME] (options)"
+      banner "knife vc vm config network [VM] [NETWORK_NAME] (options)"
 
       option :vm_net_primary_index,
              :long => "--net-primary NETWORK_PRIMARY_IDX",
@@ -51,11 +52,8 @@ class Chef
       def run
         $stdout.sync = true
 
-        vm_id = @name_args.shift
+        vm_arg = @name_args.shift
         network_name = @name_args.shift
-
-        connection.login
-
         config = {
           :primary_index => locate_config_value(:vm_net_primary_index),
           :network_index => locate_config_value(:vm_net_index),
@@ -64,7 +62,11 @@ class Chef
           :ip_allocation_mode => locate_config_value(:vm_ip_allocation_mode),
         }
 
-        task_id = connection.set_vm_network_config vm_id, network_name, config
+        connection.login
+
+        vm = get_vm(vm_arg)
+
+        task_id = connection.set_vm_network_config vm[:id], network_name, config
 
         ui.msg "VM network configuration..."
         wait_task(connection, task_id)

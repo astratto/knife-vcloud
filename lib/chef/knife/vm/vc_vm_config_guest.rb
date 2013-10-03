@@ -22,8 +22,9 @@ class Chef
   class Knife
     class VcVmConfigGuest < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcVmCommon
 
-      banner "knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)"
+      banner "knife vc vm config guest [VM] [COMPUTER_NAME] (options)"
 
       option :guest_enabled,
              :long => "--[no-]guest",
@@ -44,18 +45,19 @@ class Chef
       def run
         $stdout.sync = true
 
-        vm_id = @name_args.shift
+        vm_arg = @name_args.shift
         computer_name = @name_args.shift
-
-        connection.login
-
         config = {
           :enabled => locate_config_value(:guest_enabled),
           :admin_passwd_enabled => locate_config_value(:admin_passwd_enabled),
           :admin_passwd => locate_config_value(:admin_passwd)
         }
 
-        task_id, response = connection.set_vm_guest_customization vm_id, computer_name, config
+        connection.login
+
+        vm = get_vm(vm_arg)
+
+        task_id, response = connection.set_vm_guest_customization vm[:id], computer_name, config
 
         ui.msg "VM guest configuration..."
         wait_task(connection, task_id)
