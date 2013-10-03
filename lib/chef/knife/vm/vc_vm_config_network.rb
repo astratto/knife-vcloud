@@ -66,7 +66,7 @@ class Chef
 
         task_id = connection.set_vm_network_config vm_id, network_name, config
 
-        print "VM network configuration..."
+        ui.msg "VM network configuration..."
         wait_task(connection, task_id)
 
         connection.logout

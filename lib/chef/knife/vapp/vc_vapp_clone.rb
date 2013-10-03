@@ -88,9 +88,9 @@ class Chef
 
         result = connection.clone_vapp vdc[:id], vapp[:id], dest_vapp_name, deploy_clone, poweron_clone, delete_source
 
-        print "Cloning vApp..."
+        ui.msg "Cloning vApp..."
         wait_task(connection, result[:task_id])
-        puts "vApp cloned with ID: #{ui.color(result[:vapp_id], :cyan)}"
+        ui.msg "vApp cloned with ID: #{ui.color(result[:vapp_id], :cyan)}"
 
         connection.logout
       end

@@ -53,7 +53,7 @@ class Chef
 
         task_id = connection.poweron_vapp vapp[:id]
 
-        print "vApp startup..."
+        ui.msg("vApp startup...")
         wait_task(connection, task_id)
 
         connection.logout

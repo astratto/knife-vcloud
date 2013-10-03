@@ -53,9 +53,9 @@ class Chef
         connection.login
 
         unless org_name && vdc_name && vapp_name
+          notice_msg("--vapp, --org and --vdc not specified, assuming VM is an ID")
           vm = connection.get_vm vm_arg
         else
-          puts "#{org_name}, #{vdc_name}, #{vapp_name}, #{vm_arg}"
           org = connection.get_organization_by_name org_name
           vm = connection.get_vm_by_name org, vdc_name, vapp_name, vm_arg
         end
@@ -100,7 +100,7 @@ class Chef
           list << (pretty_symbol(k) || '')
           list << (v || '')
         end
-        puts ui.list(list, :columns_across, 2)
+        ui.msg ui.list(list, :columns_across, 2)
       end
     end
 

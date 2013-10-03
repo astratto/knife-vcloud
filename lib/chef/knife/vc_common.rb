@@ -80,13 +80,13 @@ class Chef
 
       def out_msg(label, value)
         if value && !value.empty?
-          puts "#{ui.color(label, :cyan)}: #{value}"
+          ui.msg("#{ui.color(label, :cyan)}: #{value}")
         end
       end
 
       def notice_msg(value)
         if value && !value.empty?
-          puts "#{ui.color('Note:', :bold)} #{value}"
+          ui.info("#{ui.color('Note:', :bold)} #{value}")
         end
       end
 
@@ -98,12 +98,11 @@ class Chef
       def wait_task(connection, task_id)
         result = connection.wait_task_completion task_id
 
-        puts "Done!"
         out_msg("Summary",
           "Status: #{ui.color(result[:status], :cyan)} - started at #{result[:start_time]} and ended at #{result[:end_time]}")
 
         if result[:errormsg]
-          puts ui.color("ATTENTION: #{result[:errormsg]}", :red)
+          ui.warn(ui.color("ATTENTION: #{result[:errormsg]}", :red))
         end
       end
     end

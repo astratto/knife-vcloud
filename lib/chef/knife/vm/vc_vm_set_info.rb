@@ -45,13 +45,13 @@ class Chef
 
         if cpus
           task_id = connection.set_vm_cpus vm_id, cpus
-          print "VM setting CPUs info..."
+          ui.msg "VM setting CPUs info..."
           wait_task(connection, task_id)
         end
 
         if ram
           task_id = connection.set_vm_ram vm_id, ram
-          print "VM setting RAM info..."
+          ui.msg "VM setting RAM info..."
           wait_task(connection, task_id)
         end
 

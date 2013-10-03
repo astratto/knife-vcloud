@@ -84,7 +84,7 @@ class Chef
           list << (v || '')
         end
 
-        puts ui.list(list, :columns_across, 2)
+        ui.msg ui.list(list, :columns_across, 2)
       end
     end
   end

@@ -54,7 +54,7 @@ class Chef
         if ui.confirm("Do you really want to #{ui.color('DELETE', :red)} vApp #{vapp[:name]} (ID: #{vapp[:id]})")
           task_id = connection.delete_vapp vapp[:id]
 
-          print "vApp deletion..."
+          ui.msg "vApp deletion..."
           wait_task(connection, task_id)
 
         end

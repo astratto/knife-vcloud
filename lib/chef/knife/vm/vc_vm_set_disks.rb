@@ -55,8 +55,6 @@ class Chef
         disk_name = locate_config_value(:vm_disk_name)
         disk_size = locate_config_value(:vm_disk_size)
 
-        puts "#{new_disk}, #{delete_disk}, #{disk_name}"
-
         raise ArgumentError, "Disk name is mandatory if using --no-add" if !new_disk && disk_name.nil?
         raise ArgumentError, "Disk size is mandatory if using --add" if new_disk && disk_size.nil?
         raise ArgumentError, "Disk name is mandatory if using --delete" if delete_disk && disk_name.nil?
@@ -69,7 +67,7 @@ class Chef
                                                         :disk_size => disk_size,
                                                         :disk_name => disk_name
                                                       }
-          print "VM setting Disks info..."
+          ui.msg "VM setting Disks info..."
           wait_task(connection, task_id)
 
           connection.logout

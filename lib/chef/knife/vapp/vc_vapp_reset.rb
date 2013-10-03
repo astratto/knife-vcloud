@@ -53,7 +53,7 @@ class Chef
 
         task_id = connection.reset_vapp vapp[:id]
 
-        print "vApp reset..."
+        ui.msg "vApp reset..."
         wait_task(connection, task_id)
 
         connection.logout

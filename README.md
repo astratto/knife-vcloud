@@ -178,7 +178,7 @@ This command starts up a given vApp.
 _Example:_
 
     $ knife vc vapp start clone3 --vdc vDC_Test --org Test -VV
-    vApp startup...Done!
+    vApp startup...
     Summary: Status: success - started at 2013-10-01T12:30:12.953+02:00 and ended at 2013-10-01T12:30:16.010+02:00
 
 ###Shutdown vApp
@@ -187,7 +187,7 @@ This command halts a given vApp.
 _Example:_
 
     $ knife vc vapp stop clone3 --vdc vDC_Test --org Test
-    vApp shutdown...Done!
+    vApp shutdown...
     Summary: Status: success - started at 2013-10-01T12:34:22.953+02:00 and ended at 2013-10-01T12:34:26.010+02:00
 
 ###Delete vApp
@@ -197,7 +197,7 @@ _Example:_
 
     $ knife vc vapp delete clone2 --vdc vDC_Test --org Test
     Do you really want to DELETE vApp clone2 (ID: ddd059c3-8988-4fd6-b125-4eac049ca77c)? (Y/N) Y
-    vApp deletion...Done!
+    vApp deletion...
     Summary: Status: success - started at 2013-10-01T11:37:45.690+02:00 and ended at 2013-10-01T11:37:45.973+02:00
 
 ###Reboot vApp
@@ -206,7 +206,7 @@ This command reboots a given vApp.
 _Example:_
 
     $ knife vc vapp reboot clone3 --vdc vDC_Test --org Test
-    vApp reboot...Done!
+    vApp reboot...
     Summary: Status: success - started at 2013-10-01T12:36:49.853+02:00 and ended at 2013-10-01T12:36:50.120+02:00
 
 ###Suspend vApp
@@ -215,7 +215,7 @@ This command suspends a given vApp.
 _Example:_
 
     $ knife vc vapp suspend clone3 --vdc vDC_Test --org Test
-    vApp suspend...Done!
+    vApp suspend...
     Summary: Status: success - started at 2013-10-01T12:37:43.540+02:00 and ended at 2013-10-01T12:37:50.130+02:00
 
 ###Reset vApp
@@ -224,7 +224,7 @@ This command resets a given vApp.
 _Example:_
 
     $ knife vc vapp reset clone3 --vdc vDC_Test --org Test
-    vApp reset...Done!
+    vApp reset...
     Summary: Status: success - started at 2013-10-01T12:38:42.920+02:00 and ended at 2013-10-01T12:38:44.323+02:00
 
 ###Create vApp from template
@@ -233,7 +233,7 @@ This command creates a vApp starting from a template (see catalog item).
 _Example:_
 
     $ knife vc vapp create vDC_Test clone4 "Create example" 89e33fd7-04a7-4b5f-830b-2423c41089e3 --org Test
-    vApp creation...Done!
+    vApp creation...
     Summary: Status: success - started at 2013-10-01T12:18:32.220+02:00 and ended at 2013-10-01T12:18:38.323+02:00
     vApp created with ID: 9cdd92ad-ab65-467f-abe1-075e35c050ec
 
@@ -265,7 +265,7 @@ This command clones an existing vApp.
 _Example:_
 
     $ knife vc vapp clone vDC_Test clone_vAPP clone3 --org Test -VV
-    Cloning vApp...Done!
+    Cloning vApp...
     Summary: Status: success - started at 2013-09-30T18:14:36.740+02:00 and ended at 2013-09-30T18:14:42.857+02:00
     vApp cloned with ID: 587210aa-cf92-48e8-8f37-07e058c0116f
 
@@ -302,7 +302,7 @@ Please note that you must use the human readable name of the network (i.e., _Tes
 _Example:_
 
     $ knife vc vm config network 31a56cf6-088b-4a43-b726-d6370b4e7d0a TestNet_1
-    VM network configuration...Done!
+    VM network configuration...
     Summary: Status: success - started at 2012-12-28T11:42:32.910+01:00 and ended at 2012-12-28T11:42:37.313+01:00
 
 ###VM's Guest Customization configuration
@@ -313,7 +313,7 @@ Please note that the vapp must be turned on.
 _Example:_
 
     $ knife vc vm config guest c5f11906-561b-4ffd-850a-60a48c6a21e9 CENTOS63 --guest --admin-passwd "testpassword"
-    VM guest configuration...Done!
+    VM guest configuration...
     Summary: Status: success - started at 2012-12-28T11:42:32.910+01:00 and ended at 2012-12-28T11:42:37.313+01:00
 
 LICENSE

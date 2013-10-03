@@ -52,9 +52,9 @@ class Chef
 
         result = connection.create_vapp_from_template vdc_id, name, description, templateId
 
-        print "vApp creation..."
+        ui.msg "vApp creation..."
         wait_task(connection, result[:task_id])
-        puts "vApp created with ID: #{ui.color(result[:vapp_id], :cyan)}"
+        ui.msg "vApp created with ID: #{ui.color(result[:vapp_id], :cyan)}"
 
         connection.logout
       end

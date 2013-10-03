@@ -53,7 +53,7 @@ class Chef
           vdc = connection.get_vdc_by_name org, vdc_arg
         end
 
-        puts "#{ui.color('Description:', :cyan)} #{vdc[:description]}"
+        ui.msg "#{ui.color('Description:', :cyan)} #{vdc[:description]}"
         list = ["#{ui.color('vAPPS', :cyan)}", '', '', '']
         list << header
         list.flatten!
@@ -65,7 +65,7 @@ class Chef
           list << (vapp[:ip] || '')
         end
 
-        puts ui.list(list, :columns_across, 4)
+        ui.msg ui.list(list, :columns_across, 4)
         connection.logout
       end
     end

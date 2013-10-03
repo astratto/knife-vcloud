@@ -71,7 +71,7 @@ class Chef
 
         task_id, response = connection.set_vapp_network_config vapp[:id], network_name, config
 
-        print "vApp network configuration..."
+        ui.msg "vApp network configuration..."
         wait_task(connection, task_id)
 
         connection.logout

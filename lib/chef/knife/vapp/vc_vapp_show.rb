@@ -42,14 +42,6 @@ class Chef
         org_name = locate_config_value(:org_name)
         vdc_name = locate_config_value(:vdc_name)
 
-        list = [
-            ui.color('Name', :bold),
-            ui.color('Status', :bold),
-            ui.color('IPs', :bold),
-            ui.color('ID', :bold),
-            ui.color('Scoped ID', :bold)
-        ]
-
         connection.login
         unless org_name && vdc_name
           notice_msg("--org and --vdc not specified, assuming VAPP is an ID")
@@ -66,6 +58,14 @@ class Chef
         out_msg("Status", vapp[:status])
         out_msg("IP", vapp[:ip])
 
+        list = [
+            ui.color('Name', :bold),
+            ui.color('Status', :bold),
+            ui.color('IPs', :bold),
+            ui.color('ID', :bold),
+            ui.color('Scoped ID', :bold)
+        ]
+
         vapp[:vms_hash].each do |k, v|
           list << (k || '')
           list << (v[:status] || '')
@@ -73,7 +73,7 @@ class Chef
           list << (v[:id] || '')
           list << (v[:vapp_scoped_local_id] || '')
         end
-        puts ui.list(list, :columns_across, 5)
+        ui.msg ui.list(list, :columns_across, 5)
       end
     end
   end

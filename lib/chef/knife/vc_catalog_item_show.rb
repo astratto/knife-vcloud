@@ -40,7 +40,7 @@ class Chef
         catalog_item = connection.get_catalog_item item_id
         connection.logout
 
-        puts "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
+        ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
         list = header
         list.flatten!
         catalog_item[:items].each do |k, v|
@@ -48,7 +48,7 @@ class Chef
           list << (v || '')
         end
 
-        puts ui.list(list, :columns_across, 2)
+        ui.msg ui.list(list, :columns_across, 2)
       end
     end
   end

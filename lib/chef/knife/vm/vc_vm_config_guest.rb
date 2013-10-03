@@ -57,7 +57,7 @@ class Chef
 
         task_id, response = connection.set_vm_guest_customization vm_id, computer_name, config
 
-        print "VM guest configuration..."
+        ui.msg "VM guest configuration..."
         wait_task(connection, task_id)
 
         connection.logout
