@@ -40,10 +40,6 @@ class Chef
              :description => "vApp to whom VM belongs",
              :proc => Proc.new { |key| Chef::Config[:knife][:default_vapp_name] = key }
 
-      def pretty_symbol(key)
-        key.to_s.gsub('_', ' ').capitalize
-      end
-
       def run
         $stdout.sync = true
 
@@ -107,5 +103,10 @@ class Chef
         puts ui.list(list, :columns_across, 2)
       end
     end
+
+    private
+      def pretty_symbol(key)
+        key.to_s.gsub('_', ' ').capitalize
+      end
   end
 end
