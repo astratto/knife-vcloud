@@ -24,7 +24,7 @@ class Chef
       include Knife::VcCommon
       include Knife::VcVmCommon
 
-      banner "knife vc vm set disks [VM] [SIZE (in MB)] (options)"
+      banner "knife vc vm set disks [VM] (options)"
 
       option :vm_disk_name,
              :long => "--disk-name DISK_NAME",

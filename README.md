@@ -60,7 +60,7 @@ USAGE
     knife vc vdc show VDC (options)
     knife vc vm config guest [VM_ID] [COMPUTER_NAME] (options)
     knife vc vm config network [VM_ID] [NETWORK_NAME] (options)
-    knife vc vm set disks [VM_ID] [SIZE (in MB)] (options)
+    knife vc vm set disks [VM_ID] (options)
     knife vc vm set info [VM_ID] (options)
     knife vc vm show VM (options)
 
