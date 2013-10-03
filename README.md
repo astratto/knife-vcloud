@@ -297,6 +297,7 @@ _Example:_
 This command sets CPUs and RAM info for a given VM.
 
 _Example:_
+
     $ knife vc vm set info --ram 512 --vapp vApp_test --vdc vDC_Test --org Test vm-test
     VM setting RAM info...
     Summary: Status: success - started at 2013-10-03T10:09:10.797+02:00 and ended at 2013-10-03T10:09:17.240+02:00
@@ -309,6 +310,7 @@ _Example:_
 This command manages disks for a given VM.
 
 _Example:_
+
     # Create a new disk
     $ knife vc vm set disks --add --disk-size 3000 --vapp vApp_test --vdc vDC_Test --org Test vm-test
     VM setting Disks info...
