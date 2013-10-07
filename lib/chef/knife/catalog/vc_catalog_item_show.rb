@@ -20,23 +20,23 @@ class Chef
   class Knife
     class VcCatalogItemShow < Chef::Knife
       include Knife::VcCommon
+      include Knife::VcCatalogCommon
 
-      banner "knife vc catalog item show [CATALOG_ID] (options)"
+      banner "knife vc catalog item show [CATALOG_ITEM] (options)"
 
       def run
         $stdout.sync = true
 
-        item_id = @name_args.first
+        item_arg = @name_args.first
 
         connection.login
+        catalog_item = get_catalog_item(item_arg)
+        connection.logout
 
         header = [
             ui.color('Name', :bold),
             ui.color('Template ID', :bold)
         ]
-
-        catalog_item = connection.get_catalog_item item_id
-        connection.logout
 
         ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
         list = header

@@ -25,6 +25,11 @@ class Chef
                  :long => "--org ORG_NAME",
                  :description => "Organization to whom Catalog belongs",
                  :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_name] = key }
+
+          option :vcloud_catalog_name,
+                 :long => "--catalog CATALOG_NAME",
+                 :description => "Catalog to whom Catalog Item belongs",
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_catalog_name] = key }
         end
       end
 
@@ -37,6 +42,18 @@ class Chef
         else
           org = connection.get_organization_by_name org_name
           catalog = connection.get_catalog_by_name org, catalog_arg
+        end
+      end
+
+      def get_catalog_item(catalog_item_arg)
+        catalog_name = locate_config_value(:vcloud_catalog_name)
+
+        unless catalog_name
+          notice_msg("--catalog not specified, assuming CATALOG_ITEM is an ID")
+          item = connection.get_catalog_item catalog_item_arg
+        else
+          catalog = get_catalog(catalog_name)
+          item = connection.get_catalog_item_by_name catalog[:id], catalog_item_arg
         end
       end
     end
