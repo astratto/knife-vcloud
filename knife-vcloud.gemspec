@@ -1,7 +1,11 @@
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'knife-vcloud/version'
+
 Gem::Specification.new do |s|
   s.name = %q{knife-vcloud}
-  s.version = "0.2.3"
-  s.date = %q{2012-12-28}
+  s.version = KnifeVCloud::VERSION
   s.authors = ["Stefano Tortarolo"]
   s.email = ['stefano.tortarolo@gmail.com']
   s.summary = %q{A knife plugin for the VMWare vCloud API}
