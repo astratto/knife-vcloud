@@ -1,5 +1,20 @@
 Changes
 ==
+Next Version (0.x.y)
+--
+
+FEATURES:
+* Add commands to resume/suspend/reset vApps
+* Show CPU/RAM/Disks info for VMs
+* Add command to set VM's info (CPUs & RAM)
+* Add command to manage VM's disks (add, delete, resize)
+* Add command to clone an existing vApp
+* Org show searches by name by default
+* VDCs can be searched by ID or by Name and Organization
+* Catalogs can be searched by ID or by Name and Organization
+* vApps can be searched by ID or by Name, Organization and VDC
+* VMs can be searched by ID or by Name, Organization, VDC and vApp
+
 2012-12-28 (0.2.3)
 --
 
