@@ -72,6 +72,7 @@ class Chef
               locate_config_value(:vcloud_api_version)
           )
         end
+
         @connection
       end
 

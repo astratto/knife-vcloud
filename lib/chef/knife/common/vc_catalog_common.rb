@@ -21,15 +21,15 @@ class Chef
     module VcCatalogCommon
       def self.included(includer)
         includer.class_eval do
-          option :org_name,
+          option :vcloud_org_name,
                  :long => "--org ORG_NAME",
                  :description => "Organization to whom Catalog belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_name] = key }
         end
       end
 
       def get_catalog(catalog_arg)
-        org_name = locate_config_value(:org_name)
+        org_name = locate_config_value(:vcloud_org_name)
 
         unless org_name
           notice_msg("--org not specified, assuming CATALOG is an ID")

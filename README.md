@@ -78,6 +78,16 @@ _Example:_
     Do you really want to DELETE vApp TestAppN (ID: a3f81395-4eda-43b0-8677-b2d597014979)? (Y/N) Y
     ...
 
+Default --org, --vdc and --vapp can be set in _knife.rb_:
+
+_Example:_
+
+    ...
+    knife[:vcloud_vdc_name] = "vDC_Test"
+    knife[:vcloud_org_name] = "Test"
+    knife[:vcloud_vapp_name] = "Test"
+    ...
+
 ###Configuration
 All commands accept the following options:
 
