@@ -356,9 +356,13 @@ Please note that the vapp must be turned on.
 
 _Example:_
 
-    $ knife vc vm config guest c5f11906-561b-4ffd-850a-60a48c6a21e9 CENTOS63 --guest --admin-passwd "testpassword"
+    $ knife vc vm config guest test_vm --vapp test_vapp1 --vdc vDC_TEST --org Test test_vm --admin-passwd "testpassword"
     VM guest configuration...
     Summary: Status: success - time elapsed: 5.23 seconds
+
+It's also possible to upload a customization script using _script_:
+
+    $ knife vc vm config guest ... --script script_filename.txt
 
 LICENSE
 --

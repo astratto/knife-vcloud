@@ -40,15 +40,28 @@ class Chef
              :long => "--admin-passwd ADMIN_PASSWD",
              :description => "Set Admin Password"
 
+      option :customization_script,
+             :long => "--script CUSTOMIZATION_SCRIPT",
+             :description => "Filename of a customization script to upload"
+
       def run
         $stdout.sync = true
 
         vm_arg = @name_args.shift
         computer_name = @name_args.shift
+        script_filename = locate_config_value(:customization_script)
+
+        if script_filename
+          script = File.read(script_filename)
+          raise ArgumentError,
+            "A customization script cannot exceed 49000 characters" if script.size > 49_000
+        end
+
         config = {
           :enabled => locate_config_value(:guest_enabled),
           :admin_passwd_enabled => locate_config_value(:admin_passwd_enabled),
-          :admin_passwd => locate_config_value(:admin_passwd)
+          :admin_passwd => locate_config_value(:admin_passwd),
+          :customization_script => script
         }
 
         connection.login

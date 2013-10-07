@@ -14,6 +14,7 @@ FEATURES:
 * Catalogs can be searched by ID or by Name and Organization
 * vApps can be searched by ID or by Name, Organization and VDC
 * VMs can be searched by ID or by Name, Organization, VDC and vApp
+* Add support for customization scripts
 
 2012-12-28 (0.2.3)
 --
