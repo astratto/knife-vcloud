@@ -285,6 +285,10 @@ This command shows details about a given VM.
 _Example:_
 
     $ knife vc vm show TestVM --vapp TEST_CENTOS --org TEST-ORG --vdc Test_vDC_1
+    VM Name: centos64-x64-s
+    OS Name: CentOS 4/5/6 (64-bit)
+    Status: running
+
     Cpu
     Number of Virtual CPUs  2 virtual CPU(s)
 
@@ -295,6 +299,13 @@ _Example:_
     Hard disk 1             16384 MB
 
     Networks
+    TST_FE-Rupar
+    Index                   0
+    Ip                      10.202.3.251
+    External ip
+    Is connected            true
+    Mac address             00:50:21:02:01:27
+    Ip allocation mode      POOL
 
     Guest Customizations
     Enabled                 true
@@ -302,6 +313,7 @@ _Example:_
     Admin passwd auto       false
     Admin passwd            xxxxxxxx
     Reset passwd required   false
+    Computer name           centos64-x64-s
 
 ###Set VM's CPUs / Memory
 This command sets CPUs and RAM info for a given VM.
