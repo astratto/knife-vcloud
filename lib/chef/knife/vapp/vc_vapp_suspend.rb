@@ -24,16 +24,6 @@ class Chef
 
       banner "knife vc vapp suspend [VAPP] (options)"
 
-      option :org_name,
-             :long => "--org ORG_NAME",
-             :description => "Organization to whom vApp's VDC belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
-
-      option :vdc_name,
-             :long => "--vdc VDC_NAME",
-             :description => "VDC to whom vApp belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_vdc_name] = key }
-
       def run
         $stdout.sync = true
 
