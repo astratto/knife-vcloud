@@ -15,6 +15,7 @@ FEATURES:
 * vApps can be searched by ID or by Name, Organization and VDC
 * VMs can be searched by ID or by Name, Organization, VDC and vApp
 * Add support for customization scripts
+* Add commands to manage VM's status (start/stop/delete/reset/suspend/reboot)
 
 2012-12-28 (0.2.3)
 --

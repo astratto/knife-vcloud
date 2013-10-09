@@ -182,8 +182,10 @@ _Example:_
     TestKnife (1 VMs)       09551b42-dca9-474d-aa50-201b223522db  running   10.102.46.237
     TestCENTOS (1 VMs)      4338a436-19fc-47b9-aaba-024841acfd66  stopped   10.102.46.23
 
-###Startup vApp
-This command starts up a given vApp.
+###Startup vApp/VM
+This command starts up a given vApp/VM.
+
+Note: use _knife vc vm..._ to operate on VMs.
 
 _Example:_
 
@@ -191,8 +193,10 @@ _Example:_
     vApp startup...
     Summary: Status: success - time elapsed: 2.967 seconds
 
-###Shutdown vApp
-This command halts a given vApp.
+###Shutdown vApp/VM
+This command halts a given vApp/VM.
+
+Note: use _knife vc vm..._ to operate on VMs.
 
 _Example:_
 
@@ -210,8 +214,10 @@ _Example:_
     vApp deletion...
     Summary: Status: success - time elapsed: 0.65 seconds
 
-###Reboot vApp
-This command reboots a given vApp.
+###Reboot vApp/VM
+This command reboots a given vApp/VM.
+
+Note: use _knife vc vm..._ to operate on VMs.
 
 _Example:_
 
@@ -219,8 +225,10 @@ _Example:_
     vApp reboot...
     Summary: Status: success - time elapsed: 0.157 seconds
 
-###Suspend vApp
-This command suspends a given vApp.
+###Suspend vApp/VM
+This command suspends a given vApp/VM.
+
+Note: use _knife vc vm..._ to operate on VMs.
 
 _Example:_
 
@@ -228,8 +236,10 @@ _Example:_
     vApp suspend...
     Summary: Status: success - time elapsed: 6.127 seconds
 
-###Reset vApp
-This command resets a given vApp.
+###Reset vApp/VM
+This command resets a given vApp/VM.
+
+Note: use _knife vc vm..._ to operate on VMs.
 
 _Example:_
 
