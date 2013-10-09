@@ -351,6 +351,7 @@ _Example:_
 
 ###VM's Guest Customization configuration
 This command allows for basic VM Guest Customization configuration.
+By default it forces a guest customization, use _--no-force_ to disable it.
 
 Please note that the vapp must be turned on.
 
@@ -359,6 +360,8 @@ _Example:_
     $ knife vc vm config guest test_vm --vapp test_vapp1 --vdc vDC_TEST --org Test test_vm --admin-passwd "testpassword"
     VM guest configuration...
     Summary: Status: success - time elapsed: 5.23 seconds
+    Forcing Guest Customization...
+    Summary: Status: success - time elapsed: 2.567 seconds
 
 It's also possible to upload a customization script using _script_:
 

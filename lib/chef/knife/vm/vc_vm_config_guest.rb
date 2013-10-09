@@ -44,6 +44,12 @@ class Chef
              :long => "--script CUSTOMIZATION_SCRIPT",
              :description => "Filename of a customization script to upload"
 
+      option :force_customization,
+             :long => "--[no-]force",
+             :description => "Force a Guest Customization of the parent vAPP",
+             :boolean => true,
+             :default => true
+
       def run
         $stdout.sync = true
 
@@ -72,6 +78,12 @@ class Chef
 
         ui.msg "VM guest configuration..."
         wait_task(connection, task_id)
+
+        if locate_config_value(:force_customization)
+          ui.msg "Forcing Guest Customization..."
+          task_id = connection.force_customization_vm vm[:id]
+          wait_task(connection, task_id)
+        end
 
         connection.logout
       end
