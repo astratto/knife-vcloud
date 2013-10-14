@@ -41,9 +41,11 @@ class Chef
         ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
         list = header
         list.flatten!
-        catalog_item[:items].each do |k, v|
-          list << (k || '')
-          list << (v || '')
+
+        catalog_item[:items].each do |item|
+          list << (item[:name] || '')
+          list << (item[:id] || '')
+          # TODO: show VMs using this item? item[:vms_hash]
         end
 
         ui.msg ui.list(list, :columns_across, 2)
