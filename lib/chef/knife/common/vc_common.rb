@@ -104,6 +104,8 @@ class Chef
         if result[:errormsg]
           ui.warn(ui.color("ATTENTION: #{result[:errormsg]}", :red))
         end
+
+        result[:errormsg].nil?
       end
 
       private

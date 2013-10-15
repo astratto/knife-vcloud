@@ -67,7 +67,12 @@ class Chef
         task_id = connection.set_vm_network_config vm[:id], network_name, config
 
         ui.msg "VM network configuration..."
-        wait_task(connection, task_id)
+
+        if wait_task(connection, task_id)
+          ui.msg "Forcing Guest Customization..."
+          task_id = connection.force_customization_vm vm[:id]
+          wait_task(connection, task_id)
+        end
 
         connection.logout
       end
