@@ -38,6 +38,15 @@ class Chef
         out_msg("Status", vapp[:status])
         out_msg("IP", vapp[:ip])
 
+        ui.msg("Networks")
+
+        list = [
+            ui.color('Name', :bold),
+            ui.color('IP', :bold)
+        ]
+
+        puts vapp[:networks]
+
         list = [
             ui.color('Name', :bold),
             ui.color('Status', :bold),

@@ -31,6 +31,10 @@ require 'chef/knife/common/vc_catalog_common'
 require 'chef/knife/catalog/vc_catalog_show'
 require 'chef/knife/catalog/vc_catalog_item_show'
 
+# Network
+require 'chef/knife/common/vc_network_common'
+require 'chef/knife/network/vc_network_show'
+
 # VAPP
 require 'chef/knife/common/vc_vapp_common'
 require 'chef/knife/vapp/vc_vapp_config_network'
@@ -56,3 +60,4 @@ require 'chef/knife/vm/vc_vm_reset'
 require 'chef/knife/vm/vc_vm_start'
 require 'chef/knife/vm/vc_vm_stop'
 require 'chef/knife/vm/vc_vm_suspend'
+
