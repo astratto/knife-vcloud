@@ -42,13 +42,14 @@ USAGE
 
 ###Available commands
 
-    knife vc catalog item show [CATALOG_ID] (options)
+    knife vc catalog item show [CATALOG_ITEM] (options)
     knife vc catalog show [CATALOG] (options)
     knife vc login (options)
+    knife vc network show [network] (options)
     knife vc org list (options)
     knife vc org show [ORG] (options)
     knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
-    knife vc vapp config network [VAPP] [NETWORK_NAME] (options)
+    knife vc vapp config network [VAPP] [NETWORK] (options)
     knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP] (options)
     knife vc vapp reboot [VAPP] (options)
@@ -60,9 +61,14 @@ USAGE
     knife vc vdc show VDC (options)
     knife vc vm config guest [VM] [COMPUTER_NAME] (options)
     knife vc vm config network [VM] [NETWORK_NAME] (options)
+    knife vc vm reboot [VM] (options)
+    knife vc vm reset [VM] (options)
     knife vc vm set disks [VM] (options)
     knife vc vm set info [VM] (options)
     knife vc vm show VM (options)
+    knife vc vm start [VM] (options)
+    knife vc vm stop [VM] (options)
+    knife vc vm suspend [VM] (options)
 
 ####Note about IDs and names
 Most commands now accept both names and IDs.
