@@ -18,6 +18,7 @@ FEATURES:
 * Add commands to manage VM's status (start/stop/delete/reset/suspend/reboot)
 * Add command to show details about a given network
 * Guest customization: ensure VM is stopped or stop it
+* Renamed & enhanced command _vapp config network_ to _vapp network external_
 
 VARIOUS:
 * Update dependency vcloud-rest v. 0.4.0

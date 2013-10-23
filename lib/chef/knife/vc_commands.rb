@@ -37,7 +37,7 @@ require 'chef/knife/network/vc_network_show'
 
 # VAPP
 require 'chef/knife/common/vc_vapp_common'
-require 'chef/knife/vapp/vc_vapp_config_network'
+require 'chef/knife/vapp/vc_vapp_network_external'
 require 'chef/knife/vapp/vc_vapp_create'
 require 'chef/knife/vapp/vc_vapp_delete'
 require 'chef/knife/vapp/vc_vapp_reboot'

@@ -18,24 +18,12 @@
 
 class Chef
   class Knife
-    class VcVappConfigNetwork < Chef::Knife
+    class VcVappNetworkExternal < Chef::Knife
       include Knife::VcCommon
       include Knife::VcVappCommon
       include Knife::VcNetworkCommon
 
-      banner "knife vc vapp config network [VAPP] [NETWORK] (options)"
-
-      option :add_network,
-             :long => "--[no-]add",
-             :description => "Add a new network",
-             :boolean => true,
-             :default => false
-
-      option :fence_mode,
-             :short => "-F FENCE_MODE",
-             :long => "--fence-mode FENCE_MODE",
-             :description => "Set Fence Mode (e.g., Isolated, Bridged)",
-             :proc => Proc.new { |key| Chef::Config[:knife][:fence_mode] = key }
+      banner "knife vc vapp network external [add|remove|edit| [VAPP] [NETWORK] (options)"
 
       option :retain_network,
              :long => "--[no-]retain-network",
@@ -46,19 +34,25 @@ class Chef
 
       option :parent_network,
              :short => "-p PARENT_NETWORK",
-             :long => "--parent_network PARENT_NETWORK",
-             :description => "Set Fence Mode (e.g., Isolated, Bridged)",
+             :long => "--parent-network PARENT_NETWORK",
+             :description => "Set a parent network. Defaults to the current network.",
              :proc => Proc.new { |key| Chef::Config[:knife][:parent_network] = key }
 
       def run
         $stdout.sync = true
 
+        command_arg = @name_args.shift
         vapp_arg = @name_args.shift
         network_arg = @name_args.shift
 
-        add_network = locate_config_value(:add_network)
+        unless command_arg =~ /add|delete|edit/
+          raise ArgumentError, "Invalid command #{command_arg} supplied. Only add, delete and edit are allowed."
+        end
+
+        command = command_arg.to_sym
+
         config = {
-          :fence_mode => locate_config_value(:fence_mode),
+          :fence_mode => 'bridged',
           :retain_net => locate_config_value(:retain_net)
         }
 
@@ -67,37 +61,35 @@ class Chef
         vapp = get_vapp(vapp_arg)
         network = get_network network_arg
 
+        unless network
+          raise new ArgumentError, "Network #{network_arg} not found in vDC"
+        end
+
         parent_network_arg = locate_config_value(:parent_network)
         if parent_network_arg
           ui.msg "Retrieving parent network details"
           parent_network = get_network parent_network_arg
           config[:parent_network] =  { :id => parent_network[:id],
-                                      :name => parent_network[:name] }
+                                       :name => parent_network[:name] }
+        else
+          ui.msg "Forcing parent network to itself"
+          config[:parent_network] = { :id => network[:id],
+                                      :name => network[:name] }
         end
 
-        if add_network
-          task_id, response = connection.add_network_to_vapp vapp[:id], network[:id]
-          ui.msg "Adding #{network[:name]} to vApp..."
-
-          if wait_task(connection, task_id)
-            if config[:fence_mode] == 'bridged' && config[:parent_network].nil?
-              ui.msg "Forcing parent network to itself"
-              config[:parent_network] = { :id => network[:id],
-                                          :name => network[:name] }
-            end
-
+        case command
+          when :add
+            ui.msg "Adding #{network[:name]} to vApp..."
+            task_id, response = connection.add_org_network_to_vapp vapp[:id], network, config
+            wait_task(connection, task_id)
+          when :delete
+            ui.msg "Removing #{network[:name]} from vApp..."
+            task_id, response = connection.delete_vapp_network vapp[:id], network
+            wait_task(connection, task_id)
+          when :edit
+            ui.msg "vApp network configuration for #{network[:name]}..."
             task_id, response = connection.set_vapp_network_config vapp[:id], network, config
-
-            if wait_task(connection, task_id)
-              ui.msg "Forcing Guest Customization..."
-              task_id = connection.force_customization_vapp vapp[:id]
-              wait_task(connection, task_id)
-            end
-          end
-        else
-          task_id, response = connection.set_vapp_network_config vapp[:id], network, config
-          ui.msg "vApp network configuration for #{network[:name]}..."
-          wait_task(connection, task_id)
+            wait_task(connection, task_id)
         end
 
         connection.logout
