@@ -22,52 +22,7 @@ class Chef
       include Knife::VcCommon
       include Knife::VcVDCCommon
 
-      deps do
-        require 'chef/knife/bootstrap'
-        require 'chef/knife/bootstrap_windows_winrm'
-        require 'chef/knife/core/windows_bootstrap_context'
-        Chef::Knife::Bootstrap.load_deps
-      end
-
       banner "knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)"
-
-      option :run_list,
-        :short => "-r RUN_LIST",
-        :long => "--run-list RUN_LIST",
-        :description => "Comma separated list of roles/recipes to apply",
-        :proc => lambda { |o| o.split(/[\s,]+/) },
-        :default => []
-
-      option :distro,
-        :short => "-d DISTRO",
-        :long => "--distro DISTRO",
-        :description => "Bootstrap a distro using a template; default is 'ubuntu12.04-gems'",
-        :proc => Proc.new { |d| Chef::Config[:knife][:distro] = d },
-        :default => "ubuntu12.04-gems"
-
-      option :chef_node_name,
-        :short => "-N NAME",
-        :long => "--node-name NAME",
-        :description => "The Chef node name for your new node",
-        :proc => Proc.new { |t| Chef::Config[:knife][:chef_node_name] = t }
-
-      option :no_bootstrap,
-        :long => "--[no-]bootstrap",
-        :description => "Disable Chef bootstrap",
-        :boolean => true,
-        :proc => Proc.new { |v| Chef::Config[:knife][:no_bootstrap] = v },
-        :default => false
-
-      option :bootstrap_protocol,
-        :long => "--bootstrap-protocol protocol",
-        :description => "Protocol to bootstrap windows servers. options: winrm",
-        :default => nil
-
-      option :bootstrap_proxy,
-        :long => "--bootstrap-proxy PROXY_URL",
-        :description => "The proxy server for the node being bootstrapped",
-        :proc => Proc.new { |v| Chef::Config[:knife][:bootstrap_proxy] = v }
-
 
       def run
         $stdout.sync = true
@@ -76,7 +31,6 @@ class Chef
         name = @name_args.shift
         description = @name_args.shift
         templateId = @name_args.shift
-        bootstrap = locate_config_value(:no_bootstrap)
 
         connection.login
 
@@ -87,27 +41,6 @@ class Chef
         ui.msg "vApp creation..."
         wait_task(connection, result[:task_id])
         ui.msg "vApp created with ID: #{ui.color(result[:vapp_id], :cyan)}"
-
-        if bootstrap
-          puts "Bootstrap"
-
-        #   ui.msg "vApp bootstrap..."
-
-        #   if locate_config_value(:bootstrap_protocol) == 'winrm'
-        #     print(".") until tcp_test_winrm(public_ip_address, locate_config_value(:winrm_port)) {
-        #       sleep @initial_sleep_delay ||= 10
-        #       puts("done")
-        #     }
-        #     bootstrap_for_windows_node(server, public_ip_address).run
-        #   else
-        #     print "\n#{ui.color("Waiting for sshd", :magenta)}"
-        #     print(".") until tcp_test_ssh(public_ip_address) {
-        #       sleep @initial_sleep_delay ||= 10
-        #       puts("done")
-        #     }
-        #     bootstrap_for_node(server, public_ip_address).run
-        #   end
-        end
 
         connection.logout
       end
