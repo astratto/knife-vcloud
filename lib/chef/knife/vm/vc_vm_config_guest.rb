@@ -74,6 +74,16 @@ class Chef
 
         vm = get_vm(vm_arg)
 
+        if vm[:status] == 'running'
+          if ui.confirm("Guest customizations must be applied to a stopped VM, " \
+                        "but it's running. Can I #{ui.color('STOP', :red)} it")
+            task_id, response = connection.poweroff_vm vm[:id]
+
+            ui.msg "Stopping VM..."
+            wait_task(connection, task_id)
+          end
+        end
+
         task_id, response = connection.set_vm_guest_customization vm[:id], computer_name, config
 
         ui.msg "VM guest configuration..."

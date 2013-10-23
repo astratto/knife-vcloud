@@ -17,6 +17,7 @@ FEATURES:
 * Add support for customization scripts
 * Add commands to manage VM's status (start/stop/delete/reset/suspend/reboot)
 * Add command to show details about a given network
+* Guest customization: ensure VM is stopped or stop it
 
 VARIOUS:
 * Update dependency vcloud-rest v. 0.4.0
