@@ -53,7 +53,7 @@ class Chef
           list << (v[:id] || '')
           list << (v[:vapp_scoped_local_id] || '')
         end
-        ui.msg ui.list(list, :columns_across, 5)
+        ui.msg ui.list(list, :uneven_columns_across, 5)
       end
     end
   end
