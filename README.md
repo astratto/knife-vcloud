@@ -400,7 +400,7 @@ Please note that you must use the human readable name of the network (i.e., _Tes
 
 _Example:_
 
-    $ knife vc vm config network 31a56cf6-088b-4a43-b726-d6370b4e7d0a TestNet_1
+    $ knife vc vm config network test_vm TestNet_1 --vapp test_vapp1
     VM network configuration...
     Summary: Status: success - time elapsed: 4.35 seconds
 
@@ -408,11 +408,18 @@ _Example:_
 This command allows for basic VM Guest Customization configuration.
 By default it forces a guest customization, use _--no-force_ to disable it.
 
-Please note that the vapp must be turned on.
+Please note that the vapp must be turned off.
+
+There are several options that can be specified.
+
+i.e.,
+* admin-passwd: change guest admin password
+* script: load a given file and use it as guest customization script
+* guest-computer-name: change guest name
 
 _Example:_
 
-    $ knife vc vm config guest test_vm --vapp test_vapp1 test_vm --admin-passwd "testpassword"
+    $ knife vc vm config guest test_vm --vapp test_vapp1 --script guest_script.txt
     VM guest configuration...
     Summary: Status: success - time elapsed: 5.23 seconds
     Forcing Guest Customization...

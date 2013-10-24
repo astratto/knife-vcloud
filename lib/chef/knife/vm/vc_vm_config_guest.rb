@@ -22,7 +22,7 @@ class Chef
       include Knife::VcCommon
       include Knife::VcVmCommon
 
-      banner "knife vc vm config guest [VM] [COMPUTER_NAME] (options)"
+      banner "knife vc vm config guest [VM] (options)"
 
       option :guest_enabled,
              :long => "--[no-]guest",
@@ -50,11 +50,15 @@ class Chef
              :boolean => true,
              :default => true
 
+      option :guest_computer_name,
+             :long => "--guest-computer-name COMPUTER_NAME",
+             :description => "Set Guest Computer Name"
+
       def run
         $stdout.sync = true
 
         vm_arg = @name_args.shift
-        computer_name = @name_args.shift
+        computer_name = locate_config_value(:guest_computer_name)
         script_filename = locate_config_value(:customization_script)
 
         if script_filename
@@ -73,6 +77,15 @@ class Chef
         connection.login
 
         vm = get_vm(vm_arg)
+
+        if config[:admin_passwd].nil? && vm[:guest_customizations][:admin_passwd_enabled]
+          ui.msg('Inheriting admin password')
+          config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
+        end
+
+        if computer_name.nil?
+          computer_name = vm[:guest_customizations][:computer_name]
+        end
 
         if vm[:status] == 'running'
           if ui.confirm("Guest customizations must be applied to a stopped VM, " \
