@@ -64,12 +64,20 @@ class Chef
 
         vm = get_vm(vm_arg)
 
-        task_id = connection.set_vm_network_config vm[:id], network_name, config
+        if vm[:status] == 'running'
+          if ui.confirm("Network configurations must be applied to a stopped VM, " \
+                        "but it's running. Can I #{ui.color('STOP', :red)} it")
+            ui.msg "Stopping VM..."
+            task_id, response = connection.poweroff_vm vm[:id]
+            wait_task(connection, task_id)
+          end
+        end
 
         ui.msg "VM network configuration..."
+        task_id = connection.set_vm_network_config vm[:id], network_name, config
 
         if wait_task(connection, task_id)
-          ui.msg "Forcing Guest Customization..."
+          ui.msg "Forcing Guest Customization to apply changes..."
           task_id = connection.force_customization_vm vm[:id]
           wait_task(connection, task_id)
         end
