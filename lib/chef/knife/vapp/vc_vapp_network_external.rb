@@ -23,7 +23,7 @@ class Chef
       include Knife::VcVappCommon
       include Knife::VcNetworkCommon
 
-      banner "knife vc vapp network external [add|remove|edit| [VAPP] [NETWORK] (options)"
+      banner "knife vc vapp network external [add|delete|edit| [VAPP] [NETWORK] (options)"
 
       option :retain_network,
              :long => "--[no-]retain-network",
@@ -53,7 +53,7 @@ class Chef
 
         config = {
           :fence_mode => 'bridged',
-          :retain_net => locate_config_value(:retain_net)
+          :retain_network => locate_config_value(:retain_network)
         }
 
         connection.login
@@ -65,16 +65,18 @@ class Chef
           raise new ArgumentError, "Network #{network_arg} not found in vDC"
         end
 
-        parent_network_arg = locate_config_value(:parent_network)
-        if parent_network_arg
-          ui.msg "Retrieving parent network details"
-          parent_network = get_network parent_network_arg
-          config[:parent_network] =  { :id => parent_network[:id],
-                                       :name => parent_network[:name] }
-        else
-          ui.msg "Forcing parent network to itself"
-          config[:parent_network] = { :id => network[:id],
-                                      :name => network[:name] }
+        unless command == :delete
+          parent_network_arg = locate_config_value(:parent_network)
+          if parent_network_arg
+            ui.msg "Retrieving parent network details"
+            parent_network = get_network parent_network_arg
+            config[:parent_network] =  { :id => parent_network[:id],
+                                         :name => parent_network[:name] }
+          else
+            ui.msg "Forcing parent network to itself"
+            config[:parent_network] = { :id => network[:id],
+                                        :name => network[:name] }
+          end
         end
 
         case command
