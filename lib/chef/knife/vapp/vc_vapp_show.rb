@@ -38,6 +38,32 @@ class Chef
         out_msg("Status", vapp[:status])
         out_msg("IP", vapp[:ip])
 
+        ui.msg("#{ui.color('Networks', :cyan)}")
+
+        vapp[:networks].each do |network|
+          ui.msg ui.color(network[:name], :bold)
+
+          list = [
+              ui.color(' ', :bold),
+              ui.color('Gateway', :bold),
+              ui.color('Netmask', :bold),
+              ui.color('Fence Mode', :bold),
+              ui.color('Parent Network', :bold),
+              ui.color('Retain Network', :bold)
+          ]
+
+          list << " "
+          list << (network[:scope][:gateway] || '')
+          list << (network[:scope][:netmask] || '')
+          list << (network[:scope][:fence_mode] || '')
+          list << (network[:scope][:parent_network] || '')
+          list << (network[:scope][:retain_network] || '')
+
+          ui.msg ui.list(list, :uneven_columns_across, 6)
+        end
+
+        ui.msg("#{ui.color('VMs', :cyan)}")
+
         list = [
             ui.color('Name', :bold),
             ui.color('Status', :bold),
