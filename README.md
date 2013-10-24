@@ -25,9 +25,8 @@ FEATURES
 - show VDCs
 - show Catalogs
 - show Catalog Items
-- create/start/stop/delete/show/reset/suspend/reboot vApps
-- show VMs
-- basic vApp network configuration
+- create/start/stop/delete/show/reset/suspend/reboot vApps and VMs
+- add/edit/delete vApp networks (both internal and external)
 - basic VM network configuration
 - basic VM Guest Customization configuration
 
