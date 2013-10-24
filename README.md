@@ -84,7 +84,10 @@ _Example:_
     Do you really want to DELETE vApp TestAppN (ID: a3f81395-4eda-43b0-8677-b2d597014979)? (Y/N) Y
     ...
 
-Default --org, --vdc and --vapp can be set in _knife.rb_:
+**TIP:**
+    Default --org, --vdc and --vapp can be set in _knife.rb_.  
+    For the sake of simplicity, the following examples assume that --org and --vdc
+    are configured in _knife.rb_.
 
 _Example:_
 
@@ -159,7 +162,7 @@ This command shows details about a given catalog.
 
 _Example:_
 
-    $ knife vc catalog show Catalog_1 --org TEST-ORG
+    $ knife vc catalog show Catalog_1
     Description: Test Catalog description
     Name                    ID
     CentOS 6.3              40e5e071-8231-46c1-92b7-fbe8f633e259
@@ -171,7 +174,7 @@ e.g., retrieve a template ID
 
 _Example:_
 
-    $ knife vc catalog item show 40e5e071-8231-46c1-92b7-fbe8f633e259
+    $ knife vc catalog item show CentOS 6.3 --catalog Catalog_1
     Description: Linux CentOS 64 bit 6 update 3
     Name                    Template ID
     CentOS 6.3              edb5bb2f-58bc-4a44-aaf6-c244543e4a1b
@@ -181,84 +184,31 @@ This command shows details about a given vDC.
 
 _Example:_
 
-    $ knife vc vdc show Test_vDC_1 --org TEST-ORG
+    $ knife vc vdc show Test_vDC_1
     Description:
     vAPPS
     Name                    ID                                    Status    IP
     TestKnife (1 VMs)       09551b42-dca9-474d-aa50-201b223522db  running   10.102.46.237
     TestCENTOS (1 VMs)      4338a436-19fc-47b9-aaba-024841acfd66  stopped   10.102.46.23
 
-###Startup vApp/VM
-This command starts up a given vApp/VM.
+###Manage vApp/VM status
+vApp/VM's status can be managed with _start/stop/reboot/reset/suspend/delete_
 
 Note: use _knife vc vm..._ to operate on VMs.
 
 _Example:_
 
-    $ knife vc vapp start clone3 --vdc vDC_Test --org Test -VV
+    $ knife vc vapp start clone3
     vApp startup...
     Summary: Status: success - time elapsed: 2.967 seconds
 
-###Shutdown vApp/VM
-This command halts a given vApp/VM.
-
-Note: use _knife vc vm..._ to operate on VMs.
-
-_Example:_
-
-    $ knife vc vapp stop clone3 --vdc vDC_Test --org Test
-    vApp shutdown...
-    Summary: Status: success - time elapsed: 2.317 seconds
-
-###Delete vApp
-This command deletes a given vApp.
-
-_Example:_
-
-    $ knife vc vapp delete clone2 --vdc vDC_Test --org Test
-    Do you really want to DELETE vApp clone2 (ID: ddd059c3-8988-4fd6-b125-4eac049ca77c)? (Y/N) Y
-    vApp deletion...
-    Summary: Status: success - time elapsed: 0.65 seconds
-
-###Reboot vApp/VM
-This command reboots a given vApp/VM.
-
-Note: use _knife vc vm..._ to operate on VMs.
-
-_Example:_
-
-    $ knife vc vapp reboot clone3 --vdc vDC_Test --org Test
-    vApp reboot...
-    Summary: Status: success - time elapsed: 0.157 seconds
-
-###Suspend vApp/VM
-This command suspends a given vApp/VM.
-
-Note: use _knife vc vm..._ to operate on VMs.
-
-_Example:_
-
-    $ knife vc vapp suspend clone3 --vdc vDC_Test --org Test
-    vApp suspend...
-    Summary: Status: success - time elapsed: 6.127 seconds
-
-###Reset vApp/VM
-This command resets a given vApp/VM.
-
-Note: use _knife vc vm..._ to operate on VMs.
-
-_Example:_
-
-    $ knife vc vapp reset clone3 --vdc vDC_Test --org Test
-    vApp reset...
-    Summary: Status: success - time elapsed: 1.303 seconds
 
 ###Create vApp from template
 This command creates a vApp starting from a template (see catalog item).
 
 _Example:_
 
-    $ knife vc vapp create vDC_Test clone4 "Create example" 89e33fd7-04a7-4b5f-830b-2423c41089e3 --org Test
+    $ knife vc vapp create vDC_Test clone4 "Create example" 89e33fd7-04a7-4b5f-830b-2423c41089e3
     vApp creation...
     Summary: Status: success - time elapsed: 28.967 seconds
     vApp created with ID: 9cdd92ad-ab65-467f-abe1-075e35c050ec
@@ -268,7 +218,7 @@ This command shows details about a given vApp.
 
 _Example:_
 
-    $ knife vc vapp show TEST_CENTOS --org TEST-ORG --vdc Test_vDC_1
+    $ knife vc vapp show TEST_CENTOS
     Name: TEST_CENTOS
     Status: running
     Networks
@@ -289,7 +239,7 @@ External vApp networks (from vDC) can be added, removed and modified using the _
 
 _Add example:_
 
-    $ knife vc vapp network external add test_vapp4 TST_DATA --org TEST-ORG --vdc Test_vDC_1
+    $ knife vc vapp network external add test_vapp4 TST_DATA
     Forcing parent network to itself
     Adding TST_Data to vApp...
     Summary: Status: success - time elapsed: 2.72 seconds
@@ -367,7 +317,7 @@ This command clones an existing vApp.
 
 _Example:_
 
-    $ knife vc vapp clone vDC_Test clone_vAPP clone3 --org Test -VV
+    $ knife vc vapp clone vDC_Test clone_vAPP clone3
     Cloning vApp...
     Summary: Status: success - time elapsed: 24.69 seconds
     vApp cloned with ID: 587210aa-cf92-48e8-8f37-07e058c0116f
@@ -377,7 +327,7 @@ This command shows details about a given VM.
 
 _Example:_
 
-    $ knife vc vm show TestVM --vapp TEST_CENTOS --org TEST-ORG --vdc Test_vDC_1
+    $ knife vc vm show TestVM --vapp TEST_CENTOS
     VM Name: centos64-x64-s
     OS Name: CentOS 4/5/6 (64-bit)
     Status: running
@@ -413,11 +363,11 @@ This command sets CPUs and RAM info for a given VM.
 
 _Example:_
 
-    $ knife vc vm set info --ram 512 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    $ knife vc vm set info --ram 512 --vapp vApp_test vm-test
     VM setting RAM info...
     Summary: Status: success - time elapsed: 7.69 seconds
 
-    $ knife vc vm set info --cpu 2 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    $ knife vc vm set info --cpu 2 --vapp vApp_test vm-test
     VM setting CPUs info...
     Summary: Status: success - time elapsed: 5.19 seconds
 
@@ -427,17 +377,17 @@ This command manages disks for a given VM.
 _Example:_
 
     # Create a new disk
-    $ knife vc vm set disks --add --disk-size 3000 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    $ knife vc vm set disks --add --disk-size 3000 --vapp vApp_test vm-test
     VM setting Disks info...
     Summary: Status: success - time elapsed: 6.12 seconds
 
     # Resize an existing disk (note that disk size can only be increased)
-    $ knife vc vm set disks --disk-name "Hard disk 2" --disk-size 3500 --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    $ knife vc vm set disks --disk-name "Hard disk 2" --disk-size 3500 --vapp vApp_test vm-test
     VM setting Disks info...
     Summary: Status: success - time elapsed: 6.69 seconds
 
     # Delete an existing disk
-    $ knife vc vm set disks --disk-name "Hard disk 2" --delete --vapp vApp_test --vdc vDC_Test --org Test vm-test
+    $ knife vc vm set disks --disk-name "Hard disk 2" --delete --vapp vApp_test vm-test
     Do you really want to DELETE disk Hard disk 2? (Y/N) Y
     VM setting Disks info...
     Summary: Status: success - time elapsed: 7.21 seconds
@@ -462,7 +412,7 @@ Please note that the vapp must be turned on.
 
 _Example:_
 
-    $ knife vc vm config guest test_vm --vapp test_vapp1 --vdc vDC_TEST --org Test test_vm --admin-passwd "testpassword"
+    $ knife vc vm config guest test_vm --vapp test_vapp1 test_vm --admin-passwd "testpassword"
     VM guest configuration...
     Summary: Status: success - time elapsed: 5.23 seconds
     Forcing Guest Customization...
