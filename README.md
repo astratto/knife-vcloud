@@ -271,19 +271,96 @@ _Example:_
     $ knife vc vapp show TEST_CENTOS --org TEST-ORG --vdc Test_vDC_1
     Name: TEST_CENTOS
     Status: running
-    IP: 10.102.46.237
-    Name                  Status         IPs             ID                                     Scoped ID
-    CENTOS63              running        10.102.46.237   8b943bf9-a8ca-4d41-b97f-316c3aa891ea   3963994b-5a0a-48fe-b9ae-7f9a2d8e8e5b
+    Networks
+    TST_Data
+       Gateway     Netmask        Fence Mode  Parent Network  Retain Info
+       10.22.4.1   255.255.254.0  bridged     TST_Data        false
+    TST_FE
+       Gateway       Netmask          Fence Mode  Parent Network  Retain Info
+       10.22.3.129   255.255.255.128  bridged     TST_FE          false
+    VMs
+    Name      Status   IPs  ID                                    Scoped ID
+    CENTOS63  stopped       83f6aeb3-f624-4a79-9e6b-23e162893daf  69b0fe46-224f-4266-a424-2fe16ca99ff7
 
 ###vApp's network configuration
-This command allows for basic vApp network configuration.
-E.g., retain IP address across deployments (defaults to POOL), set fence mode to _Isolated_ or _Bridge_
 
-Please note that you must use the human readable name of the network (i.e., _TestNet\_1_).
+#### External networks
+External vApp networks (from vDC) can be added, removed and modified using the _vapp network external_ command.
 
-_Example:_
+_Add example:_
 
-    $ knife vc vapp config network 31a56cf6-088b-4a43-b726-d6370b4e7d0a TestNet_1
+    $ knife vc vapp network external add test_vapp4 TST_DATA --org TEST-ORG --vdc Test_vDC_1
+    Forcing parent network to itself
+    Adding TST_Data to vApp...
+    Summary: Status: success - time elapsed: 2.72 seconds
+
+_Edit example:_
+
+    TBD
+
+_Delete example:_
+
+    $ knife vc vapp network external delete test_vapp4 TST_Data
+    Removing TST_Data from vApp...
+    Summary: Status: success - time elapsed: 2.63 seconds
+
+#### Internal networks
+Internal vApp networks can be added, removed and modified using the _vapp network internal_ command.
+
+_Add example:_
+
+    $ knife vc vapp network internal add test_vapp4 INT_NET
+      Gateway: 192.168.0.1
+      Netmask: 255.255.255.0
+      Dns1: 190.23.12.34
+      Dns2: 21.33.24.21
+      Dns suffix: test.suffix.local
+      Start address: 192.168.0.10
+      End address: 192.168.0.100
+    Adding INT_NET to vApp...
+    Summary: Status: success - time elapsed: 6.88 seconds
+
+    # Note that options can also be specified on the command line
+    $ knife vc vapp network internal add test_vapp4 INT_NET --gateway "192.168.0.1"...
+
+_Edit example:_
+
+    ## Add a parent network to this internal network
+    # Note that FenceMode is automatically set to natRouted
+
+    ## PRE-edit
+    ...
+    Networks
+    INT_NET
+       Gateway      Netmask        Fence Mode  Parent Network  Retain Network
+       192.168.0.1  255.255.255.0  isolated    TST_FE          true
+    TST_FE
+       Gateway       Netmask          Fence Mode  Parent Network  Retain Network
+       10.202.3.129  255.255.255.128  bridged     TST_FE          false
+    ...
+
+    $ knife vc vapp network internal edit test_vapp4 INT_NET --parent-network TST_FE
+    Retrieving parent network details
+    Setting a parent network for an internal network requires fence mode natRouted. Fixing it...
+    vApp network configuration for INT_NET...
+    Summary: Status: success - time elapsed: 5.324 seconds
+
+    ## POST-edit
+    ...
+    Networks
+    INT_NET
+       Gateway      Netmask        Fence Mode  Parent Network  Retain Network
+       192.168.0.1  255.255.255.0  natRouted   TST_FE          true
+    TST_FE
+       Gateway       Netmask          Fence Mode  Parent Network  Retain Network
+       10.202.3.129  255.255.255.128  bridged     TST_FE          false
+    ...
+
+_Delete example:_
+
+    $ knife vc vapp network internal delete test_vapp4 INT_NET
+    Removing INT_NET from vApp...
+    Summary: Status: success - time elapsed: 5.05 seconds
 
 ###Clone a vApp
 This command clones an existing vApp.
@@ -315,7 +392,7 @@ _Example:_
     Hard disk 1             16384 MB
 
     Networks
-    TST_FE-Rupar
+    TST_FE
     Index                   0
     Ip                      10.202.3.251
     External ip
