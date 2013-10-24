@@ -77,10 +77,5 @@ class Chef
         ui.msg ui.list(list, :columns_across, 2)
       end
     end
-
-    private
-      def pretty_symbol(key)
-        key.to_s.gsub('_', ' ').capitalize
-      end
   end
 end

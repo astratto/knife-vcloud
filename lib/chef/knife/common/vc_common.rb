@@ -108,6 +108,10 @@ class Chef
         result[:errormsg].nil?
       end
 
+      def pretty_symbol(key)
+        key.to_s.gsub('_', ' ').capitalize
+      end
+
       private
         def humanize_elapsed_time(start_time, end_time)
           start_time = Time.parse(start_time || Time.now)
