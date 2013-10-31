@@ -413,6 +413,7 @@ Please note that the vapp must be turned off.
 There are several options that can be specified.
 
 i.e.,
+
 * admin-passwd: change guest admin password
 * script: load a given file and use it as guest customization script
 * guest-computer-name: change guest name
@@ -428,6 +429,48 @@ _Example:_
 It's also possible to upload a customization script using _script_:
 
     $ knife vc vm config guest ... --script script_filename.txt
+
+### Bootstrap
+It's possible to bootstrap single VMs or every VM of a vApp.
+
+_Example:_
+
+    # Bootstrap every VM belonging to test_vapp
+    $ knife vc vapp bootstrap test_vapp
+    Bootstrap VM: SMALL_CentOS6.4-x86_64...
+    Trying to reach xxxx (try 1/5)
+        xxxx:22 replied with: SSH-2.0-OpenSSH_5.9p1 Debian-5ubuntu1
+    Bootstrap IP: xxxx
+    Bootstrapping Chef on xxxx
+    xxxx Starting Chef Client, version 11.6.2
+    ...
+
+    # Bootstrap a single VM
+    $ knife vc vm bootstrap SMALL_CentOS6.4-x86_64 --vapp test_vapp
+    Bootstrap VM: SMALL_CentOS6.4-x86_64...
+    Trying to reach xxxx (try 1/5)
+        xxxx:22 replied with: SSH-2.0-OpenSSH_5.9p1 Debian-5ubuntu1
+    Bootstrap IP: xxxx
+    Bootstrapping Chef on xxxx
+    xxxx Starting Chef Client, version 11.6.2
+    ...
+
+Since a VM may have several addresses, these commands loop over them until they
+find a reachable one.
+
+_Example:_
+
+    $ knife vc vapp bootstrap test_vapp
+    Bootstrap VM: SMALL_CentOS6.4-x86_64...
+    Trying to reach 192.168.0.102 (try 1/5)
+        Unable to reach 192.168.0.102:22 => Connection refused - connect(2)
+    ...
+    Trying to reach xxxx (try 1/5)
+        xxxx:22 replied with: SSH-2.0-OpenSSH_5.9p1 Debian-5ubuntu1
+    Bootstrap IP: xxxx
+    Bootstrapping Chef on xxxx
+    xxxx Starting Chef Client, version 11.6.2
+    ...
 
 LICENSE
 --

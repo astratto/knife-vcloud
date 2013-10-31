@@ -36,6 +36,7 @@ require 'chef/knife/common/vc_network_common'
 require 'chef/knife/network/vc_network_show'
 
 # VAPP
+require 'chef/knife/common/vc_bootstrap_common'
 require 'chef/knife/common/vc_vapp_common'
 require 'chef/knife/vapp/vc_vapp_network_external'
 require 'chef/knife/vapp/vc_vapp_network_internal'
@@ -48,6 +49,7 @@ require 'chef/knife/vapp/vc_vapp_start'
 require 'chef/knife/vapp/vc_vapp_stop'
 require 'chef/knife/vapp/vc_vapp_suspend'
 require 'chef/knife/vapp/vc_vapp_clone'
+require 'chef/knife/vapp/vc_vapp_bootstrap'
 
 # VM
 require 'chef/knife/common/vc_vm_common'
@@ -61,4 +63,5 @@ require 'chef/knife/vm/vc_vm_reset'
 require 'chef/knife/vm/vc_vm_start'
 require 'chef/knife/vm/vc_vm_stop'
 require 'chef/knife/vm/vc_vm_suspend'
+require 'chef/knife/vm/vc_vm_bootstrap'
 
