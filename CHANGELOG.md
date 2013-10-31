@@ -22,6 +22,7 @@ FEATURES:
 * Split commands to manage internal and external vApp networks
 * Add command to bootstrap single VMs
 * Add command to bootstrap every VM of a vApp
+* Add command to create/revert a vApp snapshot
 
 CHANGES:
 * Renamed & enhanced command _vapp config network_ to _vapp network external_

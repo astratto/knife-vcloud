@@ -56,6 +56,7 @@ USAGE
     knife vc vapp reboot [VAPP] (options)
     knife vc vapp reset [VAPP] (options)
     knife vc vapp show VAPP (options)
+    knife vc vapp snapshot [create|revert] [VAPP] (options)
     knife vc vapp start [VAPP] (options)
     knife vc vapp stop [VAPP] (options)
     knife vc vapp suspend [VAPP] (options)

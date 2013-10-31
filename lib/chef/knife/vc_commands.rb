@@ -50,6 +50,7 @@ require 'chef/knife/vapp/vc_vapp_stop'
 require 'chef/knife/vapp/vc_vapp_suspend'
 require 'chef/knife/vapp/vc_vapp_clone'
 require 'chef/knife/vapp/vc_vapp_bootstrap'
+require 'chef/knife/vapp/vc_vapp_snapshot'
 
 # VM
 require 'chef/knife/common/vc_vm_common'
