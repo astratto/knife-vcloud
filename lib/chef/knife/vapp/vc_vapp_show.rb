@@ -62,6 +62,10 @@ class Chef
           ui.msg ui.list(list, :uneven_columns_across, 6)
         end
 
+        if vapp[:vapp_snapshot]
+          out_msg("Snapshot", vapp[:vapp_snapshot][:creation_date])
+        end
+
         ui.msg("#{ui.color('VMs', :cyan)}")
 
         list = [
