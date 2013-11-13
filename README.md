@@ -48,6 +48,7 @@ USAGE
     knife vc network show [network] (options)
     knife vc org list (options)
     knife vc org show [ORG] (options)
+    knife vc ovf upload VDC CATALOG VAPP_NAME VAPP_DESCRIPTION OVF_FILENAME (options)
     knife vc vapp bootstrap [VAPP] (options)
     knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
     knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
@@ -362,10 +363,14 @@ _Example:_
     Reset passwd required   false
     Computer name           centos64-x64-s
 
-###Set VM's CPUs / Memory
-This command sets CPUs and RAM info for a given VM.
+###Set VM's CPUs / Memory / Name
+This command sets name, CPUs and RAM info for a given VM.
 
 _Example:_
+
+    $ knife vc vm set info --name NewName --vapp vApp_test vm-test
+    Renaming VM from vm-test to NewName
+    Summary: Status: success - time elapsed: 7.66 seconds
 
     $ knife vc vm set info --ram 512 --vapp vApp_test vm-test
     VM setting RAM info...

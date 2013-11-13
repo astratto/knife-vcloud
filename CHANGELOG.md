@@ -6,7 +6,7 @@ Next Version (0.x.y)
 FEATURES:
 * Add commands to resume/suspend/reset vApps
 * Show CPU/RAM/Disks info for VMs
-* Add command to set VM's info (CPUs & RAM)
+* Add command to set VM's info (Name, CPUs & RAM)
 * Add command to manage VM's disks (add, delete, resize)
 * Add command to clone an existing vApp
 * Org show searches by name by default

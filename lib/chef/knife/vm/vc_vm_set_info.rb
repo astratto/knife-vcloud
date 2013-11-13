@@ -32,12 +32,17 @@ class Chef
              :long => "--ram MEMORY_SIZE (in MB)",
              :description => "Memory to be allocated"
 
+      option :vm_name,
+             :long => "--name VM_NAME",
+             :description => "Rename the VM"
+
       def run
         $stdout.sync = true
 
         vm_arg = @name_args.first
         cpus = locate_config_value(:vm_cpus_number)
         ram = locate_config_value(:vm_ram)
+        vm_name = locate_config_value(:vm_name)
 
         connection.login
 
@@ -52,6 +57,12 @@ class Chef
         if ram
           task_id = connection.set_vm_ram vm[:id], ram
           ui.msg "VM setting RAM info..."
+          wait_task(connection, task_id)
+        end
+
+        if vm_name
+          task_id = connection.rename_vm vm[:id], vm_name
+          ui.msg "Renaming VM from #{vm[:vm_name]} to #{vm_name}"
           wait_task(connection, task_id)
         end
 
