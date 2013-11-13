@@ -35,6 +35,7 @@ class Chef
       end
 
       def get_vapp(vapp_arg)
+        vapp = nil
         org_name = locate_config_value(:vcloud_org_name)
         vdc_name = locate_config_value(:vcloud_vdc_name)
 
@@ -45,6 +46,8 @@ class Chef
           org = connection.get_organization_by_name org_name
           vapp = connection.get_vapp_by_name org, vdc_name, vapp_arg
         end
+        raise ArgumentError, "VApp #{vapp_arg} not found" unless vapp
+        vapp
       end
     end
   end

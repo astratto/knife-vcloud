@@ -29,6 +29,7 @@ class Chef
       end
 
       def get_network(network_arg)
+        network = nil
         org_name = locate_config_value(:vcloud_org_name)
 
         unless org_name
@@ -38,6 +39,8 @@ class Chef
           org = connection.get_organization_by_name org_name
           network = connection.get_network_by_name org, network_arg
         end
+        raise ArgumentError, "Network #{network_arg} not found" unless network
+        network
       end
     end
   end

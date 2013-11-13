@@ -34,6 +34,7 @@ class Chef
       end
 
       def get_catalog(catalog_arg)
+        catalog = nil
         org_name = locate_config_value(:vcloud_org_name)
 
         unless org_name
@@ -43,9 +44,13 @@ class Chef
           org = connection.get_organization_by_name org_name
           catalog = connection.get_catalog_by_name org, catalog_arg
         end
+
+        raise ArgumentError, "Catalog #{catalog_arg} not found" unless catalog
+        catalog
       end
 
       def get_catalog_item(catalog_item_arg)
+        item = nil
         catalog_name = locate_config_value(:vcloud_catalog_name)
 
         unless catalog_name
@@ -55,6 +60,8 @@ class Chef
           catalog = get_catalog(catalog_name)
           item = connection.get_catalog_item_by_name catalog[:id], catalog_item_arg
         end
+        raise ArgumentError, "Catalog Item #{catalog_item_arg} not found" unless item
+        item
       end
     end
   end

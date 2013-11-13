@@ -40,6 +40,7 @@ class Chef
       end
 
       def get_vm(vm_arg)
+        vm = nil
         vapp_name = locate_config_value(:vcloud_vapp_name)
         org_name = locate_config_value(:vcloud_org_name)
         vdc_name = locate_config_value(:vcloud_vdc_name)
@@ -51,6 +52,8 @@ class Chef
           org = connection.get_organization_by_name org_name
           vm = connection.get_vm_by_name org, vdc_name, vapp_name, vm_arg
         end
+        raise ArgumentError, "VM #{vm_arg} not found" unless vm
+        vm
       end
     end
   end
