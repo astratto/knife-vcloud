@@ -29,6 +29,7 @@ FEATURES
 - add/edit/delete vApp networks (both internal and external)
 - basic VM network configuration
 - basic VM Guest Customization configuration
+- OVF upload
 
 PREREQUISITES
 --
@@ -474,6 +475,15 @@ _Example:_
     Bootstrapping Chef on xxxx
     xxxx Starting Chef Client, version 11.6.2
     ...
+
+### OVF Upload
+Upload a given OVF.
+
+    $ knife vc ovf upload VDC Catalog TemplateName "Example ovf upload" centos64.ovf
+    Uploading OVF...
+    Time: 00:03:12 <=========> 100% Uploading: ../vm-d384582f-2457-477c-ad9b-6228740ca762-disk-0.vmdk
+    Time: 00:00:32 <=========> 100% Uploading: ../vm-d384582f-2457-477c-ad9b-6228740ca762-disk-1.vmdk
+    OVF uploaded. vAppTemplate created with ID: b1e58873-8227-4168-add3-87554d2043db
 
 LICENSE
 --

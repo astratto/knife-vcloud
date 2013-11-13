@@ -66,3 +66,5 @@ require 'chef/knife/vm/vc_vm_stop'
 require 'chef/knife/vm/vc_vm_suspend'
 require 'chef/knife/vm/vc_vm_bootstrap'
 
+# OVF
+require 'chef/knife/ovf/vc_ovf_upload'
