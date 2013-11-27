@@ -21,19 +21,12 @@ class Chef
     class VcOrgShow < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc org show [ORG] (options)"
-
-      option :org_use_ids,
-             :long => "--[no-]use-ids",
-             :description => "Specify whether [ORG] is an ID or a name (default)",
-             :boolean => true,
-             :default => false
+      banner "knife vc org show (options)"
 
       def run
         $stdout.sync = true
 
-        org = @name_args.first
-        use_ids = locate_config_value(:org_use_ids)
+        org = locate_org_option
 
         connection.login
 
@@ -42,18 +35,14 @@ class Chef
             ui.color('ID', :bold)
         ]
 
-        if use_ids
-          organizations = connection.get_organization org
-        else
-          organizations = connection.get_organization_by_name org
-        end
+        organization = connection.get_organization_by_name org
 
         connection.logout
 
         list = ["#{ui.color('CATALOGS', :cyan)}", '']
         list << header
         list.flatten!
-        organizations[:catalogs].each do |k, v|
+        organization[:catalogs].each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -61,7 +50,7 @@ class Chef
         list << ['', '', "#{ui.color('VDCs', :cyan)}", '']
         list << header
         list.flatten!
-        organizations[:vdcs].each do |k, v|
+        organization[:vdcs].each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -69,7 +58,7 @@ class Chef
         list << ['', '', "#{ui.color('NETWORKS', :cyan)}", '']
         list << header
         list.flatten!
-        organizations[:networks].each do |k, v|
+        organization[:networks].each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -77,7 +66,7 @@ class Chef
         list << ['', '', "#{ui.color('TASKLISTS', :cyan)}", '']
         list << header
         list.flatten!
-        organizations[:tasklists].each do |k, v|
+        organization[:tasklists].each do |k, v|
           list << (k || '<unnamed list>')
           list << (v || '')
         end

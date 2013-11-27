@@ -47,7 +47,7 @@ USAGE
     knife vc login (options)
     knife vc network show [network] (options)
     knife vc org list (options)
-    knife vc org show [ORG] (options)
+    knife vc org show (options)
     knife vc ovf upload VDC CATALOG VAPP_NAME VAPP_DESCRIPTION OVF_FILENAME (options)
     knife vc vapp bootstrap [VAPP] (options)
     knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
