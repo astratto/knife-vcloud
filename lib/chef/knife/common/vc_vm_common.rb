@@ -22,31 +22,26 @@ class Chef
 
       def self.included(includer)
         includer.class_eval do
-          option :vcloud_org_name,
-                 :long => "--org ORG_NAME",
-                 :description => "Organization to whom vApp's VDC belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_name] = key }
-
-          option :vcloud_vdc_name,
+          option :vcloud_vdc,
                  :long => "--vdc VDC_NAME",
                  :description => "VDC to whom VM's vApp belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vdc_name] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vdc] = key }
 
-          option :vcloud_vapp_name,
+          option :vcloud_vapp,
                  :long => "--vapp VAPP_NAME",
                  :description => "vApp to whom VM belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vapp_name] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vapp] = key }
         end
       end
 
       def get_vm(vm_arg)
         vm = nil
-        vapp_name = locate_config_value(:vcloud_vapp_name)
-        org_name = locate_config_value(:vcloud_org_name)
-        vdc_name = locate_config_value(:vcloud_vdc_name)
+        vapp_name = locate_config_value(:vcloud_vapp)
+        org_name = locate_org_option
+        vdc_name = locate_config_value(:vcloud_vdc)
 
-        unless org_name && vdc_name && vapp_name
-          notice_msg("--vapp, --org and --vdc not specified, assuming VM is an ID")
+        unless vdc_name && vapp_name
+          notice_msg("--vapp and --vdc not specified, assuming VM is an ID")
           vm = connection.get_vm vm_arg
         else
           org = connection.get_organization_by_name org_name

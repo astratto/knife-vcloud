@@ -32,33 +32,44 @@ class Chef
 
           option :vcloud_url,
                  :short => "-H URL",
-                 :long => "--vcloud-url URL",
+                 :long => "--url URL",
                  :description => "The vCloud endpoint URL",
                  :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
 
-          option :vcloud_user,
+          option :vcloud_user_login,
                  :short => "-U USER",
-                 :long => "--vcloud-user USER",
+                 :long => "--user-login USER",
                  :description => "Your vCloud User",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user_login] = key }
 
-          option :vcloud_password,
+          option :vcloud_password_login,
                  :short => "-P SECRET",
-                 :long => "--vcloud-password SECRET",
+                 :long => "--password-login SECRET",
                  :description => "Your vCloud secret key",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password_login] = key }
 
-          option :vcloud_org,
-                 :short => "-O ORGANIZATION",
-                 :long => "--vcloud-organization ORGANIZATION",
+          option :vcloud_org_login,
+                 :long => "--org-login ORGANIZATION",
                  :description => "Your vCloud Organization",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_login] = key }
 
           option :vcloud_api_version,
                  :short => "-A API_VERSION",
-                 :long => "--vcloud-api-version API_VERSION",
+                 :long => "--api-version API_VERSION",
                  :description => "vCloud API version (1.5 and 5.1 supported)",
                  :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_api_version] = key }
+
+          option :vcloud_system_admin,
+                 :long => "--[no-]system-admin",
+                 :description => "Set to true if user is a vCloud System Administrator",
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_system_admin] = key },
+                 :boolean => true,
+                 :default => false
+
+          option :vcloud_org,
+                 :long => "--org ORG_NAME",
+                 :description => "Organization to use (only for System Administrators)",
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
         end
       end
 
@@ -66,14 +77,34 @@ class Chef
         unless @connection
           @connection = VCloudClient::Connection.new(
               locate_config_value(:vcloud_url),
-              locate_config_value(:vcloud_user),
-              locate_config_value(:vcloud_password),
-              locate_config_value(:vcloud_org),
+              locate_config_value(:vcloud_user_login),
+              locate_config_value(:vcloud_password_login),
+              locate_config_value(:vcloud_org_login),
               locate_config_value(:vcloud_api_version)
           )
         end
 
         @connection
+      end
+
+      # Locate the correct organization option
+      #
+      # System Administrators can browse several organizations and thus --org
+      # can be used to specify different organizations
+      #
+      # Only --org-login is valid for other users
+      def locate_org_option
+        org = locate_config_value(:vcloud_org_login)
+
+        if locate_config_value(:vcloud_system_admin)
+          return locate_config_value(:vcloud_org) || org
+        end
+
+        if locate_config_value(:vcloud_org)
+          ui.warn("--org option is available only for vCloud System Administrators. " \
+                  "Using --org-login ('#{org}').")
+        end
+        return org
       end
 
       def out_msg(label, value)

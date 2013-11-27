@@ -27,6 +27,7 @@ FEATURES:
 
 CHANGES:
 * Renamed & enhanced command _vapp config network_ to _vapp network external_
+* Several options have been revisited (see README.md for details)
 
 VARIOUS:
 * Update dependency vcloud-rest v. 0.4.0

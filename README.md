@@ -75,51 +75,73 @@ USAGE
     knife vc vm stop [VM] (options)
     knife vc vm suspend [VM] (options)
 
-####Note about IDs and names
-Most commands now accept both names and IDs.
-For searches based on names, in general, _--org_ and _--vdc_ must be specified.
+###Configuration
+
+Configuration options can be set either via arguments or inside the *.chef/knife.rb* file.
+The only difference is that in *knife.rb* dashes must be converted to underscores
+and *vcloud_* must be prepended.
+
+E.g., ```$ ... --org-login XXX``` becomes ```knife[:vcloud_org_login] = 'XXX'``` in *knife.rb*.
+
+
+#### Common options
+
+The following options specify, respectively, the url of the vCloud instance and the API version
+to use:
+
+    --url URL
+    --api-version API_VERSION
+
+#### Login Configuration
+
+The following options specify user's credentials and thus are accepted by every command:
+
+    --user-login USER
+    --password-login SECRET
+    --org-login ORGANIZATION
+
+**Knife.rb configuration example:**
+
+    knife[:vcloud_url] = 'https://vcloud.server.org'
+    knife[:vcloud_org_login] = 'vcloud_organization'
+    knife[:vcloud_user_login] = 'vcloud_user'
+    knife[:vcloud_password_login] = 'vcloud_password'
+    (OPTIONAL) knife[:vcloud_api_version] = '1.5'
+
+####IDs and names
+Most commands accept both names and IDs.
+For searches based on names, in general, at least _--vdc_ must be specified.
 
 The examples in this document try to use names whenever is possible.
-Keep in mind that ID-based search is still in place.
+Keep in mind that ID-based search is still in place but will be dropped in future releases.
 
 _Example:_
 
     $ knife vc vapp delete a3f81395-4eda-43b0-8677-b2d597014979
-    Note: --org and --vdc not specified, assuming VAPP is an ID
+    Note: --vdc not specified, assuming VAPP is an ID
     Do you really want to DELETE vApp TestAppN (ID: a3f81395-4eda-43b0-8677-b2d597014979)? (Y/N) Y
     ...
 
 **TIP:**
-    Default --org, --vdc and --vapp can be set in _knife.rb_.  
-    For the sake of simplicity, the following examples assume that --org and --vdc
-    are configured in _knife.rb_.
+    Default --vdc and --vapp can be set in _knife.rb_.  
+    For the sake of simplicity, the following examples assume that --vdc
+    is configured in _knife.rb_.
 
 _Example:_
 
     ...
-    knife[:vcloud_vdc_name] = "vDC_Test"
-    knife[:vcloud_org_name] = "Test"
-    knife[:vcloud_vapp_name] = "Test"
+    knife[:vcloud_vdc] = "vDC_Test"
+    knife[:vcloud_vapp] = "Test"
     ...
 
-###Configuration
-All commands accept the following options:
+#### Browse multiple organizations
 
-    --vcloud-url URL
-    --vcloud-user USER
-    --vcloud-password SECRET
-    --vcloud-organization ORGANIZATION
-    --vcloud-api-version API_VERSION
+System Administrators can browse several organizations and thus *--org* can be used to specify different organizations.  
 
-In addition, those options can be specified inside your _.chef/knife.rb_ file.
+Only *--org-login* is valid for other users.
+If *--org* is used by those users, a warning is shown:
 
-####Knife.rb configuration:
-
-    knife[:vcloud_url] = 'https://vcloud.server.org'
-    knife[:vcloud_org] = 'vcloud_organization'
-    knife[:vcloud_user] = 'vcloud_user'
-    knife[:vcloud_password] = 'vcloud_password'
-    (OPTIONAL) knife[:vcloud_api_version] = '1.5'
+    WARNING: --org option is available only for vCloud System Administrators. Using --org-login ('test')
 
 ###Login
 This command can be used to verify that vCloud Director can be reached and credentials are correct.

@@ -44,11 +44,6 @@ class Chef
              :boolean => true,
              :default => false
 
-      option :org_name,
-             :long => "--org ORG_NAME",
-             :description => "Organization to whom vApp's VDC belongs",
-             :proc => Proc.new { |key| Chef::Config[:knife][:default_org_name] = key }
-
       option :vdc_name,
              :long => "--vdc VDC_NAME",
              :description => "VDC to whom vApp belongs",
@@ -61,22 +56,16 @@ class Chef
         vapp_arg = @name_args.shift
         dest_vapp_name = @name_args.shift
 
-        org_name = locate_config_value(:org_name)
+        org_name = locate_org_option
         deploy_clone = locate_config_value(:vm_deploy_clone).to_s
         poweron_clone = locate_config_value(:vm_poweron_clone).to_s
         delete_source = locate_config_value(:vm_delete_source).to_s
 
         connection.login
 
-        unless org_name
-          notice_msg("--org not specified, assuming VDC and SOURCE_VAPP are IDs")
-          vdc = connection.get_vdc vdc_arg
-          vapp = connection.get_vapp vapp_arg
-        else
-          org = connection.get_organization_by_name org_name
-          vdc = connection.get_vdc_by_name org, vdc_arg
-          vapp = connection.get_vapp_by_name org, vdc[:name], vapp_arg
-        end
+        org = connection.get_organization_by_name org_name
+        vdc = connection.get_vdc_by_name org, vdc_arg
+        vapp = connection.get_vapp_by_name org, vdc[:name], vapp_arg
 
         result = connection.clone_vapp vdc[:id], vapp[:id], dest_vapp_name, deploy_clone, poweron_clone, delete_source
 

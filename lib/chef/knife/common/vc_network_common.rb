@@ -19,26 +19,12 @@
 class Chef
   class Knife
     module VcNetworkCommon
-      def self.included(includer)
-        includer.class_eval do
-          option :vcloud_org_name,
-                 :long => "--org ORG_NAME",
-                 :description => "Organization to whom Network belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_name] = key }
-        end
-      end
-
       def get_network(network_arg)
         network = nil
-        org_name = locate_config_value(:vcloud_org_name)
+        org_name = locate_org_option
 
-        unless org_name
-          notice_msg("--org not specified, assuming NETWORK is an ID")
-          network = connection.get_network network_arg
-        else
-          org = connection.get_organization_by_name org_name
-          network = connection.get_network_by_name org, network_arg
-        end
+        network = connection.get_network network_arg
+
         raise ArgumentError, "Network #{network_arg} not found" unless network
         network
       end

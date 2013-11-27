@@ -22,27 +22,22 @@ class Chef
 
       def self.included(includer)
         includer.class_eval do
-          option :vcloud_org_name,
-                 :long => "--org ORG_NAME",
-                 :description => "Organization to whom vApp's VDC belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_name] = key }
-
-          option :vcloud_vdc_name,
+          option :vcloud_vdc,
                  :long => "--vdc VDC_NAME",
                  :description => "VDC to whom vApp belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vdc_name] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vdc] = key }
         end
       end
 
       def get_vapp(vapp_arg)
         vapp = nil
-        org_name = locate_config_value(:vcloud_org_name)
-        vdc_name = locate_config_value(:vcloud_vdc_name)
+        vdc_name = locate_config_value(:vcloud_vdc)
 
-        unless org_name && vdc_name
-          notice_msg("--org and --vdc not specified, assuming VAPP is an ID")
+        unless vdc_name
+          notice_msg("--vdc not specified, assuming VAPP is an ID")
           vapp = connection.get_vapp vapp_arg
         else
+          org_name = locate_org_option
           org = connection.get_organization_by_name org_name
           vapp = connection.get_vapp_by_name org, vdc_name, vapp_arg
         end

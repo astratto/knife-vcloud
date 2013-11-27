@@ -21,29 +21,19 @@ class Chef
     module VcCatalogCommon
       def self.included(includer)
         includer.class_eval do
-          option :vcloud_org_name,
-                 :long => "--org ORG_NAME",
-                 :description => "Organization to whom Catalog belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org_name] = key }
-
-          option :vcloud_catalog_name,
+          option :vcloud_catalog,
                  :long => "--catalog CATALOG_NAME",
                  :description => "Catalog to whom Catalog Item belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_catalog_name] = key }
+                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_catalog] = key }
         end
       end
 
       def get_catalog(catalog_arg)
         catalog = nil
-        org_name = locate_config_value(:vcloud_org_name)
+        org_name = locate_org_option
 
-        unless org_name
-          notice_msg("--org not specified, assuming CATALOG is an ID")
-          catalog = connection.get_catalog catalog_arg
-        else
-          org = connection.get_organization_by_name org_name
-          catalog = connection.get_catalog_by_name org, catalog_arg
-        end
+        org = connection.get_organization_by_name org_name
+        catalog = connection.get_catalog_by_name org, catalog_arg
 
         raise ArgumentError, "Catalog #{catalog_arg} not found" unless catalog
         catalog
@@ -51,7 +41,7 @@ class Chef
 
       def get_catalog_item(catalog_item_arg)
         item = nil
-        catalog_name = locate_config_value(:vcloud_catalog_name)
+        catalog_name = locate_config_value(:vcloud_catalog)
 
         unless catalog_name
           notice_msg("--catalog not specified, assuming CATALOG_ITEM is an ID")
