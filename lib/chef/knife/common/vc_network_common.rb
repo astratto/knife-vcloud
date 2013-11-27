@@ -23,7 +23,8 @@ class Chef
         network = nil
         org_name = locate_org_option
 
-        network = connection.get_network network_arg
+        org = connection.get_organization_by_name org_name
+        network = connection.get_network_by_name org, network_arg
 
         raise ArgumentError, "Network #{network_arg} not found" unless network
         network
