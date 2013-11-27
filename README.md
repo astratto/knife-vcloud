@@ -50,7 +50,7 @@ USAGE
     knife vc org show [ORG] (options)
     knife vc ovf upload VDC CATALOG VAPP_NAME VAPP_DESCRIPTION OVF_FILENAME (options)
     knife vc vapp bootstrap [VAPP] (options)
-    knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
+    knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
     knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP] (options)
     knife vc vapp network external [add|delete|edit| [VAPP] [NETWORK] (options)

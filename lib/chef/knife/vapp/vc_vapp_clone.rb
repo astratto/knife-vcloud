@@ -21,7 +21,7 @@ class Chef
     class VcVappClone < Chef::Knife
       include Knife::VcCommon
 
-      banner "knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)"
+      banner "knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)"
 
       option :vm_deploy_clone,
              :long => "--[no-]deploy-clone",
