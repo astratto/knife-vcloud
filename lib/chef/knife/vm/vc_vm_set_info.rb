@@ -63,7 +63,11 @@ class Chef
         if vm_name
           task_id = connection.rename_vm vm[:id], vm_name
           ui.msg "Renaming VM from #{vm[:vm_name]} to #{vm_name}"
-          wait_task(connection, task_id)
+          if wait_task(connection, task_id)
+            ui.msg "Forcing Guest Customization..."
+            task_id = connection.force_customization_vm vm[:id]
+            wait_task(connection, task_id)
+          end
         end
 
         connection.logout
