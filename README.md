@@ -447,7 +447,6 @@ i.e.,
 
 * admin-passwd: change guest admin password
 * script: load a given file and use it as guest customization script
-* guest-computer-name: change guest name
 
 _Example:_
 

@@ -50,15 +50,10 @@ class Chef
              :boolean => true,
              :default => true
 
-      option :guest_computer_name,
-             :long => "--guest-computer-name COMPUTER_NAME",
-             :description => "Set Guest Computer Name"
-
       def run
         $stdout.sync = true
 
         vm_arg = @name_args.shift
-        computer_name = locate_config_value(:guest_computer_name)
         script_filename = locate_config_value(:customization_script)
 
         if script_filename
@@ -83,9 +78,7 @@ class Chef
           config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
         end
 
-        if computer_name.nil?
-          computer_name = vm[:guest_customizations][:computer_name]
-        end
+        computer_name = vm[:guest_customizations][:computer_name]
 
         if vm[:status] == 'running'
           if ui.confirm("Guest customizations must be applied to a stopped VM, " \

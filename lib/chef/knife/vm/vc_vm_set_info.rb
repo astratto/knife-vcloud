@@ -61,12 +61,35 @@ class Chef
         end
 
         if vm_name
-          task_id = connection.rename_vm vm[:id], vm_name
+          # Changing VM name requires to change also its guest computer name
+          guest_config = {}
+
+          if vm[:guest_customizations][:admin_passwd_enabled]
+            ui.msg('Inheriting admin password')
+            guest_config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
+          end
+
+          if vm[:status] == 'running'
+            if ui.confirm("Guest customizations must be applied to a stopped VM, " \
+                          "but it's running. Can I #{ui.color('STOP', :red)} it")
+              task_id, response = connection.poweroff_vm vm[:id]
+
+              ui.msg "Stopping VM..."
+              wait_task(connection, task_id)
+            end
+          end
+
           ui.msg "Renaming VM from #{vm[:vm_name]} to #{vm_name}"
+          task_id = connection.rename_vm vm[:id], vm_name
+
           if wait_task(connection, task_id)
-            ui.msg "Forcing Guest Customization..."
-            task_id = connection.force_customization_vm vm[:id]
-            wait_task(connection, task_id)
+            task_id, response = connection.set_vm_guest_customization vm[:id], computer_name, guest_config
+
+            if wait_task(connection, task_id)
+              ui.msg "Forcing Guest Customization..."
+              task_id = connection.force_customization_vm vm[:id]
+              wait_task(connection, task_id)
+            end
           end
         end
 
