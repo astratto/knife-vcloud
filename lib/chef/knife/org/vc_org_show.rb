@@ -42,7 +42,7 @@ class Chef
         list = ["#{ui.color('CATALOGS', :cyan)}", '']
         list << header
         list.flatten!
-        organization[:catalogs].each do |k, v|
+        sort_by_key(organization[:catalogs]).each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -50,7 +50,7 @@ class Chef
         list << ['', '', "#{ui.color('VDCs', :cyan)}", '']
         list << header
         list.flatten!
-        organization[:vdcs].each do |k, v|
+        sort_by_key(organization[:vdcs]).each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -58,7 +58,7 @@ class Chef
         list << ['', '', "#{ui.color('NETWORKS', :cyan)}", '']
         list << header
         list.flatten!
-        organization[:networks].each do |k, v|
+        sort_by_key(organization[:networks]).each do |k, v|
           list << (k || '')
           list << (v || '')
         end
@@ -66,7 +66,7 @@ class Chef
         list << ['', '', "#{ui.color('TASKLISTS', :cyan)}", '']
         list << header
         list.flatten!
-        organization[:tasklists].each do |k, v|
+        sort_by_key(organization[:tasklists]).each do |k, v|
           list << (k || '<unnamed list>')
           list << (v || '')
         end

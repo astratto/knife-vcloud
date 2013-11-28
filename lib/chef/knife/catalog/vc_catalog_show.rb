@@ -40,7 +40,7 @@ class Chef
         ui.msg "#{ui.color('Description:', :cyan)} #{catalog[:description]}"
         list = header
         list.flatten!
-        catalog[:items].each do |k, v|
+        sort_by_key(catalog[:items]).each do |k, v|
           list << (k || '')
           list << (v || '')
         end

@@ -143,6 +143,10 @@ class Chef
         key.to_s.gsub('_', ' ').capitalize
       end
 
+      def sort_by_key(collection)
+        collection.sort_by {|k, v| k }
+      end
+
       private
         def humanize_elapsed_time(start_time, end_time)
           start_time = Time.parse(start_time || Time.now)
