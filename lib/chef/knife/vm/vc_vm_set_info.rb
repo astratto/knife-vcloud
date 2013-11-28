@@ -83,6 +83,7 @@ class Chef
           task_id = connection.rename_vm vm[:id], vm_name
 
           if wait_task(connection, task_id)
+            computer_name = vm[:guest_customizations][:computer_name]
             task_id, response = connection.set_vm_guest_customization vm[:id], computer_name, guest_config
 
             if wait_task(connection, task_id)
