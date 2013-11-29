@@ -42,12 +42,6 @@ class Chef
             :proc => Proc.new { |d| Chef::Config[:knife][:distro] = d },
             :default => "chef-full"
 
-          option :chef_node_name,
-            :short => "-N NAME",
-            :long => "--node-name NAME",
-            :description => "The Chef node name for your new node",
-            :proc => Proc.new { |t| Chef::Config[:knife][:chef_node_name] = t }
-
           option :bootstrap_windows,
             :long => "--[no-]bootstrap-windows",
             :description => "The machine to be bootstrapped is Windows",
@@ -100,10 +94,6 @@ class Chef
             :boolean => true,
             :default => true
 
-          option :chef_base_name,
-            :long => "--chef_base-name CHEF_BASE_NAME",
-            :description => "Prefix to use for every VM. If not specified, use: VM name + short hash"
-
           option :max_tries,
             :long => "--max-tries MAX_TRIES",
             :description => "Max number of connection tries for each VM",
@@ -136,7 +126,6 @@ class Chef
       def bootstrap_vm(vm_name, id, addresses)
         ui.msg "Bootstrap VM: #{vm_name}..."
 
-        chef_base_name = locate_config_value(:chef_base_name)
         max_tries = locate_config_value(:max_tries)
         ssh_port = locate_config_value(:ssh_port)
 
@@ -159,13 +148,7 @@ class Chef
 
         if reachable_ip
           ui.msg "Bootstrap IP: #{reachable_ip}"
-          if chef_base_name
-            node_name = "#{chef_base_name}#{vm_name}"
-          else
-            node_name = "#{vm_name}#{id.slice(0, 8)}"
-          end
-
-          bootstrap_for_node(node_name, reachable_ip).run
+          bootstrap_for_node(reachable_ip).run
         else
           ui.warn "No reachable IPs. Not bootstrapping."
         end
@@ -193,12 +176,11 @@ class Chef
           socket && socket.close
         end
 
-        def bootstrap_for_node(node_name, fqdn)
+        def bootstrap_for_node(fqdn)
           bootstrap = Chef::Knife::Bootstrap.new
           bootstrap.name_args = [fqdn]
           bootstrap.config[:ssh_user] = locate_config_value(:ssh_user) || "root"
           bootstrap.config[:ssh_password] = locate_config_value(:ssh_password)
-          bootstrap.config[:chef_node_name] = node_name
           bootstrap.config[:use_sudo] = true unless locate_config_value(:ssh_user) == 'root'
           bootstrap.config[:ssh_user] = locate_config_value(:ssh_user)
           bootstrap.config[:ssh_password] = config[:ssh_password]
