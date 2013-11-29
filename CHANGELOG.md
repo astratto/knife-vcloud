@@ -26,17 +26,16 @@ FEATURES:
 * Add command to upload OVF
 
 CHANGES:
+
 * Renamed & enhanced command _vapp config network_ to _vapp network external_
 * Several options have been revisited (see README.md for details)
 * Sort VDC, Networks, vApps, Catalogs and Catalog Items by name
-
-VARIOUS:
-* Update dependency vcloud-rest v. 0.4.0
 
 2012-12-28 (0.2.3)
 --
 
 VARIOUS:
+
 * Update dependency vcloud-rest v. 0.2.1
 * Update documentation
 
@@ -47,6 +46,7 @@ FIXES:
 --
 
 FIXES:
+
 * VM Network config: use command line arguments
 * Properly use boolean options
 * Minor fixes
@@ -55,17 +55,20 @@ FIXES:
 --
 
 FIXES:
+
 * Change namespace to fix import error under 1.9.x (system-wide)
 
 2012-12-24 (0.2.0)
 --
 
 FEATURES:
+
 * Add command for basic VM Guest Customization configuration
 * Add command for basic VM Network configuration
 * Add command for basic vApp Network configuration
 
-FIXES:
+CHANGES:
+
 * Renamed _Common#msg_ to _Common#out\_msg_
 
 2012-12-21 (0.1.0)
