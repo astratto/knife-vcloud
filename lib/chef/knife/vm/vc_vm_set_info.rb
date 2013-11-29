@@ -36,6 +36,12 @@ class Chef
              :long => "--name VM_NAME",
              :description => "Rename the VM"
 
+      option :override_guest_name,
+             :long => "--[no-]override-guest-name",
+             :description => "Set Guest hostname to VM_NAME",
+             :boolean => true,
+             :default => true
+
       def run
         $stdout.sync = true
 
@@ -61,40 +67,36 @@ class Chef
         end
 
         if vm_name
-          # Changing VM name requires to change also its guest computer name
-          guest_config = {}
-
-          if vm[:guest_customizations][:admin_passwd_enabled]
-            ui.msg('Inheriting admin password')
-            guest_config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
-          end
-
-          if vm[:status] == 'running'
-            if ui.confirm("Guest customizations must be applied to a stopped VM, " \
-                          "but it's running. Can I #{ui.color('STOP', :red)} it")
-              task_id, response = connection.poweroff_vm vm[:id]
-
-              ui.msg "Stopping VM..."
-              wait_task(connection, task_id)
-            end
-          end
-
-          ui.msg "Renaming VM from #{vm[:vm_name]} to #{vm_name}"
-          task_id = connection.rename_vm vm[:id], vm_name
-
-          if wait_task(connection, task_id)
-            computer_name = vm[:guest_customizations][:computer_name]
-            task_id, response = connection.set_vm_guest_customization vm[:id], computer_name, guest_config
-
-            if wait_task(connection, task_id)
-              ui.msg "Forcing Guest Customization..."
-              task_id = connection.force_customization_vm vm[:id]
-              wait_task(connection, task_id)
-            end
-          end
+          rename_vm(connection, vm, vm_name)
         end
 
         connection.logout
+      end
+
+      def rename_vm(connection, vm, vm_name)
+        ui.msg "Renaming VM from #{vm[:vm_name]} to #{vm_name}"
+        task_id = connection.rename_vm vm[:id], vm_name
+        result = wait_task(connection, task_id)
+
+        return unless result && locate_config_value(:override_guest_name)
+
+        # Change also its guest computer name
+        guest_config = {}
+
+        # Inheriting admin_passwd if enabled
+        if vm[:guest_customizations][:admin_passwd_enabled]
+          guest_config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
+        end
+
+        stop_if_running(connection, vm)
+
+        ui.msg "Renaming guest name..."
+        task_id, response = connection.set_vm_guest_customization vm[:id], vm_name, guest_config
+        return unless wait_task(connection, task_id)
+
+        ui.msg "Forcing Guest Customization..."
+        task_id = connection.force_customization_vm vm[:id]
+        wait_task(connection, task_id)
       end
     end
   end

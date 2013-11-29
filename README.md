@@ -388,6 +388,9 @@ _Example:_
 ###Set VM's CPUs / Memory / Name
 This command sets name, CPUs and RAM info for a given VM.
 
+Renaming a VM implies renaming its guest name.
+Use ```--no-override-guest-name``` if you want to preserve the old name.
+
 _Example:_
 
     $ knife vc vm set info --name NewName --vapp vApp_test vm-test
