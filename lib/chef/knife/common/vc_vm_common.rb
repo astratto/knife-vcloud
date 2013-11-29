@@ -50,6 +50,17 @@ class Chef
         raise ArgumentError, "VM #{vm_arg} not found" unless vm
         vm
       end
+
+      def stop_if_running(connection, vm)
+        if vm[:status] == 'running'
+          if ui.confirm("Guest customizations must be applied to a stopped VM, " \
+                        "but it's running. Can I #{ui.color('STOP', :red)} it")
+            ui.msg "Stopping VM..."
+            task_id, response = connection.poweroff_vm vm[:id]
+            return unless wait_task(connection, task_id)
+          end
+        end
+      end
     end
   end
 end
