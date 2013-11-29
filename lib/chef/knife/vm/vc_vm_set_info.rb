@@ -88,15 +88,17 @@ class Chef
           guest_config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
         end
 
-        stop_if_running(connection, vm)
+        action = stop_if_running(connection, vm)
 
-        ui.msg "Renaming guest name..."
-        task_id, response = connection.set_vm_guest_customization vm[:id], vm_name, guest_config
-        return unless wait_task(connection, task_id)
+        guest_name = sanitize_guest_name(vm_name)
 
-        ui.msg "Forcing Guest Customization..."
-        task_id = connection.force_customization_vm vm[:id]
-        wait_task(connection, task_id)
+        ui.msg "Renaming guest name to #{guest_name}..."
+        task_id, response = connection.set_vm_guest_customization vm[:id], guest_name, guest_config
+        if wait_task(connection, task_id) && action == :stopped
+          ui.msg "Restarting VM..."
+          task_id = connection.poweron_vm vm[:id]
+          wait_task(connection, task_id)
+        end
       end
     end
   end

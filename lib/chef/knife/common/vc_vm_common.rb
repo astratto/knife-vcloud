@@ -51,15 +51,29 @@ class Chef
         vm
       end
 
+      # Accept only characters and hyphens
+      #
+      # Underscores are converted to hyphens
+      def sanitize_guest_name(name)
+        name.gsub(/_/, '-').gsub(/[^[a-z]|^[A-Z]|^-]/, '')
+      end
+
+      # Verify a VM and stop it if it's running
+      #
+      # Return :nothing if nothing was made
+      #        :errored for errors
+      #        :stopped if was stopped
       def stop_if_running(connection, vm)
         if vm[:status] == 'running'
           if ui.confirm("Guest customizations must be applied to a stopped VM, " \
                         "but it's running. Can I #{ui.color('STOP', :red)} it")
             ui.msg "Stopping VM..."
             task_id, response = connection.poweroff_vm vm[:id]
-            return unless wait_task(connection, task_id)
+            return :errored unless wait_task(connection, task_id)
           end
+          return :stopped
         end
+        return :nothing
       end
     end
   end

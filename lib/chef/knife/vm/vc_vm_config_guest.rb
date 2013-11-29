@@ -89,7 +89,10 @@ class Chef
 
         stop_if_running(connection, vm)
 
-        task_id, response = connection.set_vm_guest_customization vm[:id], computer_name, config
+        guest_name = sanitize_guest_name(computer_name)
+
+        ui.msg "Renaming guest name to #{guest_name}..."
+        task_id, response = connection.set_vm_guest_customization vm[:id], guest_name, config
 
         ui.msg "VM guest configuration..."
         wait_task(connection, task_id)
