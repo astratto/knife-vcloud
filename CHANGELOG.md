@@ -29,7 +29,6 @@ CHANGES:
 * Renamed & enhanced command _vapp config network_ to _vapp network external_
 * Several options have been revisited (see README.md for details)
 * Sort VDC, Networks, vApps, Catalogs and Catalog Items by name
-* Remove --guest-computer-name since it's now implied by VM renaming
 
 VARIOUS:
 * Update dependency vcloud-rest v. 0.4.0
