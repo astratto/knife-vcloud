@@ -109,6 +109,22 @@ class Chef
             :description => "Max number of connection tries for each VM",
             :default => 5
 
+          option :secret,
+            :short => "-s SECRET",
+            :long  => "--secret ",
+            :description => "The secret key to use to encrypt data bag item values",
+            :proc => Proc.new { |s| Chef::Config[:knife][:secret] = s }
+
+          option :secret_file,
+            :long => "--secret-file SECRET_FILE",
+            :description => "A file containing the secret key to use to encrypt data bag item values",
+            :proc => Proc.new { |sf| Chef::Config[:knife][:secret_file] = sf }
+
+          option :template_file,
+            :long => "--template-file TEMPLATE_FILE",
+            :description => "Template file to use for bootstrap",
+            :proc => Proc.new { |sf| Chef::Config[:knife][:template_file] = tf }
+
           Chef::Config[:knife][:hints] ||= {"vcloud" => {}}
           option :hint,
             :long => "--hint HINT_FILE",
@@ -200,8 +216,9 @@ class Chef
           bootstrap.config[:template_file] = locate_config_value(:template_file)
           bootstrap.config[:bootstrap_proxy] = locate_config_value(:bootstrap_proxy)
           bootstrap.config[:environment] = config[:environment]
-          bootstrap.config[:encrypted_data_bag_secret] = config[:encrypted_data_bag_secret]
-          bootstrap.config[:encrypted_data_bag_secret_file] = config[:encrypted_data_bag_secret_file]
+          bootstrap.config[:encrypted_data_bag_secret] = locate_config_value(:secret)
+          bootstrap.config[:encrypted_data_bag_secret_file] = locate_config_value(:secret_file)
+
           bootstrap
         end
     end
