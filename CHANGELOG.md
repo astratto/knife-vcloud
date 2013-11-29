@@ -1,29 +1,36 @@
 Changes
 ==
-Next Version (0.x.y)
+2013-11-29 (1.0.0)
 --
 
+This is the first release that leaves beta status.
+It's actively used in production by at least one company and thus it's important
+to offer a more stable interface.
+
+This version requires vcloud-rest v. 1.0.0.
+
 FEATURES:
-* Add commands to resume/suspend/reset vApps
-* Show CPU/RAM/Disks info for VMs
-* Add command to set VM's info (Name, CPUs & RAM)
-* Add command to manage VM's disks (add, delete, resize)
-* Add command to clone an existing vApp
-* Org show searches by name by default
-* VDCs can be searched by ID or by Name and Organization
-* Catalogs can be searched by ID or by Name and Organization
-* vApps can be searched by ID or by Name, Organization and VDC
-* VMs can be searched by ID or by Name, Organization, VDC and vApp
-* Add support for customization scripts
-* Add commands to manage VM's status (start/stop/delete/reset/suspend/reboot)
-* Add command to show details about a given network
-* Guest customization: ensure VM is stopped or stop it
-* Show network details in vapp show
-* Split commands to manage internal and external vApp networks
-* Add command to bootstrap single VMs
-* Add command to bootstrap every VM of a vApp
-* Add command to create/revert a vApp snapshot
-* Add command to upload OVF
+
+* vApp management
+    * Add commands to resume/suspend/reset vApps
+    * Add command to clone an existing vApp
+    * Show network details in vapp show
+    * Split commands to manage internal and external vApp networks
+    * Add command to create/revert a vApp snapshot
+* VM management
+    * Add commands to manage VM's status (start/stop/delete/reset/suspend/reboot)
+    * Show CPU/RAM/Disks info for VMs
+    * Add command to set VM's info (Name, CPUs & RAM)
+    * Add command to manage VM's disks (add, delete, resize)
+    * Add support for customization scripts
+    * Guest customization: ensure VM is stopped or stop it
+    * Add command to bootstrap single VMs
+    * Add command to bootstrap every VM of a vApp
+* CLI revisited
+    * Almost every command accepts names in addition to IDs
+* Various
+    * Add command to show details about a given network
+    * Add command to upload OVF
 
 CHANGES:
 

@@ -7,8 +7,6 @@ A knife plugin for the VMware® vCloud API.
 
 It uses [vcloud-rest](https://github.com/astratto/vcloud-rest) to communicate with a VMware vCloud Director instance.
 
-This code is BETA QUALITY.
-
 INSTALLATION
 --
 This plugin is distributed as a Ruby Gem. To install it, run:
@@ -136,7 +134,7 @@ _Example:_
 
 #### Browse multiple organizations
 
-System Administrators can browse several organizations and thus *--org* can be used to specify different organizations.  
+Using a vCloud System Administrator account is possible to browse several organizations and thus *--org* can be used to specify different organizations.  
 
 Only *--org-login* is valid for other users.
 If *--org* is used by those users, a warning is shown:
