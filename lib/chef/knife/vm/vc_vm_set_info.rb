@@ -36,12 +36,6 @@ class Chef
              :long => "--name VM_NAME",
              :description => "Rename the VM"
 
-      option :override_guest_name,
-             :long => "--[no-]override-guest-name",
-             :description => "Set Guest hostname to VM_NAME",
-             :boolean => true,
-             :default => true
-
       def run
         $stdout.sync = true
 
@@ -78,27 +72,7 @@ class Chef
         task_id = connection.rename_vm vm[:id], vm_name
         result = wait_task(connection, task_id)
 
-        return unless result && locate_config_value(:override_guest_name)
-
-        # Change also its guest computer name
-        guest_config = {}
-
-        # Inheriting admin_passwd if enabled
-        if vm[:guest_customizations][:admin_passwd_enabled]
-          guest_config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
-        end
-
-        action = stop_if_running(connection, vm)
-
-        guest_name = sanitize_guest_name(vm_name)
-
-        ui.msg "Renaming guest name to #{guest_name}..."
-        task_id, response = connection.set_vm_guest_customization vm[:id], guest_name, guest_config
-        if wait_task(connection, task_id) && action == :stopped
-          ui.msg "Restarting VM..."
-          task_id = connection.poweron_vm vm[:id]
-          wait_task(connection, task_id)
-        end
+        return result
       end
     end
   end
