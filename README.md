@@ -515,6 +515,16 @@ Upload a given OVF.
     Time: 00:00:32 <=========> 100% Uploading: ../vm-d384582f-2457-477c-ad9b-6228740ca762-disk-1.vmdk
     OVF uploaded. vAppTemplate created with ID: b1e58873-8227-4168-add3-87554d2043db
 
+DEBUGGING
+--
+
+The underlying library *vcloud-rest* can be configured to print debug information.
+Debug can be enabled setting the following environment variables:
+
+* *VCLOUD_REST_DEBUG_LEVEL*: to specify the log level (e.g., INFO)
+* *VCLOUD_REST_LOG_FILE*: to specify the output file (defaults to STDOUT)
+
+
 LICENSE
 --
 
