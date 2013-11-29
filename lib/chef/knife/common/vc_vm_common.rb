@@ -55,7 +55,7 @@ class Chef
       #
       # Underscores are converted to hyphens
       def sanitize_guest_name(name)
-        name.gsub(/_/, '-').gsub(/[^[a-z]|^[A-Z]|^-]/, '')
+        name.gsub(/_/, '-').gsub(/[^[0-9]|^[a-z]|^[A-Z]|^-]/, '')
       end
 
       # Verify a VM and stop it if it's running
