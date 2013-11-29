@@ -1,5 +1,12 @@
 Changes
 ==
+Next Version (1.x.x)
+--
+
+FEATURES:
+
+* Add option *--override-guest* to *vm set info* to rename also its guest name (false by default for backward-compatibility)
+
 2013-11-29 (1.0.0)
 --
 
