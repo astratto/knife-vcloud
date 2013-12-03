@@ -1,11 +1,16 @@
 Changes
 ==
-Next Version (1.x.x)
+Next Version (1.1.0)
 --
 
 FEATURES:
 
 * Add option *--override-guest* to *vm set info* to rename also its guest name (false by default for backward-compatibility)
+* Add command *vm network [add|delete|edit|* to manage multiple networks
+
+DEPRECATIONS:
+
+* *vm config network* is now deprecated.
 
 2013-11-29 (1.0.0)
 --

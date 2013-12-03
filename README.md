@@ -63,7 +63,8 @@ USAGE
     knife vc vdc show VDC (options)
     knife vc vm bootstrap [VM] (options)
     knife vc vm config guest [VM] (options)
-    knife vc vm config network [VM] [NETWORK_NAME] (options)
+    [DEPRECATED] knife vc vm config network [VM] [NETWORK_NAME] (options)
+    knife vc vm network [add|delete|edit| [VM] [NETWORK] (options)
     knife vc vm reboot [VM] (options)
     knife vc vm reset [VM] (options)
     knife vc vm set disks [VM] (options)
@@ -425,16 +426,50 @@ _Example:_
     Summary: Status: success - time elapsed: 7.21 seconds
 
 ###VM's network configuration
-This command allows for basic VM network configuration.
-E.g., set IP allocation mode (defaults to POOL)
+VM networks can be added, removed and modified using the *vm network* command.
+This commands allows for basic VM network configuration and accepts several options to configure a given network (see *knife vc vm network --help* for details).
 
 Please note that you must use the human readable name of the network (i.e., _TestNet\_1_).
 
-_Example:_
+**DEPRECATION NOTE: The command *vm config network* has been deprecated and will be removed in future versions.**
 
-    $ knife vc vm config network test_vm TestNet_1 --vapp test_vapp1
+_Add example:_
+
+    $ knife vc vm network edit testvm TST_Data
+    Forcing parent network to itself
     VM network configuration...
-    Summary: Status: success - time elapsed: 4.35 seconds
+    Guest customizations must be applied to a stopped VM, but it's running. Can I STOP it? (Y/N) y
+    Stopping VM...
+    Summary: Status: success - time elapsed: 1.617 seconds
+    Adding TST_Data to VM...
+    Summary: Status: success - time elapsed: 5.866 seconds
+    Forcing Guest Customization to apply changes...
+    Summary: Status: success - time elapsed: 13.387 seconds
+
+_Edit example:_
+
+    $ knife vc vm network edit testvm TST_Data --ip-allocation-mode DHCP
+    Forcing parent network to itself
+    VM network configuration...
+    Guest customizations must be applied to a stopped VM, but it's running. Can I STOP it? (Y/N) y
+    Stopping VM...
+    Summary: Status: success - time elapsed: 5.34 seconds
+    VM network configuration for TST_Data...
+    Summary: Status: success - time elapsed: 3.397 seconds
+    Forcing Guest Customization to apply changes...
+    Summary: Status: success - time elapsed: 8.01 seconds
+
+_Delete example:_
+
+    $ knife vc vm network delete test_vm TST_Data
+    VM network configuration...
+    Guest customizations must be applied to a stopped VM, but it's running. Can I STOP it? (Y/N) y
+    Stopping VM...
+    Summary: Status: success - time elapsed: 4.77 seconds
+    Removing TST_Data from VM...
+    Summary: Status: success - time elapsed: 3.614 seconds
+    Forcing Guest Customization to apply changes...
+    Summary: Status: success - time elapsed: 11.194 seconds
 
 ###VM's Guest Customization configuration
 This command allows for basic VM Guest Customization configuration.

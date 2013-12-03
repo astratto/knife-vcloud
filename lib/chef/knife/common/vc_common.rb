@@ -119,6 +119,13 @@ class Chef
         end
       end
 
+      def deprecation_msg(value)
+        if value && !value.empty?
+          ui.info("#{ui.color('DEPRECATION WARNING:', :bold)} This method is deprecated" \
+                  " and will be removed in the next version. You should use #{value}.")
+        end
+      end
+
       def locate_config_value(key)
         key = key.to_sym
         Chef::Config[:knife][key] || config[key]

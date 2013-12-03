@@ -62,6 +62,8 @@ class Chef
 
         connection.login
 
+        deprecation_msg("vm network [add|delete|edit]")
+
         vm = get_vm(vm_arg)
 
         stop_if_running(connection, vm)
