@@ -42,6 +42,7 @@ USAGE
 
     knife vc catalog item show [CATALOG_ITEM] (options)
     knife vc catalog show [CATALOG] (options)
+    knife vc configure (options)
     knife vc login (options)
     knife vc network show [network] (options)
     knife vc org list (options)
@@ -76,7 +77,20 @@ USAGE
 
 ###Configuration
 
-Configuration options can be set either via arguments or inside the *.chef/knife.rb* file.
+A first configuration should be done using ```knife vc configure``` that would prompt user for
+credentials and vCloud URL.
+
+**DEPRECATION NOTE: *vcloud_password_login* has been deprecated and will be removed in future versions.**
+
+E.g.,
+
+    $ bundle exec knife vc configure
+    Loading existing pem
+    vCloud URL (https://mycloud.test.com):
+    vCloud username (testuser):
+    ...
+
+Other configuration options can be set either via arguments or inside the *.chef/knife.rb* file.
 The only difference is that in *knife.rb* dashes must be converted to underscores
 and *vcloud_* must be prepended.
 
@@ -104,7 +118,7 @@ The following options specify user's credentials and thus are accepted by every 
     knife[:vcloud_url] = 'https://vcloud.server.org'
     knife[:vcloud_org_login] = 'vcloud_organization'
     knife[:vcloud_user_login] = 'vcloud_user'
-    knife[:vcloud_password_login] = 'vcloud_password'
+    knife[:vcloud_password] = <MUST BE GENERATED WITH knife vc configure>
     (OPTIONAL) knife[:vcloud_api_version] = '1.5'
 
 ####IDs and names
