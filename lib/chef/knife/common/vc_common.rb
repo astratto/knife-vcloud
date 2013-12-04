@@ -18,9 +18,13 @@
 
 require 'chef/knife'
 require 'date'
+require 'openssl'
+require 'base64'
 
 class Chef
   class Knife
+    class ConfigurationError < StandardError; end
+
     module VcCommon
       def self.included(includer)
         includer.class_eval do
@@ -75,10 +79,28 @@ class Chef
 
       def connection
         unless @connection
+          pemfile = locate_config_value(:vcloud_pem)
+
+          if locate_config_value(:vcloud_password_login)
+            ui.info("#{ui.color('DEPRECATION WARNING:', :bold)} knife[:vcloud_password_login] is deprecated" \
+                  " and will be removed in the next version. You should remove it and run 'knife vc configure'.")
+            passwd = locate_config_value(:vcloud_password_login)
+          else
+            unless pemfile
+              raise ConfigurationError, "PEM file not configured. Please run 'knife vc configure'"
+            end
+
+            unless locate_config_value(:vcloud_password)
+              raise ConfigurationError, "Password not configured. Please run 'knife vc configure'"
+            end
+
+            passwd = get_password(pemfile)
+          end
+
           @connection = VCloudClient::Connection.new(
               locate_config_value(:vcloud_url),
               locate_config_value(:vcloud_user_login),
-              locate_config_value(:vcloud_password_login),
+              passwd,
               locate_config_value(:vcloud_org_login),
               locate_config_value(:vcloud_api_version)
           )
@@ -152,6 +174,62 @@ class Chef
 
       def sort_by_key(collection)
         collection.sort_by {|k, v| k }
+      end
+
+      # Generate a new key pair and store it on knife.rb
+      def generate_key(dir="#{File.join(Dir.home, '.chef')}", output="vc_key.pem")
+        key = OpenSSL::PKey::RSA.new 2048
+
+        pemfile = File.join(dir, output)
+
+        File.open("#{pemfile}", 'w') do |io| io.write key.to_pem end
+
+        store_config(:vcloud_pem, pemfile)
+      end
+
+      # Store a password in knife.rb
+      def store_password(keyfile)
+        pub_key = OpenSSL::PKey::RSA.new(File.read(keyfile)).public_key
+        result = Base64.encode64(pub_key.public_encrypt(ui.ask("Enter your password: ") { |q| q.echo = false }))
+        store_config(:vcloud_password, result.gsub("\n", ''))
+      end
+
+      # Retrieve a stored password
+      def get_password(keyfile)
+        priv_key = OpenSSL::PKey::RSA.new(File.read(keyfile))
+        result = priv_key.private_decrypt(Base64.decode64(locate_config_value(:vcloud_password)))
+        result
+      end
+
+      # Update knife.rb with an entry knife[:KEY] = VALUE
+      #
+      # It checks whether a given configuration already exists and, if so, updates it
+      def store_config(key, value)
+        configfile = File.join(Dir.home, '.chef', 'knife.rb')
+        old_config = File.open(configfile, 'r').readlines
+        full_key = "knife[:#{key}]"
+
+        if Chef::Config[:knife][key]
+          # Replace existing key
+          File.open("#{configfile}.tmp", 'w') do |new_config|
+            old_config.each do |line|
+              if line =~ Regexp.new("^#{Regexp.escape(full_key)}")
+                line = "#{full_key} = '#{value}'"
+              end
+              new_config.puts line
+            end
+          end
+
+          FileUtils.mv("#{configfile}.tmp", configfile)
+        else
+          # Create a new one
+          File.open(configfile, 'a') do |new_config|
+            new_config.puts "#{full_key} = '#{value}'"
+          end
+        end
+
+        # Reload Chef configuration
+        self.configure_chef
       end
 
       private

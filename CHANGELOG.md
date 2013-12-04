@@ -7,10 +7,13 @@ FEATURES:
 
 * Add option *--override-guest* to *vm set info* to rename also its guest name (false by default for backward-compatibility)
 * Add command *vm network [add|delete|edit|* to manage multiple networks
+* Use RSA keys to manage passwords
+* Add command *configure* to manage knife-vcloud's configuration
 
 DEPRECATIONS:
 
-* *vm config network* is now deprecated.
+* *vm config network* is now deprecated
+* *knife[:vcloud_password_login]* is now deprecated and should be replaced using ```knife vc configure```
 
 2013-11-29 (1.0.0)
 --
