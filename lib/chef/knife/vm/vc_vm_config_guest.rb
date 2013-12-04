@@ -91,7 +91,7 @@ class Chef
 
         guest_name = sanitize_guest_name(computer_name)
 
-        ui.msg "Renaming guest name to #{guest_name}..."
+        ui.msg "Renaming guest name to #{guest_name}..." if locate_config_value(:guest_computer_name)
         task_id, response = connection.set_vm_guest_customization vm[:id], guest_name, config
 
         ui.msg "VM guest configuration..."
