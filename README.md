@@ -110,7 +110,6 @@ to use:
 The following options specify user's credentials and thus are accepted by every command:
 
     --user-login USER
-    --password-login SECRET
     --org-login ORGANIZATION
 
 **Knife.rb configuration example:**
