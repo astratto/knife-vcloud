@@ -63,7 +63,7 @@ class Chef
         vm[:networks].each do |network, values|
           list << [(network || ''), '']
           values.each do |k, v|
-            list << (pretty_symbol(k) || '')
+            list << "  #{(pretty_symbol(k) || '')}"
             list << (v || '')
           end
         end
