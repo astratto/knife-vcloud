@@ -31,17 +31,14 @@ class Chef
 
         vm_arg = @name_args.shift
 
-        connection.login
-
         vm = get_vm(vm_arg)
 
         if locate_config_value(:bootstrap_windows)
           ui.msg "Windows bootstrapping is not available, yet."
         else
-          bootstrap_vm(vm[:vm_name], vm[:id], vm[:networks].collect{|k, v| v[:ip]})
+          addresses = vm.network.connections.collect{|c| c[:ip_address]}.reject{|ip| ip.nil?}
+          bootstrap_vm(vm.name, vm.id, addresses)
         end
-
-        connection.logout
       end
     end
   end

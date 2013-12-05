@@ -29,18 +29,18 @@ class Chef
 
         vapp_arg = @name_args.shift
 
-        connection.login
-
         vapp = get_vapp(vapp_arg)
 
-        if ui.confirm("Do you really want to #{ui.color('DELETE', :red)} vApp #{vapp[:name]} (ID: #{vapp[:id]})")
-          task_id = connection.delete_vapp vapp[:id]
+        if ui.confirm("Do you really want to #{ui.color('DELETE', :red)} vApp #{vapp.name} (ID: #{vapp.id})")
+          vapp.undeploy if convert_vapp_status(vapp.status) != 'stopped'
 
           ui.msg "vApp deletion..."
-          wait_task(connection, task_id)
-
+          if vapp.destroy
+            ui.msg "Done!"
+          else
+            ui.warn "Unable to delete #{vapp.name}"
+          end
         end
-        connection.logout
       end
     end
   end

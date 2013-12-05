@@ -61,71 +61,29 @@ class Chef
           :network_index => locate_config_value(:vm_net_index),
           :ip => locate_config_value(:vm_net_ip),
           :is_connected => locate_config_value(:vm_net_is_connected),
-          :ip_allocation_mode => locate_config_value(:vm_ip_allocation_mode),
-          :retain_network => locate_config_value(:retain_network)
+          :ip_address_allocation_mode => locate_config_value(:vm_ip_allocation_mode)
         }
-
-        connection.login
+        config.delete_if{|k, v| v.nil?}
 
         vm = get_vm(vm_arg)
-        network = get_network network_arg
-
-        unless network
-          raise new ArgumentError, "Network #{network_arg} not found in vDC."
-        end
-
-        unless command == :delete
-          parent_network_arg = locate_config_value(:parent_network)
-          if parent_network_arg
-            ui.msg "Retrieving parent network details"
-            parent_network = get_network parent_network_arg
-            config[:parent_network] =  { :id => parent_network[:id],
-                                         :name => parent_network[:name] }
-          else
-            ui.msg "Forcing parent network to itself"
-            config[:parent_network] = { :id => network[:id],
-                                        :name => network[:name] }
-          end
-        end
 
         ui.msg "VM network configuration..."
-        stop_if_running(connection, vm)
+        stop_if_running(vm)
 
         case command
           when :add
-            ui.msg "Adding #{network[:name]} to VM..."
-            task_id, response = connection.add_network_to_vm vm[:id], network, config
-            result = wait_task(connection, task_id)
+            ui.msg "Adding #{network_arg} to VM..."
+            net = organization.networks.get_by_name(network_arg)
+            vm.network << net
           when :delete
-            ui.msg "Removing #{network[:name]} from VM..."
-            task_id, response = connection.delete_vm_network vm[:id], network
-            result = wait_task(connection, task_id)
+            ui.msg "Removing #{network_arg} from VM..."
+            vm.network.remove(network_arg)
           when :edit
-            ui.msg "VM network configuration for #{network[:name]}..."
-            task_id, response = connection.edit_vm_network vm[:id], network, config
-            result = wait_task(connection, task_id)
+            ui.msg "Editing VM network configuration for #{network_arg}..."
+            network = vm.network[network_arg]
+            network.merge!(config)
+            vm.network[network_arg] = network
         end
-
-        if result
-          unless vm[:guest_customizations][:enabled]
-            config = {
-              :enabled => true,
-              :admin_passwd_enabled => vm[:guest_customizations][:admin_passwd_enabled],
-              :admin_passwd => vm[:guest_customizations][:admin_passwd],
-              :customization_script => script
-            }
-
-            ui.msg "Enabling Guest Customization to apply changes..."
-            task_id, response = connection.set_vm_guest_customization vm[:id], guest_name, config
-            wait_task(connection, task_id)
-          end
-
-          ui.msg "Forcing Guest Customization to apply changes..."
-          task_id = connection.force_customization_vm vm[:id]
-          wait_task(connection, task_id)
-        end
-
-        connection.logout
       end
     end
   end

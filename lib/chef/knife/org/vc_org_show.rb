@@ -26,49 +26,41 @@ class Chef
       def run
         $stdout.sync = true
 
-        org = locate_org_option
-
-        connection.login
-
         header = [
             ui.color('Name', :bold),
             ui.color('ID', :bold)
         ]
 
-        organization = connection.get_organization_by_name org
-
-        connection.logout
-
         list = ["#{ui.color('CATALOGS', :cyan)}", '']
         list << header
         list.flatten!
-        sort_by_key(organization[:catalogs]).each do |k, v|
-          list << (k || '')
-          list << (v || '')
+        sort_by_name(organization.catalogs).each do |item|
+          list << (item.name || '')
+          list << (item.id || '')
         end
 
         list << ['', '', "#{ui.color('VDCs', :cyan)}", '']
         list << header
         list.flatten!
-        sort_by_key(organization[:vdcs]).each do |k, v|
-          list << (k || '')
-          list << (v || '')
+        sort_by_name(organization.vdcs).each do |item|
+          list << (item.name || '')
+          list << (item.id || '')
         end
 
         list << ['', '', "#{ui.color('NETWORKS', :cyan)}", '']
         list << header
         list.flatten!
-        sort_by_key(organization[:networks]).each do |k, v|
-          list << (k || '')
-          list << (v || '')
+        sort_by_name(organization.networks).each do |item|
+          list << (item.name || '')
+          list << (item.id || '')
         end
 
-        list << ['', '', "#{ui.color('TASKLISTS', :cyan)}", '']
+        list << ['', '', "#{ui.color('ACTIVE/ERRORED TASKS', :cyan)}", '']
         list << header
         list.flatten!
-        sort_by_key(organization[:tasklists]).each do |k, v|
-          list << (k || '<unnamed list>')
-          list << (v || '')
+        sort_by_operation_name(organization.tasks.select{|t| !t.success? }).each do |item|
+          list << ("#{item.operation_name} (#{item.status})" || '')
+          list << (item.id || '')
         end
 
         ui.msg ui.list(list, :columns_across, 2)

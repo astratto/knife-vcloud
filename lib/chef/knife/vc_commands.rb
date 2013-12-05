@@ -29,7 +29,6 @@ require 'chef/knife/vdc/vc_vdc_show'
 # Catalog
 require 'chef/knife/common/vc_catalog_common'
 require 'chef/knife/catalog/vc_catalog_show'
-require 'chef/knife/catalog/vc_catalog_item_show'
 
 # Network
 require 'chef/knife/common/vc_network_common'
@@ -55,11 +54,10 @@ require 'chef/knife/vapp/vc_vapp_snapshot'
 # VM
 require 'chef/knife/common/vc_vm_common'
 require 'chef/knife/vm/vc_vm_config_guest'
-require 'chef/knife/vm/vc_vm_config_network'
 require 'chef/knife/vm/vc_vm_network'
 require 'chef/knife/vm/vc_vm_show'
-require 'chef/knife/vm/vc_vm_set_info'
-require 'chef/knife/vm/vc_vm_set_disks'
+require 'chef/knife/vm/vc_vm_edit'
+require 'chef/knife/vm/vc_vm_disks'
 require 'chef/knife/vm/vc_vm_reboot'
 require 'chef/knife/vm/vc_vm_reset'
 require 'chef/knife/vm/vc_vm_start'

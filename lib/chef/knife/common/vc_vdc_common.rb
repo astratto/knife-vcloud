@@ -19,25 +19,6 @@
 class Chef
   class Knife
     module VcVDCCommon
-      def self.included(includer)
-        includer.class_eval do
-          option :vcloud_org,
-                 :long => "--org ORG_NAME",
-                 :description => "Organization to whom VDC belongs",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_org] = key }
-        end
-      end
-
-      def get_vdc(vdc_arg)
-        vdc = nil
-        org_name = locate_org_option
-
-        org = connection.get_organization_by_name org_name
-        vdc = connection.get_vdc_by_name org, vdc_arg
-
-        raise ArgumentError, "VDC #{vdc_arg} not found" unless vdc
-        vdc
-      end
     end
   end
 end

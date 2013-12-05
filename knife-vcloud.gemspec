@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "chef", ">= 0.10.0"
   s.add_dependency "knife-windows", ">= 0"
-  s.add_dependency "vcloud-rest", "~> 1.1.0.pre"
+  s.add_dependency "fog", "~> 1.18.0"
   s.add_dependency "winrm", "~> 1.1.3"
   s.require_path = 'lib'
   s.files = ["CHANGELOG.md","README.md", "LICENSE"] + Dir.glob("lib/**/*")

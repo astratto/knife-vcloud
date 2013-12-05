@@ -31,20 +31,16 @@ class Chef
 
         vapp_arg = @name_args.shift
 
-        connection.login
-
         vapp = get_vapp(vapp_arg)
 
         if locate_config_value(:bootstrap_windows)
           ui.msg "Windows bootstrapping is not available, yet."
         else
-          vapp[:vms_hash].each do |vm_name, details|
-            addresses = details[:addresses].reject(&:nil?)
-            bootstrap_vm(vm_name, details[:id], addresses)
+          vapp.vms.each do |vm|
+            addresses = vm.network.connections.collect{|c| c[:ip_address]}.reject{|ip| ip.nil?}
+            bootstrap_vm(vm.name, vm.id, addresses)
           end
         end
-
-        connection.logout
       end
     end
   end

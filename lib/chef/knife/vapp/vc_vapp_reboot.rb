@@ -24,21 +24,15 @@ class Chef
 
       banner "knife vc vapp reboot [VAPP] (options)"
 
-
       def run
         $stdout.sync = true
 
         vapp_arg = @name_args.shift
 
-        connection.login
         vapp = get_vapp(vapp_arg)
 
-        task_id = connection.reboot_vapp vapp[:id]
-
         ui.msg "vApp reboot..."
-        wait_task(connection, task_id)
-
-        connection.logout
+        vapp.reboot
       end
     end
   end

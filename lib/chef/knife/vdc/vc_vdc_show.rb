@@ -29,31 +29,28 @@ class Chef
 
         vdc_arg = @name_args.shift
 
-        connection.login
-
         vdc = get_vdc(vdc_arg)
 
         header = [
             ui.color('Name', :bold),
             ui.color('ID', :bold),
             ui.color('Status', :bold),
-            ui.color('IP', :bold),
+            ui.color('Description', :bold),
         ]
 
-        ui.msg "#{ui.color('Description:', :cyan)} #{vdc[:description]}"
+        ui.msg "#{ui.color('Description:', :cyan)} #{vdc.description}"
         list = ["#{ui.color('vAPPS', :cyan)}", '', '', '']
         list << header
         list.flatten!
-        sort_by_key(vdc[:vapps]).each do |k, v|
-          vapp = connection.get_vapp v
-          list << ("#{k} (#{vapp[:vms_hash].count} VMs)" || '')
-          list << (v || '')
-          list << (vapp[:status] || '')
-          list << (vapp[:ip] || '')
+
+        sort_by_name(vdc.vapps).each do |vapp|
+          list << ("#{vapp.name} (#{vapp.vms.count} VMs)" || '')
+          list << (vapp.id || '')
+          list << convert_vapp_status(vapp.status || '')
+          list << short_description(vapp.description || '')
         end
 
-        ui.msg ui.list(list, :columns_across, 4)
-        connection.logout
+        ui.msg ui.list(list, :uneven_columns_across, 4)
       end
     end
   end

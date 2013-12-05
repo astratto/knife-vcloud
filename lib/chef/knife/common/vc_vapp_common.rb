@@ -28,22 +28,6 @@ class Chef
                  :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_vdc] = key }
         end
       end
-
-      def get_vapp(vapp_arg)
-        vapp = nil
-        vdc_name = locate_config_value(:vcloud_vdc)
-
-        unless vdc_name
-          notice_msg("--vdc not specified, assuming VAPP is an ID")
-          vapp = connection.get_vapp vapp_arg
-        else
-          org_name = locate_org_option
-          org = connection.get_organization_by_name org_name
-          vapp = connection.get_vapp_by_name org, vdc_name, vapp_arg
-        end
-        raise ArgumentError, "VApp #{vapp_arg} not found" unless vapp
-        vapp
-      end
     end
   end
 end

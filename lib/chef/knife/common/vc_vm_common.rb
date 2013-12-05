@@ -34,23 +34,6 @@ class Chef
         end
       end
 
-      def get_vm(vm_arg)
-        vm = nil
-        vapp_name = locate_config_value(:vcloud_vapp)
-        org_name = locate_org_option
-        vdc_name = locate_config_value(:vcloud_vdc)
-
-        unless vdc_name && vapp_name
-          notice_msg("--vapp and --vdc not specified, assuming VM is an ID")
-          vm = connection.get_vm vm_arg
-        else
-          org = connection.get_organization_by_name org_name
-          vm = connection.get_vm_by_name org, vdc_name, vapp_name, vm_arg
-        end
-        raise ArgumentError, "VM #{vm_arg} not found" unless vm
-        vm
-      end
-
       # Accept only characters and hyphens
       #
       # Underscores are converted to hyphens
@@ -63,13 +46,13 @@ class Chef
       # Return :nothing if nothing was made
       #        :errored for errors
       #        :stopped if was stopped
-      def stop_if_running(connection, vm)
-        if vm[:status] == 'running'
+      def stop_if_running(vm)
+        if vm.ready?
           if ui.confirm("Guest customizations must be applied to a stopped VM, " \
                         "but it's running. Can I #{ui.color('STOP', :red)} it")
             ui.msg "Stopping VM..."
-            task_id, response = connection.poweroff_vm vm[:id]
-            return :errored unless wait_task(connection, task_id)
+            vm.shutdown
+            return :errored
           end
           return :stopped
         end

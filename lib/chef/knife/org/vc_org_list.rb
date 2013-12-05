@@ -31,13 +31,11 @@ class Chef
             ui.color('ID', :bold)
         ]
 
-        connection.login
-        org_list = connection.get_organizations
-        connection.logout
+        org_list = connection.organizations
 
-        org_list.each do |k, v|
-          list << (k || '')
-          list << (v || '')
+        org_list.each do |org|
+          list << (org.name || '')
+          list << (org.id || '')
         end
         ui.msg ui.list(list, :columns_across, 2)
       end

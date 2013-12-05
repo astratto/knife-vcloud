@@ -29,15 +29,10 @@ class Chef
 
         vapp_arg = @name_args.shift
 
-        connection.login
         vapp = get_vapp(vapp_arg)
 
-        task_id = connection.reset_vapp vapp[:id]
-
         ui.msg "vApp reset..."
-        wait_task(connection, task_id)
-
-        connection.logout
+        vapp.reset
       end
     end
   end

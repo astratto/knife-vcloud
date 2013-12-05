@@ -18,18 +18,18 @@
 
 class Chef
   class Knife
-    class VcVmSetDisks < Chef::Knife
+    class VcVmDisks < Chef::Knife
       include Knife::VcCommon
       include Knife::VcVmCommon
 
-      banner "knife vc vm set disks [VM] (options)"
+      banner "knife vc vm disks [add|delete|edit] [VM] (options)"
 
       option :vm_disk_name,
-             :long => "--disk-name DISK_NAME",
+             :long => "--name DISK_NAME",
              :description => "Name of the disk to be modified (required unless using --add)"
 
       option :vm_disk_size,
-             :long => "--disk-size DISK_SIZE",
+             :long => "--size DISK_SIZE",
              :description => "Size of the disk (in MB)"
 
       option :vm_add_disk,
@@ -47,31 +47,39 @@ class Chef
       def run
         $stdout.sync = true
 
+        command_arg = @name_args.shift
         vm_arg = @name_args.shift
 
-        new_disk = locate_config_value(:vm_add_disk)
-        delete_disk = locate_config_value(:vm_delete_disk)
         disk_name = locate_config_value(:vm_disk_name)
         disk_size = locate_config_value(:vm_disk_size)
 
-        raise ArgumentError, "Disk name is mandatory if using --no-add" if !new_disk && disk_name.nil?
-        raise ArgumentError, "Disk size is mandatory if using --add" if new_disk && disk_size.nil?
+        unless command_arg =~ /add|delete|edit/
+          raise ArgumentError, "Invalid command #{command_arg} supplied. Only add, delete and edit are allowed."
+        end
+
+        add_disk = command_arg == 'add'
+        delete_disk = command_arg == 'delete'
+
+        raise ArgumentError, "Disk name is mandatory unless using add" if !add_disk && disk_name.nil?
+        raise ArgumentError, "Disk size is mandatory if using --add" if add_disk && disk_size.nil?
         raise ArgumentError, "Disk name is mandatory if using --delete" if delete_disk && disk_name.nil?
 
-        connection.login
         vm = get_vm(vm_arg)
 
-        if !delete_disk || ui.confirm("Do you really want to #{ui.color('DELETE', :red)} disk #{disk_name}")
-          task_id = connection.set_vm_disk_info vm[:id], {
-                                                        :add => new_disk,
-                                                        :delete => delete_disk,
-                                                        :disk_size => disk_size,
-                                                        :disk_name => disk_name
-                                                      }
-          ui.msg "VM setting Disks info..."
-          wait_task(connection, task_id)
+        if delete_disk
+          if ui.confirm("Do you really want to #{ui.color('DELETE', :red)} disk #{disk_name}")
+            ui.msg "Removing disk..."
+            disk = vm.disks.get_by_name(disk_name)
+            disk.destroy
+          end
+        elsif add_disk
+          ui.msg "Adding disk..."
+          vm.disks.create(disk_size)
+        else
+          ui.msg "Resizing disk..."
+          disk = vm.disks.get_by_name(disk_name)
+          disk.capacity = disk_size
         end
-        connection.logout
       end
     end
   end

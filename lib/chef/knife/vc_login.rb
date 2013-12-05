@@ -28,10 +28,7 @@ class Chef
       def run
         $stdout.sync = true
 
-        connection.login
-        out_msg("Authenticated successfully, code", connection.auth_key)
-
-        connection.logout
+        out_msg("Authenticated successfully, code", connection.vcloud_token)
       end
     end
   end

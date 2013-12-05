@@ -28,24 +28,24 @@ class Chef
         $stdout.sync = true
 
         catalog_arg = @name_args.shift
-        connection.login
-        catalog = get_catalog(catalog_arg)
-        connection.logout
 
-        header = [
+        catalog = organization.catalogs.get_by_name(catalog_arg)
+
+        ui.msg "#{ui.color('Description:', :cyan)} #{catalog.description}"
+
+        list = [
             ui.color('Name', :bold),
-            ui.color('ID', :bold)
+            ui.color('Description', :bold),
+            ui.color('vApp Template', :bold)
         ]
 
-        ui.msg "#{ui.color('Description:', :cyan)} #{catalog[:description]}"
-        list = header
-        list.flatten!
-        sort_by_key(catalog[:items]).each do |k, v|
-          list << (k || '')
-          list << (v || '')
+        sort_by_name(catalog.catalog_items).each do |item|
+          list << (item.name || '')
+          list << short_description(item.description || '', 25)
+          list << (item.vapp_template_id || '')
         end
 
-        ui.msg ui.list(list, :columns_across, 2)
+        ui.msg ui.list(list, :uneven_columns_across, 3)
       end
     end
   end

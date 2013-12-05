@@ -29,15 +29,10 @@ class Chef
 
         vm_arg = @name_args.shift
 
-        connection.login
         vm = get_vm(vm_arg)
 
-        task_id = connection.reset_vm vm[:id]
-
         ui.msg "VM reset..."
-        wait_task(connection, task_id)
-
-        connection.logout
+        vm.reset
       end
     end
   end

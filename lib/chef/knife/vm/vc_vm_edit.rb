@@ -18,11 +18,11 @@
 
 class Chef
   class Knife
-    class VcVmSetInfo < Chef::Knife
+    class VcVmEdit < Chef::Knife
       include Knife::VcCommon
       include Knife::VcVmCommon
 
-      banner "knife vc vm set info [VM] (options)"
+      banner "knife vc vm edit [VM] (options)"
 
       option :vm_cpus_number,
              :long => "--cpus CPUs_NUMBER",
@@ -42,6 +42,36 @@ class Chef
              :boolean => true,
              :default => false
 
+      option :guest_enabled,
+             :long => "--[no-]guest",
+             :description => "Toggle Guest Customization (default true)",
+             :boolean => true,
+             :default => true
+
+      option :admin_password_enabled,
+             :long => "--use-[no-]admin-password",
+             :description => "Toggle Admin Password (default true)",
+             :boolean => true,
+             :default => true
+
+      option :admin_password,
+             :long => "--admin-password ADMIN_PASSWD",
+             :description => "Set Admin Password"
+
+      option :customization_script,
+             :long => "--script CUSTOMIZATION_SCRIPT",
+             :description => "Filename of a customization script to upload"
+
+      option :force_customization,
+             :long => "--[no-]force",
+             :description => "Force a Guest Customization of the parent vAPP",
+             :boolean => true,
+             :default => true
+
+      option :guest_computer_name,
+             :long => "--computer-name COMPUTER_NAME",
+             :description => "Set Guest Computer Name"
+
       def run
         $stdout.sync = true
 
@@ -49,28 +79,50 @@ class Chef
         cpus = locate_config_value(:vm_cpus_number)
         ram = locate_config_value(:vm_ram)
         vm_name = locate_config_value(:vm_name)
+        script_filename = locate_config_value(:customization_script)
 
-        connection.login
+        if script_filename
+          script = File.read(script_filename)
+          raise ArgumentError,
+            "A customization script cannot exceed 49000 characters" if script.size > 49_000
+        end
+
+        config = {
+          :enabled => locate_config_value(:guest_enabled),
+          :admin_password_enabled => locate_config_value(:admin_password_enabled),
+          :admin_password => locate_config_value(:admin_password),
+          :script => script,
+          :computer_name => locate_config_value(:guest_computer_name)
+        }
+        config.reject!{|k, v| v.nil?}
 
         vm = get_vm(vm_arg)
 
         if cpus
-          task_id = connection.set_vm_cpus vm[:id], cpus
           ui.msg "VM setting CPUs info..."
-          wait_task(connection, task_id)
+          vm.cpu = cpus
+          vm.save
         end
 
         if ram
-          task_id = connection.set_vm_ram vm[:id], ram
           ui.msg "VM setting RAM info..."
-          wait_task(connection, task_id)
+          vm.memory = ram
+          vm.save
         end
 
         if vm_name
+          # TODO: IMPLEMENT RENAME!
+          raise NotImplementedError
           rename_vm(connection, vm, vm_name)
         end
 
-        connection.logout
+        customization = vm.customization
+
+        config.each do |key, value|
+          ui.msg "Setting #{pretty_symbol(key)}..."
+          customization.send("#{key}=".to_sym, value)
+        end
+        customization.save
       end
 
       def rename_vm(connection, vm, vm_name)
@@ -83,9 +135,9 @@ class Chef
         # Change also its guest computer name
         guest_config = {:enabled => true}
 
-        # Inheriting admin_passwd if enabled
-        if vm[:guest_customizations][:admin_passwd_enabled]
-          guest_config[:admin_passwd] = vm[:guest_customizations][:admin_passwd]
+        # Inheriting admin_password if enabled
+        if vm[:guest_customizations][:admin_password_enabled]
+          guest_config[:admin_password] = vm[:guest_customizations][:admin_password]
         end
 
         stop_if_running(connection, vm)

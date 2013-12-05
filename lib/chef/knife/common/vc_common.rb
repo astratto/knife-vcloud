@@ -20,6 +20,7 @@ require 'chef/knife'
 require 'date'
 require 'openssl'
 require 'base64'
+require 'fog/vcloud_director/compute'
 
 class Chef
   class Knife
@@ -30,7 +31,7 @@ class Chef
         includer.class_eval do
 
           deps do
-            require 'vcloud-rest/connection'
+            require 'fog'
             require 'chef/api_client'
           end
 
@@ -39,6 +40,11 @@ class Chef
                  :long => "--url URL",
                  :description => "The vCloud endpoint URL",
                  :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_url] = url }
+
+          option :vcloud_host,
+                 :long => "--host HOST",
+                 :description => "The vCloud endpoint HOST",
+                 :proc => Proc.new { |url| Chef::Config[:knife][:vcloud_host] = host }
 
           option :vcloud_user_login,
                  :short => "-U USER",
@@ -97,16 +103,86 @@ class Chef
             passwd = get_password(pemfile)
           end
 
-          @connection = VCloudClient::Connection.new(
-              locate_config_value(:vcloud_url),
-              locate_config_value(:vcloud_user_login),
-              passwd,
-              locate_config_value(:vcloud_org_login),
-              locate_config_value(:vcloud_api_version)
-          )
+          if locate_config_value(:vcloud_url)
+            ui.info("#{ui.color('DEPRECATION WARNING:', :bold)} knife[:vcloud_url] is deprecated" \
+                  " and will be removed in the next version. You should remove it and run 'knife vc configure'.")
+            host = locate_config_value(:vcloud_url).gsub(/^http[s]*\:\/\//, '')
+          else
+            host = locate_config_value(:vcloud_host)
+          end
+
+          @connection = Fog::Compute::VcloudDirector.new ({
+            :vcloud_director_username  => "#{locate_config_value(:vcloud_user_login)}@#{locate_config_value(:vcloud_org_login)}",
+            :vcloud_director_password => passwd,
+            :vcloud_director_host => host,
+            :vcloud_director_api_version => locate_config_value(:vcloud_api_version),
+            :connection_options => { :ssl_verify_peer => false} # TODO: handle proper certificate
+          })
         end
 
         @connection
+      end
+
+      # Retrieve the current organization
+      def organization
+        @organization ||= connection.organizations.get_by_name(locate_org_option)
+      end
+
+      def get_vdc(vdc_arg)
+        vdc = nil
+        vdc = organization.vdcs.get_by_name vdc_arg
+        raise ArgumentError, "VDC #{vdc_arg} not found" unless vdc
+        vdc
+      end
+
+      def get_vapp(vapp_arg)
+        vapp = nil
+        vdc_name = locate_config_value(:vcloud_vdc)
+        vdc = get_vdc(vdc_name)
+        vapp = vdc.vapps.get_by_name(vapp_arg)
+        raise ArgumentError, "VApp #{vapp_arg} not found" unless vapp
+        vapp
+      end
+
+      def get_vm(vm_arg)
+        vm = nil
+
+        vapp_name = locate_config_value(:vcloud_vapp)
+        vapp = get_vapp(vapp_name)
+
+        vm = vapp.vms.get_by_name(vm_arg)
+
+        raise ArgumentError, "VM #{vm_arg} not found" unless vm
+        vm
+      end
+
+      # Convert vApp status codes into human readable description
+      def convert_vapp_status(status_code)
+        case status_code.to_i
+          when 0
+            'suspended'
+          when 3
+            'paused'
+          when 4
+            'running'
+          when 8
+            'stopped'
+          when 10
+            'mixed'
+          else
+            "Unknown #{status_code}"
+        end
+      end
+
+      def short_description(text, length=15)
+        line, rest = text.gsub(/\n/, '')
+        if line
+          result = "#{line[0..length]}"
+          result << "..." if line.size > length
+          result
+        else
+          ''
+        end
       end
 
       # Locate the correct organization option
@@ -172,8 +248,16 @@ class Chef
         key.to_s.gsub('_', ' ').capitalize
       end
 
-      def sort_by_key(collection)
-        collection.sort_by {|k, v| k }
+      def sort_by(collection, method)
+        collection.sort_by(&method)
+      end
+
+      def method_missing(method_name, *args, &block)
+        if method_name =~ /sort_by_(.*)/
+          sort_by(args.first, $1.to_sym)
+        else
+          super
+        end
       end
 
       # Generate a new key pair and store it on knife.rb
