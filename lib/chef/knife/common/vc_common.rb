@@ -183,6 +183,7 @@ class Chef
         pemfile = File.join(dir, output)
 
         File.open("#{pemfile}", 'w') do |io| io.write key.to_pem end
+        FileUtils.chmod 0600, pemfile
 
         store_config(:vcloud_pem, pemfile)
       end
