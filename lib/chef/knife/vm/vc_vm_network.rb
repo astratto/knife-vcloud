@@ -94,7 +94,7 @@ class Chef
         case command
           when :add
             ui.msg "Adding #{network[:name]} to VM..."
-            task_id, response = connection.add_network_to_vm vm[:id], network, config
+            task_id, response = connection.add_vm_network vm[:id], network, config
             result = wait_task(connection, task_id)
           when :delete
             ui.msg "Removing #{network[:name]} from VM..."
