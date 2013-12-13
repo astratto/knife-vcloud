@@ -1,7 +1,10 @@
 Changes
 ==
-Next Version (1.1.0)
+2013-12-13 (1.1.0)
 --
+
+This version introduces new features and deprecations.
+Deprecated features will be dropped in the future release.
 
 FEATURES:
 
