@@ -64,7 +64,6 @@ USAGE
     knife vc vdc show VDC (options)
     knife vc vm bootstrap [VM] (options)
     knife vc vm config guest [VM] (options)
-    [DEPRECATED] knife vc vm config network [VM] [NETWORK_NAME] (options)
     knife vc vm network [add|delete|edit| [VM] [NETWORK] (options)
     knife vc vm reboot [VM] (options)
     knife vc vm reset [VM] (options)
@@ -443,8 +442,6 @@ VM networks can be added, removed and modified using the *vm network* command.
 This commands allows for basic VM network configuration and accepts several options to configure a given network (see *knife vc vm network --help* for details).
 
 Please note that you must use the human readable name of the network (i.e., _TestNet\_1_).
-
-**DEPRECATION NOTE: The command *vm config network* has been deprecated and will be removed in future versions.**
 
 _Add example:_
 

@@ -1,5 +1,12 @@
 Changes
 ==
+Next Version
+--
+
+DEPRECATIONS:
+
+* Remove `vm config network` deprecated in 1.1.0
+
 2013-12-13 (1.1.0)
 --
 

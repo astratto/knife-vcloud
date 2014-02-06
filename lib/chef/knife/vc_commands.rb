@@ -55,7 +55,6 @@ require 'chef/knife/vapp/vc_vapp_snapshot'
 # VM
 require 'chef/knife/common/vc_vm_common'
 require 'chef/knife/vm/vc_vm_config_guest'
-require 'chef/knife/vm/vc_vm_config_network'
 require 'chef/knife/vm/vc_vm_network'
 require 'chef/knife/vm/vc_vm_show'
 require 'chef/knife/vm/vc_vm_set_info'
