@@ -1,7 +1,9 @@
 Changes
 ==
-Next Version
+2014-02-06 (1.2.0)
 --
+
+This version requires vcloud-rest v. 1.2.0.
 
 FEATURES:
 
