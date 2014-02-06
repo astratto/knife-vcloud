@@ -46,12 +46,6 @@ class Chef
                  :description => "Your vCloud User",
                  :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_user_login] = key }
 
-          option :vcloud_password_login,
-                 :short => "-P SECRET",
-                 :long => "--password-login SECRET",
-                 :description => "Your vCloud secret key",
-                 :proc => Proc.new { |key| Chef::Config[:knife][:vcloud_password_login] = key }
-
           option :vcloud_org_login,
                  :long => "--org-login ORGANIZATION",
                  :description => "Your vCloud Organization",
@@ -81,21 +75,15 @@ class Chef
         unless @connection
           pemfile = locate_config_value(:vcloud_pem)
 
-          if locate_config_value(:vcloud_password_login)
-            ui.info("#{ui.color('DEPRECATION WARNING:', :bold)} knife[:vcloud_password_login] is deprecated" \
-                  " and will be removed in the next version. You should remove it and run 'knife vc configure'.")
-            passwd = locate_config_value(:vcloud_password_login)
-          else
-            unless pemfile
-              raise ConfigurationError, "PEM file not configured. Please run 'knife vc configure'"
-            end
-
-            unless locate_config_value(:vcloud_password)
-              raise ConfigurationError, "Password not configured. Please run 'knife vc configure'"
-            end
-
-            passwd = get_password(pemfile)
+          unless pemfile
+            raise ConfigurationError, "PEM file not configured. Please run 'knife vc configure'"
           end
+
+          unless locate_config_value(:vcloud_password)
+            raise ConfigurationError, "Password not configured. Please run 'knife vc configure'"
+          end
+
+          passwd = get_password(pemfile)
 
           @connection = VCloudClient::Connection.new(
               locate_config_value(:vcloud_url),

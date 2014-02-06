@@ -79,8 +79,6 @@ USAGE
 A first configuration should be done using ```knife vc configure``` that would prompt user for
 credentials and vCloud URL.
 
-**DEPRECATION NOTE: *vcloud_password_login* has been deprecated and will be removed in future versions.**
-
 E.g.,
 
     $ bundle exec knife vc configure
