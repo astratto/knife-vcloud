@@ -3,6 +3,10 @@ Changes
 Next Version
 --
 
+FEATURES:
+
+* Honor local .chef/knife.rb precedence
+
 DEPRECATIONS:
 
 * Remove `vm config network` deprecated in 1.1.0

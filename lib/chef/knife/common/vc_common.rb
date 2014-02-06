@@ -165,7 +165,8 @@ class Chef
       end
 
       # Generate a new key pair and store it on knife.rb
-      def generate_key(dir="#{File.join(Dir.home, '.chef')}", output="vc_key.pem")
+      def generate_key(output="vc_key.pem")
+        dir = File.dirname(get_config_file)
         key = OpenSSL::PKey::RSA.new 2048
 
         pemfile = File.join(dir, output)
@@ -194,7 +195,7 @@ class Chef
       #
       # It checks whether a given configuration already exists and, if so, updates it
       def store_config(key, value)
-        configfile = File.join(Dir.home, '.chef', 'knife.rb')
+        configfile = get_config_file
         old_config = File.open(configfile, 'r').readlines
         full_key = "knife[:#{key}]"
 
@@ -222,6 +223,16 @@ class Chef
       end
 
       private
+        def get_config_file
+          knife_cfg = File.join('.chef', 'knife.rb')
+
+          if File.exists?(File.join(Dir.pwd, knife_cfg))
+            File.join(Dir.pwd, knife_cfg)
+          else
+            File.join(Dir.home, knife_cfg)
+          end
+        end
+
         def humanize_elapsed_time(start_time, end_time)
           start_time = Time.parse(start_time || Time.now)
           end_time = Time.parse(end_time || Time.now)
