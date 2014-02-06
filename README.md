@@ -33,7 +33,7 @@ PREREQUISITES
 --
 - chef >= 0.10.0
 - knife-windows
-- vcloud-rest ~> 1.0.0
+- vcloud-rest ~> 1.2.0
 
 USAGE
 --
