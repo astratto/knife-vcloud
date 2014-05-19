@@ -33,22 +33,42 @@ class Chef
         catalog_item = get_catalog_item(item_arg)
         connection.logout
 
-        header = [
-            ui.color('Name', :bold),
-            ui.color('Template ID', :bold)
-        ]
+        if catalog_item[:type] == "vAppTemplate"
+          header = [
+              ui.color('Name', :bold),
+              ui.color('Template ID', :bold)
+          ]
 
-        ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
-        list = header
-        list.flatten!
+          ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
+          list = header
 
-        catalog_item[:items].each do |item|
-          list << (item[:name] || '')
-          list << (item[:id] || '')
-          # TODO: show VMs using this item? item[:vms_hash]
+          catalog_item[:items].each do |item|
+            list << (item[:name] || '')
+            list << (item[:id] || '')
+            # TODO: show VMs using this item? item[:vms_hash]
+          end
+
+          ui.msg ui.list(list, :columns_across, 2)
+
+        elsif catalog_item[:type] == "media"
+          header = [
+              ui.color('Name', :bold),
+              ui.color('Media ID', :bold)
+          ]
+
+          ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
+          list = header
+
+          list << (catalog_item[:name] || '')
+          list << (catalog_item[:id] || '')
+
+          ui.msg ui.list(list, :columns_across, 2)
+
+        elsif catalog_item[:type] == "unknown"
+
+          ui.msg "#{ui.color('Description:', :cyan)} #{catalog_item[:description]}"
+          ui.msg "#{ui.color('Unknown catalog item type', :bold)}"
         end
-
-        ui.msg ui.list(list, :columns_across, 2)
       end
     end
   end
