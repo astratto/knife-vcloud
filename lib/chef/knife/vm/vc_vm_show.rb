@@ -61,7 +61,9 @@ class Chef
 
         list << ['', '', ui.color('Networks', :bold), '']
         vm[:networks].each do |network, values|
-          list << [(network || ''), '']
+          # remove NetworkConnectionIndex from network hash key
+          network =~ /^(.*)_[0-9]+$/
+          list << [$1 || '', '']
           values.each do |k, v|
             list << "  #{(pretty_symbol(k) || '')}"
             list << (v || '')
