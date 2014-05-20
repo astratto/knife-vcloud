@@ -51,6 +51,7 @@ require 'chef/knife/vapp/vc_vapp_suspend'
 require 'chef/knife/vapp/vc_vapp_clone'
 require 'chef/knife/vapp/vc_vapp_bootstrap'
 require 'chef/knife/vapp/vc_vapp_snapshot'
+require 'chef/knife/vapp/vc_vapp_discard_suspended'
 
 # VM
 require 'chef/knife/common/vc_vm_common'
@@ -65,6 +66,7 @@ require 'chef/knife/vm/vc_vm_start'
 require 'chef/knife/vm/vc_vm_stop'
 require 'chef/knife/vm/vc_vm_suspend'
 require 'chef/knife/vm/vc_vm_bootstrap'
+require 'chef/knife/vm/vc_vm_discard_suspended'
 
 # OVF
 require 'chef/knife/ovf/vc_ovf_upload'
