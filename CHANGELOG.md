@@ -1,5 +1,20 @@
 Changes
 ==
+Next release (x.x.x)
+
+This version requires the master branch of vcloud-rest.
+
+FEATURES:
+
+* Add "media" item type management to `catalog item show`
+* Add commands `[vm|vapp] discard suspended` to discard suspended state of a vApp or VM
+
+FIXES:
+
+* Adapt 'vc vm show' to display different IPs from same network
+
+Note that now `get_vm` appends NetworkConnectionIndex to network name to generate a unique hash key.
+
 2014-02-06 (1.2.0)
 --
 
