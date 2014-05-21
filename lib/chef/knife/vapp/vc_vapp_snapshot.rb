@@ -42,11 +42,11 @@ class Chef
 
         case command
           when :create
-            task_id = connection.create_snapshot vapp[:id]
+            task_id = connection.create_vapp_snapshot vapp[:id]
             ui.msg "vApp snapshot creation..."
             wait_task(connection, task_id)
           when :revert
-            task_id = connection.revert_snapshot vapp[:id]
+            task_id = connection.revert_vapp_snapshot vapp[:id]
             ui.msg "vApp snapshot revert..."
             wait_task(connection, task_id)
         end
