@@ -23,7 +23,7 @@ FEATURES
 - show VDCs
 - show Catalogs
 - show Catalog Items
-- create/start/stop/delete/show/reset/suspend/reboot vApps and VMs
+- create/start/stop/delete/show/reset/suspend/reboot/discard suspended vApps and VMs
 - add/edit/delete vApp networks (both internal and external)
 - basic VM network configuration
 - basic VM Guest Customization configuration
@@ -52,6 +52,7 @@ USAGE
     knife vc vapp clone [VDC] [SOURCE_VAPP] [DEST_NAME] (options)
     knife vc vapp create [VDC] [NAME] [DESCRIPTION] [TEMPLATE_ID] (options)
     knife vc vapp delete [VAPP] (options)
+    knife vc vapp discard suspended [VAPP] (options)
     knife vc vapp network external [add|delete|edit| [VAPP] [NETWORK] (options)
     knife vc vapp network internal [add|delete|edit| [VAPP] [NETWORK] (options)
     knife vc vapp reboot [VAPP] (options)
@@ -229,6 +230,8 @@ _Example:_
 
 ###Manage vApp/VM status
 vApp/VM's status can be managed with _start/stop/reboot/reset/suspend/delete_
+
+A suspended state can be discarded, it means that a vApp/VM is switched from paused to stopped.
 
 Note: use _knife vc vm..._ to operate on VMs.
 
