@@ -31,9 +31,12 @@ FEATURES
 
 PREREQUISITES
 --
-- chef >= 0.10.0
+- chef
 - knife-windows
-- vcloud-rest ~> 1.2.0
+- vcloud-rest
+
+(see *knife-vcloud.gemspec* for details)
+
 
 USAGE
 --

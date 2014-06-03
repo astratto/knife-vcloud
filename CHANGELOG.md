@@ -1,8 +1,8 @@
 Changes
 ==
-Next release (x.x.x)
+2014-06-03 (1.3.0)
 
-This version requires the master branch of vcloud-rest.
+This version requires vcloud-rest v. 1.3.0.
 
 FEATURES:
 
