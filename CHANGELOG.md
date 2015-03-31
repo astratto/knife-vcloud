@@ -1,55 +1,57 @@
-Changes
-==
-2014-06-03 (1.3.0)
---
+# Changes
+
+### 2015-03-31 (1.3.1)
+
+**Fixes**
+
+* Bump dependencies
+
+### 2014-06-03 (1.3.0)
 
 This version requires vcloud-rest v. 1.3.0.
 
-FEATURES:
+**Features**
 
 * Add "media" item type management to `catalog item show`
 * Add commands `[vm|vapp] discard suspended` to discard suspended state of a vApp or VM
 
-FIXES:
+**Fixes**
 
 * Adapt 'vc vm show' to display different IPs from same network
 
 Note that now `get_vm` appends NetworkConnectionIndex to network name to generate a unique hash key.
 
-2014-02-06 (1.2.0)
---
+### 2014-02-06 (1.2.0)
 
 This version requires vcloud-rest v. 1.2.0.
 
-FEATURES:
+**Features**
 
 * Honor local .chef/knife.rb precedence
 
-DEPRECATIONS:
+**Deprecations**
 
 * Remove `vm config network` deprecated in 1.1.0
 * Remove *knife[:vcloud_password_login]* deprecated in 1.1.0
 
-2013-12-13 (1.1.0)
---
+### 2013-12-13 (1.1.0)
 
 This version introduces new features and deprecations.  
 Deprecated features will be dropped in the future release.
 
-FEATURES:
+**Features**
 
 * Add option *--override-guest* to `vm set info` to rename also its guest name (*false* by default for backward-compatibility)
 * Add command `vm network [add|delete|edit]` to manage multiple networks
 * Use RSA keys to manage passwords
 * Add command `knife vc configure` to manage knife-vcloud's configuration
 
-DEPRECATIONS:
+**Deprecations**
 
 * `vm config network` is now deprecated
 * *knife[:vcloud_password_login]* is now deprecated and should be replaced using ```knife vc configure```
 
-2013-11-29 (1.0.0)
---
+### 2013-11-29 (1.0.0)
 
 This is the first release that leaves beta status.
 It's actively used in production by at least one company and thus it's important
@@ -57,7 +59,7 @@ to offer a more stable interface.
 
 This version requires vcloud-rest v. 1.0.0.
 
-FEATURES:
+**Features**
 
 * vApp management
     * Add commands to resume/suspend/reset vApps
@@ -80,54 +82,49 @@ FEATURES:
     * Add command to show details about a given network
     * Add command to upload OVF
 
-CHANGES:
+**Changes**
 
 * Renamed & enhanced command _vapp config network_ to _vapp network external_
 * Several options have been revisited (see README.md for details)
 * Sort VDC, Networks, vApps, Catalogs and Catalog Items by name
 
-2012-12-28 (0.2.3)
---
+### 2012-12-28 (0.2.3)
 
-VARIOUS:
+**Various**
 
 * Update dependency vcloud-rest v. 0.2.1
 * Update documentation
 
-FIXES:
+**Fixes**
 * Minor fixes
 
-2012-12-27 (0.2.2)
---
+### 2012-12-27 (0.2.2)
 
-FIXES:
+**Fixes**
 
 * VM Network config: use command line arguments
 * Properly use boolean options
 * Minor fixes
 
-2012-12-27 (0.2.1)
---
+### 2012-12-27 (0.2.1)
 
-FIXES:
+**Fixes**
 
 * Change namespace to fix import error under 1.9.x (system-wide)
 
-2012-12-24 (0.2.0)
---
+### 2012-12-24 (0.2.0)
 
-FEATURES:
+**Features**
 
 * Add command for basic VM Guest Customization configuration
 * Add command for basic VM Network configuration
 * Add command for basic vApp Network configuration
 
-CHANGES:
+**Changes**
 
 * Renamed _Common#msg_ to _Common#out\_msg_
 
-2012-12-21 (0.1.0)
---
+### 2012-12-21 (0.1.0)
 
 Initial release
 
